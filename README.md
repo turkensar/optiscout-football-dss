@@ -1,4 +1,6 @@
-﻿# ⚽ OptiScout: AI-Driven Football Scouting & Squad Optimization DSS
+﻿[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://optiscout-turkensar.streamlit.app)
+
+# ⚽ OptiScout: AI-Driven Football Scouting & Squad Optimization DSS
 
 Avrupa'nın 5 büyük ligindeki (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) **2026-2027 sezonu FBref** verileri üzerine inşa edilmiş; **Veri Mühendisliği**, **Makine Öğrenmesi (Cosine Similarity)** ve **Yöneylem Araştırması (Mixed-Integer Linear Programming - MILP)** yöntemlerini birleştiren interaktif bir **Karar Destek Sistemi (Decision Support System - DSS)**.
 
@@ -67,3 +69,4 @@ pip install -r requirements.txt
 # 3. Streamlit karar destek arayüzünü başlatın
 python -m streamlit run app.py
 ```
+
