@@ -5,6 +5,8 @@
 
 Avrupa'nın 5 büyük ligindeki (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) **2026-2027 sezonu FBref** verileri üzerine inşa edilmiş; **Veri Mühendisliği**, **İstatistiksel Benzerlik Analizi (Cosine Similarity)** ve **Yöneylem Araştırması (Mixed-Integer Linear Programming - MILP)** yöntemlerini birleştiren interaktif bir **Karar Destek Sistemi (Decision Support System - DSS)**.
 
+![OptiScout demo](images/demo.gif)
+
 ---
 
 ## 🎯 Projenin Amacı ve Çözülen Problemler
@@ -31,17 +33,26 @@ Modern futbol analitiğinde oyuncu izleme (scouting) ve kadro planlama süreçle
 
 ## 📸 Uygulama Ekran Görüntüleri
 
-### 1. Oyuncu Sıralaması ve Performans Skorlaması
-![Overview](images/overview.png)
+### 1. Rol Bazlı Oyuncu Sıralaması
+Skorlar rol içinde hesaplanır: kanatlar kanatlarla, bekler beklerle kıyaslanır.
+![Rol bazlı sıralama](images/overview.png)
 
 ### 2. Dört Kadran Performans Haritası (Outlier Tespiti)
-![Quadrant Analysis](images/quadrant.png)
+![Dört kadran haritası](images/quadrant.png)
 
 ### 3. Kosinüs Benzerliği ile İkame Oyuncu & Wonderkid Keşfi
-![Similarity Engine](images/similarity.png)
+![Benzerlik motoru](images/similarity.png)
 
-### 4. Doğrusal Programlama (MILP) ile Kısıtlı Optimum İlk 11 ve Taktik Tahtası
-![Optimal XI](images/optimal_xi.png)
+### 4. Bütçe Kısıtlı Optimum İlk 11 (MILP) ve Taktik Tahtası
+![Optimum ilk 11](images/optimal_xi.png)
+
+### 5. Bütçe - Performans Eğrisi
+Model farklı bütçeler için yeniden çözülür; eğrinin düzleştiği nokta ek harcamanın artık anlamlı getiri sağlamadığı bütçedir.
+![Bütçe-performans eğrisi](images/budget_frontier.png)
+
+### 6. Kulüp Boşluk Analizi & Transfer Planı
+Juventus örneği: kadroda doğal sol bek olmadığı için bir stoper sol bekte oynar; model bütçe içinde sol bek ve santrfor transferi önerir (★ = yeni transfer).
+![Transfer planı](images/transfer_plan.png)
 
 ---
 

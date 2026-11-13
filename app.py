@@ -57,6 +57,58 @@ def cached_transfer_plan(min_minutes: int, leagues: tuple, club: str, **kwargs):
     return SquadOptimizer(df).plan_transfers(club, target_leagues=list(leagues), **kwargs)
 
 
+# Tablolarda kod adları yerine okunur Türkçe başlıklar gösterilir
+COLUMN_LABELS = {
+    "Player": "Oyuncu", "Squad": "Kulüp", "League": "Lig", "Age": "Yaş", "Min": "Dakika",
+    "Score_Group": "Rol", "TM_Sub_Position": "Alt Mevki (TM)", "Assigned_Role": "Görev",
+    "Gls": "Gol", "Ast": "Asist", "Gls_p90": "Gol/90", "Ast_p90": "Asist/90",
+    "Def_Actions_p90": "Savunma Aks./90", "GA_non_pk_p90": "PS'siz G+A/90",
+    "OptiScout_Score": "OptiScout", "Effective_Score": "Rol Uyumlu Skor",
+    "Similarity_Score": "Benzerlik", "Market_Value_M": "Piyasa Değeri",
+    "Role_Fit": "Rol Uyumu", "Improvement": "Kazanç",
+    "Attacking_Score": "Hücum", "Creativity_Score": "Yaratıcılık", "Defensive_Score": "Savunma",
+    "Goalkeeping_Score": "Kalecilik", "Discipline_Score": "Disiplin", "Saves_p90": "Kurtarış/90",
+}
+SUB_POSITION_TR = {
+    "Goalkeeper": "Kaleci", "Centre-Back": "Stoper", "Left-Back": "Sol Bek", "Right-Back": "Sağ Bek",
+    "Defensive Midfield": "Ön Libero", "Central Midfield": "Merkez Orta Saha",
+    "Attacking Midfield": "10 Numara", "Left Midfield": "Sol Orta Saha", "Right Midfield": "Sağ Orta Saha",
+    "Left Winger": "Sol Kanat", "Right Winger": "Sağ Kanat", "Second Striker": "İkinci Forvet",
+    "Centre-Forward": "Santrfor",
+}
+
+
+AXIS_LABELS = {
+    "Sh/90": "Şut/90", "SoT/90": "İsabetli Şut/90", "Gls_p90": "Gol/90", "Ast_p90": "Asist/90",
+    "Crs_p90": "Orta/90", "TklW_p90": "Top Kapma/90", "Int_p90": "Araya Girme/90",
+    "GA_non_pk_p90": "Penaltısız Gol+Asist/90", "Def_Actions_p90": "Savunma Aksiyonu/90",
+}
+
+
+def show_table(frame, **kwargs):
+    """st.dataframe sarmalayıcısı: Türkçe başlıklar, rol adları ve sayı biçimleri."""
+    t = frame.copy()
+    if "Score_Group" in t.columns:
+        t["Score_Group"] = t["Score_Group"].map(lambda g: ROLE_GROUP_LABELS.get(g, g))
+    if "TM_Sub_Position" in t.columns:
+        t["TM_Sub_Position"] = t["TM_Sub_Position"].map(lambda v: SUB_POSITION_TR.get(v, v) if isinstance(v, str) else "—")
+    if "Age" in t.columns:
+        t["Age"] = t["Age"].round(0).astype("Int64")
+    t = t.rename(columns=COLUMN_LABELS)
+    config = {
+        "Piyasa Değeri": st.column_config.NumberColumn(format="€%.1fM"),
+        "Rol Uyumu": st.column_config.NumberColumn(format="%.2f"),
+    }
+    for col in ["OptiScout", "Rol Uyumlu Skor", "Benzerlik", "Kazanç", "Hücum", "Yaratıcılık",
+                "Savunma", "Kalecilik", "Disiplin"]:
+        config[col] = st.column_config.NumberColumn(format="%.1f")
+    for col in ["Gol/90", "Asist/90", "Savunma Aks./90", "PS'siz G+A/90", "Kurtarış/90"]:
+        config[col] = st.column_config.NumberColumn(format="%.2f")
+    kwargs.setdefault("hide_index", True)
+    kwargs.setdefault("use_container_width", True)
+    return st.dataframe(t, column_config=config, **kwargs)
+
+
 def fmt_value(v) -> str:
     """Piyasa değerini okunabilir biçimde yazar: 45.0 -> '€45M'."""
     if v is None or v != v:  # None veya NaN
@@ -67,7 +119,9 @@ def fmt_value(v) -> str:
 
 
 def draw_tactical_pitch(xi_df, has_values: bool = False,
-                        title: str = "⚽ Optimum İlk 11 Saha Dizilişi (Taktik Tahtası)") -> go.Figure:
+                        title: str = "⚽ Optimum İlk 11 Saha Dizilişi (Taktik Tahtası)",
+                        home_club: str = None) -> go.Figure:
+    """home_club verilirse o kulübün oyuncularında kulüp adı yazılmaz (dar sahada etiketler kısalır)."""
     fig = go.Figure()
 
     pitch_shapes = [
@@ -81,7 +135,7 @@ def draw_tactical_pitch(xi_df, has_values: bool = False,
 
     # Takım soldan sağa hücum eder: x = derinlik, y = genişlik (y yüksek = sol kanat)
     role_xy = {
-        "GK": (6, [50]),
+        "GK": (5, [50]),
         "CB": (22, None), "LB": (27, [88]), "RB": (27, [12]),
         "LWB": (40, [86]), "RWB": (40, [14]),
         "DM": (40, None), "CM": (53, None), "AM": (66, None),
@@ -89,9 +143,10 @@ def draw_tactical_pitch(xi_df, has_values: bool = False,
         "LW": (77, [84]), "RW": (77, [16]),
         "ST": (86, None),
     }
-    central_spread = {1: [50], 2: [36, 64], 3: [26, 50, 74]}
+    central_spread = {1: [50], 2: [33, 67], 3: [26, 50, 74]}
     group_colors = {"GK": "#f59e0b", "DF": "#3b82f6", "MF": "#10b981", "FW": "#ef4444"}
 
+    three_cb = int((xi_df["Assigned_Role"] == "CB").sum()) >= 3
     for group in ["GK", "DF", "MF", "FW"]:
         xs, ys, labels, ring_colors, ring_widths = [], [], [], [], []
         group_df = xi_df[xi_df["Assigned_Pos"] == group]
@@ -106,7 +161,7 @@ def draw_tactical_pitch(xi_df, has_values: bool = False,
                 ring_widths.append(5 if is_new else 2)
                 labels.append(
                     f"<b>{'★ ' if is_new else ''}{row['Player']}</b>{'*' if row['Out_Of_Position'] else ''}"
-                    f"<br>{role} · {row['Squad']} ("
+                    f"<br>{role}{'' if row['Squad'] == home_club else ' · ' + row['Squad']} ("
                     f"{row['OptiScout_Score']}"
                     f"{'→' + str(row['Effective_Score']) if row['Out_Of_Position'] and 'Effective_Score' in row else ''})"
                     f"{' · ' + fmt_value(row['Market_Value_M']) if has_values else ''}"
@@ -120,8 +175,9 @@ def draw_tactical_pitch(xi_df, has_values: bool = False,
                 mode="markers+text",
                 marker=dict(size=26, color=group_colors[group], line=dict(width=ring_widths, color=ring_colors)),
                 text=labels,
-                # Kaleci etiketi altta: 3'lü savunmada ortadaki stoperin etiketiyle çakışmasın
-                textposition="bottom center" if group == "GK" else "top center",
+                # Kaleci etiketi: 3'lü savunmada ortadaki stoperin etiketiyle çakışmasın diye
+                # altta, 4'lü savunmada stoper etiketleriyle çakışmasın diye üstte
+                textposition=("bottom center" if three_cb else "top center") if group == "GK" else "top center",
                 textfont=dict(color="white", size=11),
                 name=group,
             )
@@ -207,6 +263,7 @@ with tab1:
         sort_metric = st.selectbox(
             "Sıralama Ölçütü",
             sort_options,
+            format_func=lambda c: COLUMN_LABELS.get(c, c),
             help="Hücum/Yaratıcılık/Savunma gibi alt skorlar rol içinde hesaplanır; "
                  "roller arası karşılaştırılamadığı için yalnızca bir rol seçiliyken listelenir.",
         )
@@ -223,30 +280,45 @@ with tab1:
         "Player", "Squad", "League", "Score_Group", "TM_Sub_Position", "Age", "Min",
         "Gls", "Ast", "Gls_p90", "Ast_p90", "Def_Actions_p90", "OptiScout_Score"
     ] + (["Market_Value_M"] if has_values else [])
-    st.dataframe(view_df[display_cols].head(25), hide_index=True)
+    show_table(view_df[display_cols].head(25), hide_index=True)
 
     st.markdown("---")
     st.subheader("🎯 Dört Kadran Performans Haritası (Outlier Tespiti)")
     c_x, c_y = st.columns(2)
     with c_x:
-        x_axis_col = st.selectbox("X Ekseni", ["Sh/90", "Gls_p90", "Ast_p90", "Crs_p90", "TklW_p90"], index=0)
+        x_axis_col = st.selectbox(
+            "X Ekseni", ["Sh/90", "Gls_p90", "Ast_p90", "Crs_p90", "TklW_p90"], index=0,
+            format_func=lambda c: AXIS_LABELS.get(c, c),
+        )
     with c_y:
-        y_axis_col = st.selectbox("Y Ekseni", ["Gls_p90", "SoT/90", "GA_non_pk_p90", "Int_p90", "Def_Actions_p90"], index=0)
+        y_axis_col = st.selectbox(
+            "Y Ekseni", ["Gls_p90", "SoT/90", "GA_non_pk_p90", "Int_p90", "Def_Actions_p90"], index=0,
+            format_func=lambda c: AXIS_LABELS.get(c, c),
+        )
+
+    # Okunabilirlik: yalnızca en yüksek skorlu oyuncuların adı yazılır, diğerleri fareyle görülür
+    plot_df = view_df.head(150).copy()
+    plot_df["Rol"] = plot_df["Score_Group"].map(lambda g: ROLE_GROUP_LABELS.get(g, g))
+    top_keys = set(plot_df.nlargest(15, "OptiScout_Score")["Row_Key"])
+    plot_df["Etiket"] = plot_df.apply(lambda r: r["Player"] if r["Row_Key"] in top_keys else "", axis=1)
+    x_label, y_label = AXIS_LABELS.get(x_axis_col, x_axis_col), AXIS_LABELS.get(y_axis_col, y_axis_col)
 
     fig_scatter = px.scatter(
-        view_df.head(150),
+        plot_df,
         x=x_axis_col,
         y=y_axis_col,
-        color="Score_Group",
+        color="Rol",
         size="OptiScout_Score",
         hover_name="Player",
-        hover_data=["Squad", "League", "Age", "Min", "OptiScout_Score"],
-        text="Player",
+        hover_data={"Squad": True, "League": True, "Age": True, "Min": True,
+                    "OptiScout_Score": True, "Rol": False, "Etiket": False},
+        text="Etiket",
+        labels={x_axis_col: x_label, y_axis_col: y_label, **COLUMN_LABELS},
         template="plotly_dark",
         height=550,
-        title=f"{x_axis_col} vs {y_axis_col} (İlk 150 Oyuncu)"
+        title=f"{x_label} vs {y_label} · ilk {len(plot_df)} oyuncu (en iyi 15'in adı gösteriliyor)",
     )
-    fig_scatter.update_traces(textposition="top center", textfont_size=10)
+    fig_scatter.update_traces(textposition="top center", textfont_size=11)
     fig_scatter.add_vline(x=view_df[x_axis_col].median(), line_dash="dash", line_color="gray")
     fig_scatter.add_hline(y=view_df[y_axis_col].median(), line_dash="dash", line_color="gray")
     st.plotly_chart(fig_scatter)
@@ -287,10 +359,9 @@ with tab2:
     col_table, col_radar = st.columns([3, 2])
     with col_table:
         sim_cols = [
-            "Player", "Squad", "League", "Age", "Min",
-            "Similarity_Score", "OptiScout_Score", "Gls_p90", "Ast_p90", "Def_Actions_p90"
+            "Player", "Squad", "Age", "Similarity_Score", "OptiScout_Score", "Gls_p90", "Ast_p90",
         ] + (["Market_Value_M"] if has_values else [])
-        st.dataframe(similar_df[sim_cols], hide_index=True)
+        show_table(similar_df[sim_cols], hide_index=True)
         st.caption(
             "Benzerlik Skoru = kosinüs benzerliği × 100. 100: aynı profil, "
             "0: ilişkisiz, negatif: zıt profil."
@@ -336,20 +407,23 @@ with tab2:
             fig_radar.update_layout(
                 polar=dict(radialaxis=dict(visible=True, range=[0, 100])),
                 template="plotly_dark",
-                title="Yüzdelik Dilim (0-100) Profil Karşılaştırması"
+                title="Profil Karşılaştırması (rol içi 0-100)",
+                legend=dict(orientation="h", yanchor="top", y=-0.08, xanchor="center", x=0.5),
+                margin=dict(l=60, r=60, t=60, b=40),
             )
             st.plotly_chart(fig_radar)
 
 with tab3:
     st.subheader("🧠 Doğrusal Programlama (MILP) ile Kısıtlı Optimum İlk 11")
 
-    o1, o2, o3, o4, o5 = st.columns(5)
+    o1, o2, o3 = st.columns(3)
     with o1:
         formation = st.selectbox("Taktik Diziliş", ["4-3-3", "4-2-3-1", "3-5-2", "3-4-3", "4-4-2"])
     with o2:
         max_club = st.slider("Kulüp Başına Maksimum Oyuncu", 1, 5, 2)
     with o3:
         max_avg_age = st.slider("Kadro Maksimum Yaş Ortalaması", 20.0, 32.0, 26.5, 0.5)
+    o4, o5 = st.columns(2)
     with o4:
         exclude_giants = st.checkbox("Dev Kulüpleri Dışla (Fırsat 11'i)", value=False)
     with o5:
@@ -431,13 +505,13 @@ with tab3:
             if xi_df["Out_Of_Position"].any():
                 st.caption("* Doğal rolü dışında oynatılan oyuncu (skoru uygunluk katsayısıyla indirimli)")
         with col_xi_table:
-            st.dataframe(
+            show_table(
                 xi_df[[
                     "Assigned_Role", "Player", "TM_Sub_Position", "Squad", "League", "Age",
                     "Min", "Gls", "Ast", "OptiScout_Score"
                 ] + (["Market_Value_M"] if has_values else [])],
                 hide_index=True,
-                height=480,
+                height=(len(xi_df) + 1) * 35 + 3,
             )
     else:
         st.error(
@@ -551,10 +625,10 @@ with tab4:
 
             pc1, pc2 = st.columns(2)
             with pc1:
-                st.plotly_chart(draw_tactical_pitch(base["squad"], True, f"Mevcut 11 · {club}"))
+                st.plotly_chart(draw_tactical_pitch(base["squad"], True, f"Mevcut 11 · {club}", home_club=club))
             with pc2:
                 if after["status"] == "Optimal":
-                    st.plotly_chart(draw_tactical_pitch(after["squad"], True, "Transfer Sonrası 11 (★ = yeni transfer)"))
+                    st.plotly_chart(draw_tactical_pitch(after["squad"], True, "Transfer Sonrası 11 (★ = yeni)", home_club=club))
 
             if base["squad"]["Role_Fit"].le(0.5).any():
                 st.caption(
@@ -565,9 +639,9 @@ with tab4:
             g1, g2 = st.columns(2)
             with g1:
                 st.markdown("**🔻 En zayıf mevkiler (boşluklar)**")
-                st.dataframe(
+                show_table(
                     plan["gaps"][["Assigned_Role", "Player", "TM_Sub_Position", "Role_Fit",
-                                  "OptiScout_Score", "Effective_Score"]],
+                                  "Effective_Score"]],
                     hide_index=True,
                 )
             with g2:
@@ -575,14 +649,14 @@ with tab4:
                 if plan["signings"].empty:
                     st.write("Bu bütçeyle mevcut 11'i iyileştiren bir transfer bulunamadı.")
                 else:
-                    st.dataframe(
-                        plan["signings"][["Assigned_Role", "Player", "Squad", "League", "Age",
+                    show_table(
+                        plan["signings"][["Assigned_Role", "Player", "Squad",
                                           "Market_Value_M", "Effective_Score"]],
                         hide_index=True,
                     )
                 if not plan["dropped"].empty:
                     st.markdown("**↘️ İlk 11'den çıkanlar**")
-                    st.dataframe(
+                    show_table(
                         plan["dropped"][["Assigned_Role", "Player", "Effective_Score"]],
                         hide_index=True,
                     )
@@ -597,7 +671,7 @@ with tab4:
                     if cand.empty:
                         st.write("Bütçeye sığan daha iyi bir aday yok.")
                     else:
-                        st.dataframe(
+                        show_table(
                             cand[["Player", "Squad", "League", "Age", "TM_Sub_Position",
                                   "Market_Value_M", "Effective_Score", "Improvement"]],
                             hide_index=True,
