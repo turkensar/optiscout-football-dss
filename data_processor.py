@@ -86,8 +86,10 @@ BROAD_WEIGHTS = {
 class FootballDataProcessor:
     """
     FBref 2026-2027 veri setini temizler, 90 dakika basina (Per 90) metrikleri uretir
-    ve her oyuncuya kendi mevkisi (GK, DF, MF, FW) icinde 0-100 arasi
-    yuzdelik dilim (Percentile) ile agirlikli 'OptiScoutScore' hesaplar.
+    ve her oyuncuya kendi ROL grubu (kaleci, stoper, bek, ön libero, kanat, santrfor...)
+    icinde, yuzdelik dilim ile z-skor karisimina dayali 0-100 arasi agirlikli
+    'OptiScout_Score' hesaplar. Rol bilgisi Transfermarkt alt mevkisinden gelir; bilinmiyorsa
+    FBref ana mevkisi (GK, DF, MF, FW) kullanilir.
 
     Ham per-90 degerleri (`*_p90`) tablolarda gosterilir; skorlama ve benzerlik
     ise kucuk orneklem etkisi azaltilmis (`*_adj`) degerler uzerinden yapilir.

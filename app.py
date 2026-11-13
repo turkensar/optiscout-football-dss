@@ -7,7 +7,7 @@ from similarity_engine import PlayerSimilarityEngine
 from squad_optimizer import SquadOptimizer
 
 st.set_page_config(
-    page_title="OptiScout | AI Football DSS",
+    page_title="OptiScout | Football Scouting DSS",
     page_icon="⚽",
     layout="wide",
 )
@@ -131,7 +131,7 @@ st.markdown(
 
 tab1, tab2, tab3 = st.tabs([
     "📊 1. Oyuncu Sıralaması & Kadran Analizi",
-    "🔍 2. İkame Oyuncu Bulucu (ML Cosine Similarity)",
+    "🔍 2. İkame Oyuncu Bulucu (Kosinüs Benzerliği)",
     "🧠 3. Optimum İlk 11 Çözücü (MILP)"
 ])
 
