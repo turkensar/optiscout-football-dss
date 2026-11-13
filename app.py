@@ -51,14 +51,23 @@ def cached_frontier(min_minutes: int, leagues: tuple, excluded_squads: tuple, bu
     )
 
 
+@st.cache_data(max_entries=32, show_spinner="Transfer planı hesaplanıyor...")
+def cached_transfer_plan(min_minutes: int, leagues: tuple, club: str, **kwargs):
+    df, _, _ = load_processed_data(min_minutes)
+    return SquadOptimizer(df).plan_transfers(club, target_leagues=list(leagues), **kwargs)
+
+
 def fmt_value(v) -> str:
     """Piyasa değerini okunabilir biçimde yazar: 45.0 -> '€45M'."""
     if v is None or v != v:  # None veya NaN
         return "?"
+    if abs(v) < 0.0005:
+        return "€0"
     return f"€{v:,.0f}M" if v >= 1 else f"€{v * 1000:,.0f}K"
 
 
-def draw_tactical_pitch(xi_df, has_values: bool = False) -> go.Figure:
+def draw_tactical_pitch(xi_df, has_values: bool = False,
+                        title: str = "⚽ Optimum İlk 11 Saha Dizilişi (Taktik Tahtası)") -> go.Figure:
     fig = go.Figure()
 
     pitch_shapes = [
@@ -84,17 +93,22 @@ def draw_tactical_pitch(xi_df, has_values: bool = False) -> go.Figure:
     group_colors = {"GK": "#f59e0b", "DF": "#3b82f6", "MF": "#10b981", "FW": "#ef4444"}
 
     for group in ["GK", "DF", "MF", "FW"]:
-        xs, ys, labels = [], [], []
+        xs, ys, labels, ring_colors, ring_widths = [], [], [], [], []
         group_df = xi_df[xi_df["Assigned_Pos"] == group]
         for role, role_df in group_df.groupby("Assigned_Role", sort=False):
             x, fixed_y = role_xy[role]
             y_list = fixed_y or central_spread.get(len(role_df), [50] * len(role_df))
             for (_, row), y in zip(role_df.iterrows(), y_list):
+                is_new = bool(row.get("New_Signing", False))
                 xs.append(x)
                 ys.append(y)
+                ring_colors.append("#facc15" if is_new else "white")
+                ring_widths.append(5 if is_new else 2)
                 labels.append(
-                    f"<b>{row['Player']}</b>{'*' if row['Out_Of_Position'] else ''}"
-                    f"<br>{role} · {row['Squad']} ({row['OptiScout_Score']})"
+                    f"<b>{'★ ' if is_new else ''}{row['Player']}</b>{'*' if row['Out_Of_Position'] else ''}"
+                    f"<br>{role} · {row['Squad']} ("
+                    f"{row['OptiScout_Score']}"
+                    f"{'→' + str(row['Effective_Score']) if row['Out_Of_Position'] and 'Effective_Score' in row else ''})"
                     f"{' · ' + fmt_value(row['Market_Value_M']) if has_values else ''}"
                 )
         if not xs:
@@ -104,7 +118,7 @@ def draw_tactical_pitch(xi_df, has_values: bool = False) -> go.Figure:
                 x=xs,
                 y=ys,
                 mode="markers+text",
-                marker=dict(size=26, color=group_colors[group], line=dict(width=2, color="white")),
+                marker=dict(size=26, color=group_colors[group], line=dict(width=ring_widths, color=ring_colors)),
                 text=labels,
                 # Kaleci etiketi altta: 3'lü savunmada ortadaki stoperin etiketiyle çakışmasın
                 textposition="bottom center" if group == "GK" else "top center",
@@ -120,7 +134,7 @@ def draw_tactical_pitch(xi_df, has_values: bool = False) -> go.Figure:
         margin=dict(l=10, r=10, t=40, b=10),
         plot_bgcolor="#111827",
         paper_bgcolor="#111827",
-        title=dict(text="⚽ Optimum İlk 11 Saha Dizilişi (Taktik Tahtası)", font=dict(color="white")),
+        title=dict(text=title, font=dict(color="white")),
         showlegend=True,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="white")),
     )
@@ -160,10 +174,11 @@ st.markdown(
     "ile çalışan karar destek platformu."
 )
 
-tab1, tab2, tab3 = st.tabs([
+tab1, tab2, tab3, tab4 = st.tabs([
     "📊 1. Oyuncu Sıralaması & Kadran Analizi",
     "🔍 2. İkame Oyuncu Bulucu (Kosinüs Benzerliği)",
-    "🧠 3. Optimum İlk 11 Çözücü (MILP)"
+    "🧠 3. Optimum İlk 11 Çözücü (MILP)",
+    "🏟️ 4. Kulüp Boşluk Analizi & Transfer Planı",
 ])
 
 with tab1:
@@ -461,3 +476,135 @@ with tab3:
                     template="plotly_dark", height=420,
                 )
                 st.plotly_chart(fig_frontier)
+
+with tab4:
+    st.subheader("🏟️ Kulüp Boşluk Analizi & Transfer Planı")
+    st.markdown(
+        "Seçilen kulübün **mevcut oyuncularıyla kurabileceği en iyi 11** bulunur, en zayıf "
+        "mevkiler (boşluklar) belirlenir ve bütçe içinde **hangi transferlerin takımı en çok "
+        "iyileştireceği** MILP ile hesaplanır. Kulübün kendi oyuncuları maliyetsiz, dış oyuncular "
+        "piyasa değerleriyle modele girer; kimin alınacağına ve kimin yedeğe düşeceğine model karar verir."
+    )
+
+    if not has_values:
+        st.info(
+            "Transfer planı için piyasa değerleri gerekli (`data/market_values.csv`). "
+            "Oluşturmak için: `python scripts/build_market_values.py`"
+        )
+    else:
+        clubs = sorted(df["Squad"].unique().tolist())
+        p1, p2, p3 = st.columns([2, 1, 1])
+        with p1:
+            club = st.selectbox(
+                "Kulüp", clubs,
+                index=clubs.index("Tottenham") if "Tottenham" in clubs else 0,
+            )
+        with p2:
+            plan_formation = st.selectbox(
+                "Diziliş", list(SquadOptimizer.FORMATIONS), key="plan_formation"
+            )
+        with p3:
+            max_signings = st.slider("Maksimum Transfer Sayısı", 1, 5, 2)
+        q1, q2 = st.columns([3, 1])
+        with q1:
+            plan_budget_m = st.slider("Transfer Bütçesi (milyon €)", 0, 300, 50, 5)
+        with q2:
+            max_signing_age = st.slider("Transferlerde Maks. Yaş", 18, 36, 28)
+
+        plan = cached_transfer_plan(
+            min_mins,
+            tuple(selected_leagues),
+            club,
+            formation=plan_formation,
+            budget_eur=plan_budget_m * 1e6,
+            max_signings=max_signings,
+            max_signing_age=max_signing_age,
+        )
+        st.caption(
+            f"{club} kadrosu, kenar çubuğundaki minimum süre filtresini (≥ {min_mins} dk) geçen "
+            f"**{plan['own_players']} oyuncudan** oluşur. Sakat veya az süre almış oyuncuları da "
+            "katmak için filtreyi düşürün. Transfer hedefleri seçili liglerden aranır; "
+            "aynı kulüpten en fazla 1 oyuncu alınır."
+        )
+
+        base, after = plan["baseline"], plan["plan"]
+        if base["status"] != "Optimal":
+            st.error(
+                f"{club} için bu dizilişte 11 kurulamadı (ör. süre filtresini geçen kaleci yok). "
+                "Süre filtresini düşürmeyi deneyin."
+            )
+        else:
+            k1, k2, k3, k4 = st.columns(4)
+            k1.metric("Mevcut 11 (rol uyumlu skor)", f"{base['avg_effective_score']}")
+            if after["status"] == "Optimal":
+                k2.metric(
+                    "Transfer Sonrası 11",
+                    f"{after['avg_effective_score']}",
+                    delta=f"{after['avg_effective_score'] - base['avg_effective_score']:+.1f}",
+                )
+                k3.metric("Harcanan", fmt_value(plan["spent_eur"] / 1e6),
+                          delta=f"{fmt_value(plan_budget_m - plan['spent_eur'] / 1e6)} kaldı",
+                          delta_color="off")
+                k4.metric("Transfer", f"{len(plan['signings'])} / {max_signings}")
+            else:
+                k2.metric("Transfer Sonrası 11", "—")
+
+            pc1, pc2 = st.columns(2)
+            with pc1:
+                st.plotly_chart(draw_tactical_pitch(base["squad"], True, f"Mevcut 11 · {club}"))
+            with pc2:
+                if after["status"] == "Optimal":
+                    st.plotly_chart(draw_tactical_pitch(after["squad"], True, "Transfer Sonrası 11 (★ = yeni transfer)"))
+
+            if base["squad"]["Role_Fit"].le(0.5).any():
+                st.caption(
+                    "Mevcut 11'de skoru yarıya indirilmiş oyuncular, kadroda o rol için doğal "
+                    "oyuncu olmadığı için zorunlu olarak yerleştirilmiştir (rol uygunluğu 0.5)."
+                )
+
+            g1, g2 = st.columns(2)
+            with g1:
+                st.markdown("**🔻 En zayıf mevkiler (boşluklar)**")
+                st.dataframe(
+                    plan["gaps"][["Assigned_Role", "Player", "TM_Sub_Position", "Role_Fit",
+                                  "OptiScout_Score", "Effective_Score"]],
+                    hide_index=True,
+                )
+            with g2:
+                st.markdown("**✍️ Önerilen transferler**")
+                if plan["signings"].empty:
+                    st.write("Bu bütçeyle mevcut 11'i iyileştiren bir transfer bulunamadı.")
+                else:
+                    st.dataframe(
+                        plan["signings"][["Assigned_Role", "Player", "Squad", "League", "Age",
+                                          "Market_Value_M", "Effective_Score"]],
+                        hide_index=True,
+                    )
+                if not plan["dropped"].empty:
+                    st.markdown("**↘️ İlk 11'den çıkanlar**")
+                    st.dataframe(
+                        plan["dropped"][["Assigned_Role", "Player", "Effective_Score"]],
+                        hide_index=True,
+                    )
+
+            st.markdown("**🔎 Boşluk başına alternatif adaylar** (bütçeye sığan, mevcut oyuncudan daha iyi)")
+            for key, cand in plan["candidates"].items():
+                role, row_key = key.split("|", 1)
+                current = plan["gaps"][plan["gaps"]["Row_Key"] == row_key].iloc[0]
+                with st.expander(
+                    f"{role} · şu an: {current['Player']} ({current['Effective_Score']})"
+                ):
+                    if cand.empty:
+                        st.write("Bütçeye sığan daha iyi bir aday yok.")
+                    else:
+                        st.dataframe(
+                            cand[["Player", "Squad", "League", "Age", "TM_Sub_Position",
+                                  "Market_Value_M", "Effective_Score", "Improvement"]],
+                            hide_index=True,
+                        )
+
+            st.caption(
+                "Varsayımlar: Oyuncu satışları ve maaşlar modele dahil değildir; maliyet olarak "
+                "Transfermarkt piyasa değeri kullanılır (gerçek bonservis bedeli farklı olabilir)."
+            )
+
