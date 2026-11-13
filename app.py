@@ -1,3 +1,4 @@
+import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
@@ -5,6 +6,7 @@ import streamlit as st
 from data_processor import ROLE_GROUP_LABELS, FootballDataProcessor, applicable_sub_scores
 from similarity_engine import PlayerSimilarityEngine
 from squad_optimizer import SquadOptimizer
+from value_model import MarketValueModel
 
 st.set_page_config(
     page_title="OptiScout | Football Scouting DSS",
@@ -66,6 +68,7 @@ COLUMN_LABELS = {
     "OptiScout_Score": "OptiScout", "Effective_Score": "Rol Uyumlu Skor",
     "Similarity_Score": "Benzerlik", "Market_Value_M": "Piyasa Değeri",
     "Role_Fit": "Rol Uyumu", "Improvement": "Kazanç",
+    "Pred_Value_M": "Tahmini Değer", "Value_Ratio": "Fırsat Katsayısı",
     "Attacking_Score": "Hücum", "Creativity_Score": "Yaratıcılık", "Defensive_Score": "Savunma",
     "Goalkeeping_Score": "Kalecilik", "Discipline_Score": "Disiplin", "Saves_p90": "Kurtarış/90",
 }
@@ -97,6 +100,8 @@ def show_table(frame, **kwargs):
     t = t.rename(columns=COLUMN_LABELS)
     config = {
         "Piyasa Değeri": st.column_config.NumberColumn(format="€%.1fM"),
+        "Tahmini Değer": st.column_config.NumberColumn(format="€%.1fM"),
+        "Fırsat Katsayısı": st.column_config.NumberColumn(format="%.1fx"),
         "Rol Uyumu": st.column_config.NumberColumn(format="%.2f"),
     }
     for col in ["OptiScout", "Rol Uyumlu Skor", "Benzerlik", "Kazanç", "Hücum", "Yaratıcılık",
@@ -105,8 +110,14 @@ def show_table(frame, **kwargs):
     for col in ["Gol/90", "Asist/90", "Savunma Aks./90", "PS'siz G+A/90", "Kurtarış/90"]:
         config[col] = st.column_config.NumberColumn(format="%.2f")
     kwargs.setdefault("hide_index", True)
-    kwargs.setdefault("use_container_width", True)
+    kwargs.setdefault("width", "stretch")
     return st.dataframe(t, column_config=config, **kwargs)
+
+
+@st.cache_data(max_entries=8, show_spinner="Değer modeli eğitiliyor...")
+def cached_value_model(min_minutes: int):
+    df, _, _ = load_processed_data(min_minutes)
+    return MarketValueModel(df).fit()
 
 
 def fmt_value(v) -> str:
@@ -230,11 +241,12 @@ st.markdown(
     "ile çalışan karar destek platformu."
 )
 
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📊 1. Oyuncu Sıralaması & Kadran Analizi",
     "🔍 2. İkame Oyuncu Bulucu (Kosinüs Benzerliği)",
     "🧠 3. Optimum İlk 11 Çözücü (MILP)",
     "🏟️ 4. Kulüp Boşluk Analizi & Transfer Planı",
+    "💎 5. Fırsat Oyuncular (Değer Tahmini)",
 ])
 
 with tab1:
@@ -681,4 +693,112 @@ with tab4:
                 "Varsayımlar: Oyuncu satışları ve maaşlar modele dahil değildir; maliyet olarak "
                 "Transfermarkt piyasa değeri kullanılır (gerçek bonservis bedeli farklı olabilir)."
             )
+
+with tab5:
+    st.subheader("💎 Fırsat Oyuncular: Performansına Göre Ucuz Kalanlar")
+    st.markdown(
+        "Bir regresyon modeli, oyuncunun **performansından, yaşından, ligi ve rolünden** "
+        "piyasa değerinin ne olması gerektiğini tahmin eder. Rolünde üst dilimde oynayan ama "
+        "gerçek piyasa değeri tahminin çok altında kalan oyuncular **fırsat** olarak listelenir. "
+        "Her oyuncunun tahmini, o oyuncuyu eğitimde hiç görmemiş bir modelden gelir "
+        "(5 katlı çapraz doğrulama); böylece model ezberlediği değeri geri vermez."
+    )
+
+    if not has_values:
+        st.info("Değer modeli için piyasa değerleri gerekli (`data/market_values.csv`).")
+    else:
+        vm = cached_value_model(min_mins)
+        mt = vm.metrics
+        v1, v2, v3, v4 = st.columns(4)
+        v1.metric("Açıklanan Varyans (R², çapraz doğrulama)", f"{mt['r2']:.2f}")
+        v2.metric("Tipik Tahmin Hatası (medyan)", f"±%{mt['median_pct_error'] * 100:.0f}")
+        v3.metric("Eğitim Örneği", f"{mt['n_train']} oyuncu")
+        v4.metric("Kulüp Gücü Eklenince R²", f"{mt['r2_with_club']:.2f}",
+                  help="Takım arkadaşlarının ortalama değeri eklendiğinde (oyuncunun kendisi hariç).")
+
+        st.info(
+            f"**Bulgu:** Yalnızca yaş, lig ve rol bilgisi değerin R² = {mt['r2_context_only']:.2f} kadarını "
+            f"açıklıyor; bu sezonun performansı bunu sadece {mt['r2']:.2f}'ye çıkarıyor. Kulüp gücü eklenince "
+            f"{mt['r2_with_club']:.2f}'ye fırlıyor. Yani piyasa, sahadaki güncel performanstan çok kulübü ve "
+            "itibarı fiyatlıyor; fırsatlar tam bu boşlukta. Kulüp gücü fırsat modeline bilerek konmadı: "
+            "konsaydı model \"küçük kulüpteki iyi oyuncu ucuzdur\" diye öğrenip aranan oyuncuları ıskalardı."
+        )
+
+        f1, f2, f3, f4 = st.columns(4)
+        with f1:
+            role_codes = [g for g in ["GK", "CB", "FB", "DM", "CM", "AM", "W", "ST"]
+                          if g in set(vm.predictions["Score_Group"])]
+            opp_roles = st.multiselect("Rol", role_codes, format_func=lambda g: ROLE_GROUP_LABELS[g],
+                                       placeholder="Tüm roller")
+        with f2:
+            opp_max_age = st.slider("Maksimum Yaş", 17, 36, 27, key="opp_age")
+        with f3:
+            opp_min_value = st.slider("Min. Piyasa Değeri (milyon €)", 0.5, 20.0, 1.0, 0.5,
+                                      help="Çok düşük değerler (€0.2M gibi) çoğu zaman eski veya güvenilmez kayıttır.")
+        with f4:
+            perf_label = st.selectbox("Performans Eşiği", ["Rolünde en iyi %10", "Rolünde en iyi %25",
+                                                           "Rolünde en iyi %50"], index=1)
+        quantile = {"Rolünde en iyi %10": 0.9, "Rolünde en iyi %25": 0.75, "Rolünde en iyi %50": 0.5}[perf_label]
+
+        opp = vm.opportunities(
+            min_value_eur=opp_min_value * 1e6,
+            min_minutes=450,
+            performance_quantile=quantile,
+            max_age=opp_max_age,
+            roles=opp_roles or None,
+            top_n=200,
+        )
+        opp = opp[opp["League"].isin(selected_leagues)].head(25)
+
+        st.markdown(f"**{len(opp)} fırsat oyuncu** (en az 450 dakika; fırsat katsayısı = tahmini değer / gerçek değer)")
+        if opp.empty:
+            st.write("Bu filtrelerle fırsat oyuncu bulunamadı.")
+        else:
+            show_table(opp[["Player", "Squad", "League", "Score_Group", "Age", "Min", "OptiScout_Score",
+                            "Market_Value_M", "Pred_Value_M", "Value_Ratio"]])
+
+        ch1, ch2 = st.columns([3, 2])
+        with ch1:
+            pr = vm.predictions.copy()
+            pr["Durum"] = np.where(pr["Row_Key"].isin(opp["Row_Key"]), "Fırsat", "Diğer")
+            pr["Rol"] = pr["Score_Group"].map(lambda g: ROLE_GROUP_LABELS.get(g, g))
+            fig_val = px.scatter(
+                pr.sort_values("Durum", ascending=False),
+                x="Market_Value_M", y="Pred_Value_M", color="Durum",
+                color_discrete_map={"Fırsat": "#facc15", "Diğer": "#475569"},
+                hover_name="Player",
+                hover_data={"Squad": True, "Rol": True, "Age": True, "OptiScout_Score": True,
+                            "Market_Value_M": ":.1f", "Pred_Value_M": ":.1f", "Durum": False},
+                log_x=True, log_y=True, template="plotly_dark", height=460,
+                labels={**COLUMN_LABELS,
+                        "Market_Value_M": "Gerçek piyasa değeri (milyon €, log)",
+                        "Pred_Value_M": "Tahmini değer (milyon €, log)"},
+                title="Gerçek vs Tahmini Değer (çizginin üstü: performansına göre ucuz)",
+            )
+            lo = float(min(pr["Market_Value_M"].min(), pr["Pred_Value_M"].min()))
+            hi = float(max(pr["Market_Value_M"].max(), pr["Pred_Value_M"].max()))
+            fig_val.add_trace(go.Scatter(x=[lo, hi], y=[lo, hi], mode="lines", name="Tahmin = Gerçek",
+                                         line=dict(color="gray", dash="dash")))
+            st.plotly_chart(fig_val)
+        with ch2:
+            eff = vm.effects.copy().sort_values("Etki_%")
+            eff["Yön"] = np.where(eff["Etki_%"] >= 0, "Artırır", "Azaltır")
+            eff["Etiket"] = eff["Etki_%"].map(lambda v: f"{v:+.0f}%")
+            fig_eff = px.bar(
+                eff, x="Etki_%", y="Etken", orientation="h", color="Yön", text="Etiket",
+                color_discrete_map={"Artırır": "#10b981", "Azaltır": "#ef4444"},
+                template="plotly_dark", height=460, title="Değeri Ne Belirliyor? (diğer her şey sabitken)",
+                labels={"Etki_%": "Piyasa değerine etkisi (%)", "Etken": ""},
+            )
+            fig_eff.update_traces(textposition="outside", cliponaxis=False)
+            fig_eff.update_layout(showlegend=False, margin=dict(r=40))
+            # Dış etiketler için iki yanda boşluk: negatif etiketler eksen yazılarıyla çakışmasın
+            fig_eff.update_xaxes(range=[min(eff["Etki_%"].min(), 0) - 30, max(eff["Etki_%"].max(), 0) + 30])
+            st.plotly_chart(fig_eff)
+
+        st.caption(
+            "Sınırlamalar: Model yalnızca bu sezonun ilk haftalarındaki performansı görür; sakatlık geçmişi, "
+            "sözleşme süresi, potansiyel ve itibar modelde yoktur. Bu yüzden liste bir karar değil, "
+            "scout'ların daha yakından izlemesi gereken oyuncular için bir ön elemedir."
+        )
 

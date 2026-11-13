@@ -3,7 +3,7 @@
 
 # ⚽ OptiScout: Data-Driven Football Scouting & Squad Optimization DSS
 
-Avrupa'nın 5 büyük ligindeki (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) **2026-2027 sezonu FBref** verileri üzerine inşa edilmiş; **Veri Mühendisliği**, **İstatistiksel Benzerlik Analizi (Cosine Similarity)** ve **Yöneylem Araştırması (Mixed-Integer Linear Programming - MILP)** yöntemlerini birleştiren interaktif bir **Karar Destek Sistemi (Decision Support System - DSS)**.
+Avrupa'nın 5 büyük ligindeki (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) **2026-2027 sezonu FBref** verileri üzerine inşa edilmiş; **Veri Mühendisliği**, **İstatistiksel Benzerlik Analizi (Cosine Similarity)**, **Makine Öğrenmesi (piyasa değeri regresyonu)** ve **Yöneylem Araştırması (Mixed-Integer Linear Programming - MILP)** yöntemlerini birleştiren interaktif bir **Karar Destek Sistemi (Decision Support System - DSS)**.
 
 ![OptiScout demo](images/demo.gif)
 
@@ -16,6 +16,7 @@ Modern futbol analitiğinde oyuncu izleme (scouting) ve kadro planlama süreçle
 2. **İkame & Fırsat Oyuncu Keşfi (Player Similarity):** Takımdan ayrılan veya yüksek maliyetli bir yıldız oyuncunun oyun profiline istatistiksel olarak en çok benzeyen genç yeteneklerin (U23 Wonderkid) çok boyutlu uzayda bulunması.
 3. **Kısıtlı Kadro Optimizasyonu (Squad Building):** Taktik diziliş, **transfer bütçesi**, yaş ortalaması sınırı ve kulüp başına maksimum oyuncu kısıtları altında matematiksel olarak en yüksek verimi üreten İlk 11'in kurulması; bütçe arttıkça kadronun ne kadar iyileştiğinin (azalan getiri) ölçülmesi.
 4. **Kulüp Boşluk Analizi & Transfer Planı:** Belirli bir kulübün mevcut kadrosundaki en zayıf mevkilerin bulunması ve sınırlı bütçe ile transfer sayısı altında takımı en çok iyileştirecek transferlerin seçilmesi.
+5. **Fırsat Oyuncu Tespiti:** Performansına göre piyasa değeri düşük kalan, yani piyasanın henüz fiyatlamadığı oyuncuların bulunması.
 
 ---
 
@@ -26,8 +27,9 @@ Modern futbol analitiğinde oyuncu izleme (scouting) ve kadro planlama süreçle
 | **1. Veri Mühendisliği & Skorlama** | `data_processor.py` | Per-90 Normalizasyon & Rol Bazlı Yüzdelik Dilim (`Percentile Rank`) | Ham FBref verilerini temizler, oyuncuları Transfermarkt alt mevkilerine göre rol gruplarına ayırır, az dakika alan oyuncuların şişmiş oranlarını **Bayesian shrinkage** ile rol ortalamasına çeker ve Hücum, Yaratıcılık, Savunma, Disiplin alt kırılımlarıyla `0-100` arası **OptiScout_Score** üretir. |
 | **2. İkame Oyuncu Motoru** | `similarity_engine.py` | `StandardScaler` (Z-Score) + `Cosine Similarity` (`scikit-learn`) | Oyuncuların rol bazlı Per-90 vektörlerini standartlaştırır ve seçilen referans oyuncuya en yüksek kosinüs benzerliği gösteren alternatifleri listeler. Model eğitimi gerektirmeyen, açıklanabilir bir mesafe ölçüsüdür. |
 | **3. Optimum İlk 11 Çözücü** | `squad_optimizer.py` | Karışık Tamsayılı Doğrusal Programlama (`scipy.optimize.milp` - HiGHS Solver) | Seçilen formasyon (`4-3-3`, `4-2-3-1`, `3-5-2` vb.), **transfer bütçesi**, maksimum yaş ortalaması ve kulüp sınırı kısıtları altında toplam kadro skorunu maksimize eder; bütçe-performans eğrisini çizer ve **kulüp bazlı transfer planı** üretir. Formasyonlar Transfermarkt alt mevkilerine dayalı **taktik rollerle** (LB, CB, DM, AM, RW, ST...) tanımlanır. |
-| **4. Piyasa Değeri Eşleştirme** | `scripts/build_market_values.py` | İsim normalizasyonu + doğum yılı + kulüp benzerliği ile kademeli eşleştirme | FBref oyuncularını Transfermarkt piyasa değerleri ve alt mevkileriyle eşleştirir ve `data/market_values.csv` dosyasını üretir. |
-| **5. İnteraktif KDS Arayüzü** | `app.py` | `Streamlit` & `Plotly` | Rol bazlı oyuncu sıralaması, dört kadranlı aykırı değer (outlier) haritası, radar karşılaştırması, taktik tahtası ve bütçe-performans eğrisi sunar. |
+| **4. Piyasa Değeri Modeli** | `value_model.py` | Ridge regresyon, 5 katlı çapraz doğrulama (out-of-fold tahmin) | Performans, yaş, lig ve rolden beklenen piyasa değerini tahmin eder; gerçek değeri tahminin çok altında kalan üst dilim oyuncuları fırsat olarak listeler. |
+| **5. Piyasa Değeri Eşleştirme** | `scripts/build_market_values.py` | İsim normalizasyonu + doğum yılı + kulüp benzerliği ile kademeli eşleştirme | FBref oyuncularını Transfermarkt piyasa değerleri ve alt mevkileriyle eşleştirir ve `data/market_values.csv` dosyasını üretir. |
+| **6. İnteraktif KDS Arayüzü** | `app.py` | `Streamlit` & `Plotly` | Rol bazlı oyuncu sıralaması, dört kadranlı aykırı değer (outlier) haritası, radar karşılaştırması, taktik tahtası ve bütçe-performans eğrisi sunar. |
 
 ---
 
@@ -53,6 +55,10 @@ Model farklı bütçeler için yeniden çözülür; eğrinin düzleştiği nokta
 ### 6. Kulüp Boşluk Analizi & Transfer Planı
 Juventus örneği: kadroda doğal sol bek olmadığı için bir stoper sol bekte oynar; model bütçe içinde sol bek ve santrfor transferi önerir (★ = yeni transfer).
 ![Transfer planı](images/transfer_plan.png)
+
+### 7. Fırsat Oyuncular (Piyasa Değeri Modeli)
+Çizginin üstündeki sarı noktalar, rolünde üst %25'te oynayıp piyasa değeri performansına göre tahminin çok altında kalan oyunculardır.
+![Fırsat oyuncular](images/value_opportunities.png)
 
 ---
 
@@ -127,6 +133,29 @@ Kimin alınacağına **ve kimin yedeğe düşeceğine** model kendisi karar veri
 
 ---
 
+## 💎 Fırsat Oyuncular: Piyasa Değeri Modeli
+
+Bir **Ridge regresyon** modeli, oyuncunun bu sezonki performansından (OptiScout ve alt skorlar), yaşından, dakikasından, ilk 11 oranından, liginden ve rolünden **log(piyasa değeri)** tahmin eder. Rolünde üst dilimde oynayan ama gerçek değeri tahminin çok altında kalan oyuncular **fırsat** olarak listelenir (fırsat katsayısı = tahmini değer / gerçek değer).
+
+**Tasarım kararları:**
+* **Out-of-fold tahmin:** Her oyuncunun tahmini, o oyuncuyu eğitimde görmemiş bir modelden gelir (5 katlı çapraz doğrulama). Tüm veriyle eğitilen bir model ezberlediği değeri geri verir ve fırsat sinyali kaybolur.
+* **Kulüp gücü bilerek modele konmadı:** Takım arkadaşlarının ortalama değeri (oyuncunun kendisi hariç) eklendiğinde açıklanan varyans ~2 katına çıkar; ama model "küçük kulüpteki iyi oyuncu ucuzdur" diye öğrenir ve tam da aranan gizli cevherleri ıskalar.
+* **Model seçimi:** Gradient boosting (HistGradientBoosting) bu veri boyutunda Ridge'i geçemedi; Ridge hem daha iyi genelleşti hem de katsayıları yorumlanabilir.
+
+**Sonuçlar (5 katlı çapraz doğrulama, 1.232 oyuncu):**
+
+| Model | Açıklanan varyans (R²) |
+| :--- | :---: |
+| Yalnızca yaş + lig + rol | 0.29 |
+| + bu sezonun performansı (**fırsat modeli**) | 0.33 |
+| + kulüp gücü (karşılaştırma) | 0.64 |
+
+Fırsat modelinin tipik (medyan) tahmin hatası ±%57'dir. **Bulgu:** Bu sezonun performansı piyasa değerinin küçük bir kısmını açıklar; değeri asıl belirleyen kulüp, lig ve itibardır. Örneğin aynı performans ve yaştaki bir oyuncu Premier League'de ortalama lige göre ~2,4 kat değerlidir, 30 yaşındaki bir oyuncu 26 yaşındakinden ~%36 ucuzdur. Piyasanın güncel performansı yeterince fiyatlamaması, fırsat tespitinin dayandığı boşluktur (*Moneyball* yaklaşımı).
+
+Bu nedenle liste bir **karar değil, ön elemedir**: sakatlık geçmişi, sözleşme süresi, potansiyel ve sezonun ilk haftalarındaki şans faktörü modelde yoktur.
+
+---
+
 ## 🎯 Rol Bazlı Skorlama
 
 FBref yalnızca dört geniş mevki verir (`GK`, `DF`, `MF`, `FW`). Bu kaba ayrımda bir bek stoperlerle, bir kanat oyuncusu merkez orta sahalarla kıyaslanır. Veride FBref'in `MF` dediği 125'ten fazla kanat ve 60'tan fazla bek vardır. OptiScout, Transfermarkt alt mevkisini kullanarak her oyuncuyu bir **rol grubu** içinde puanlar ve her role ayrı ağırlıklar uygular:
@@ -162,6 +191,7 @@ Per-90 metriklerde $k = 450$ dakikadır (5 maçlık sanal veri). Çok oynayan oy
 ## ⚠️ Bilinen Sınırlamalar
 
 * **xG/xA yok:** FBref artık gelişmiş Opta metriklerini yayınlamadığı için skorlar gol, asist ve şut gibi temel istatistiklere dayanır.
+* **Değer modeli:** Bu sezonun ilk haftalarındaki performansa dayanır ve piyasa değerindeki değişimin yalnızca üçte birini açıklar (R² ≈ 0.33); fırsat listesi bir ön eleme aracıdır.
 * **Transfer planı varsayımları:** Oyuncu satışları ve maaşlar modele dahil değildir; maliyet olarak piyasa değeri kullanılır. Kulüp kadrosu yalnızca süre filtresini geçen oyunculardan oluşur; sakat veya az oynamış oyuncular için filtre düşürülmelidir.
 * **Penaltısız, dakika başına üretim:** Skorlar toplam gol sayısını değil penaltısız 90 dakika başına üretimi ödüllendirir. Bu yüzden örneğin penaltı golleri olan ve çok oynayan bir yıldız, daha az oynayıp yüksek oranla gol atan bir oyuncunun gerisinde kalabilir.
 * **Rol verisi:** Roller Transfermarkt'ın tek bir "ana" alt mevkisine dayanır; birden fazla rolde oynayan oyuncular yalnızca ana rolünde puanlanır (MILP'de diğer rollere uygunluk katsayısıyla yerleştirilebilir). Rol ağırlıkları uzman görüşüne dayalı varsayımlardır.
