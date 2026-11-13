@@ -1,4 +1,5 @@
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://optiscout-turkensar.streamlit.app)
+[![tests](https://github.com/turkensar/optiscout-football-dss/actions/workflows/tests.yml/badge.svg)](https://github.com/turkensar/optiscout-football-dss/actions/workflows/tests.yml)
 
 # ⚽ OptiScout: Data-Driven Football Scouting & Squad Optimization DSS
 

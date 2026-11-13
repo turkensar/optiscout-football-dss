@@ -20,6 +20,37 @@ def load_processed_data(min_minutes: int):
     return df, processor.source_file, processor.has_market_values
 
 
+# Streamlit her etkileşimde (kaydırıcı, filtre) bütün sayfayı baştan çalıştırır.
+# Aşağıdaki fonksiyonlar sonuçlarını girdilerine göre önbelleğe alır; böylece örneğin
+# 1. sekmedeki yaş filtresi değişince MILP ve benzerlik hesabı tekrar yapılmaz.
+# Listeler önbellek anahtarı olabilmesi için tuple olarak geçirilir.
+@st.cache_data(max_entries=64, show_spinner=False)
+def cached_similar_players(min_minutes: int, target_key: str, top_n: int, max_age: int, leagues: tuple):
+    df, _, _ = load_processed_data(min_minutes)
+    return PlayerSimilarityEngine(df).find_similar_players(
+        target_key=target_key, top_n=top_n, max_age=max_age, leagues=list(leagues)
+    )
+
+
+def _league_pool(min_minutes: int, leagues: tuple):
+    df, _, _ = load_processed_data(min_minutes)
+    return df[df["League"].isin(leagues)]
+
+
+@st.cache_data(max_entries=64, show_spinner="Optimum 11 hesaplanıyor...")
+def cached_optimize(min_minutes: int, leagues: tuple, excluded_squads: tuple, **kwargs):
+    return SquadOptimizer(_league_pool(min_minutes, leagues)).optimize_starting_xi(
+        selected_leagues=list(leagues), excluded_squads=list(excluded_squads), **kwargs
+    )
+
+
+@st.cache_data(max_entries=16, show_spinner="Bütçe eğrisi hesaplanıyor...")
+def cached_frontier(min_minutes: int, leagues: tuple, excluded_squads: tuple, budgets: tuple, **kwargs):
+    return SquadOptimizer(_league_pool(min_minutes, leagues)).budget_frontier(
+        list(budgets), selected_leagues=list(leagues), excluded_squads=list(excluded_squads), **kwargs
+    )
+
+
 def fmt_value(v) -> str:
     """Piyasa değerini okunabilir biçimde yazar: 45.0 -> '€45M'."""
     if v is None or v != v:  # None veya NaN
@@ -207,7 +238,6 @@ with tab1:
 
 with tab2:
     st.subheader("🔍 Yıldız Oyuncu İkamesi & Genç Yetenek (Wonderkid) Keşfi")
-    sim_engine = PlayerSimilarityEngine(df)
 
     c1, c2, c3 = st.columns([2, 1, 1])
     with c1:
@@ -228,11 +258,8 @@ with tab2:
     with c3:
         top_n_sim = st.slider("Listelenecek Oyuncu Sayısı", 5, 20, 10)
 
-    similar_df = sim_engine.find_similar_players(
-        target_key=target_key,
-        top_n=top_n_sim,
-        max_age=sim_max_age,
-        leagues=selected_leagues,
+    similar_df = cached_similar_players(
+        min_mins, target_key, top_n_sim, sim_max_age, tuple(selected_leagues)
     )
 
     ref_row = df[df["Row_Key"] == target_key].iloc[0]
@@ -300,7 +327,6 @@ with tab2:
 
 with tab3:
     st.subheader("🧠 Doğrusal Programlama (MILP) ile Kısıtlı Optimum İlk 11")
-    optimizer = SquadOptimizer(filtered_df)
 
     o1, o2, o3, o4, o5 = st.columns(5)
     with o1:
@@ -348,12 +374,13 @@ with tab3:
         "Arsenal", "Liverpool", "Chelsea", "Paris SG", "Bayern Munich", "Inter", "Juventus"
     ] if exclude_giants else []
 
-    result = optimizer.optimize_starting_xi(
+    result = cached_optimize(
+        min_mins,
+        tuple(selected_leagues),
+        tuple(giant_clubs),
         formation=formation,
         max_players_per_club=max_club,
         max_avg_age=max_avg_age,
-        selected_leagues=selected_leagues,
-        excluded_squads=giant_clubs,
         allow_out_of_position=allow_oop,
         budget_eur=budget_eur,
     )
@@ -412,13 +439,14 @@ with tab3:
         )
         if st.button("Eğriyi hesapla"):
             budgets = [b * 1e6 for b in (25, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1000, 1500)]
-            frontier = optimizer.budget_frontier(
-                budgets,
+            frontier = cached_frontier(
+                min_mins,
+                tuple(selected_leagues),
+                tuple(giant_clubs),
+                tuple(budgets),
                 formation=formation,
                 max_players_per_club=max_club,
                 max_avg_age=max_avg_age,
-                selected_leagues=selected_leagues,
-                excluded_squads=giant_clubs,
                 allow_out_of_position=allow_oop,
             )
             ok = frontier[frontier["Status"] == "Optimal"]
