@@ -6,26 +6,44 @@ from sklearn.preprocessing import StandardScaler
 
 class PlayerSimilarityEngine:
     """
-    Seçilen hedef oyuncunun oyun stiline (Per 90 metriklerine) en çok benzeyen
-    alternatif / fırsat oyuncuları Kosinüs Benzerliği (Cosine Similarity) ile bulur.
+    Seçilen hedef oyuncunun oyun stiline (küçük örneklem düzeltmeli Per 90
+    metriklerine) en çok benzeyen alternatif / fırsat oyuncuları
+    Kosinüs Benzerliği (Cosine Similarity) ile bulur. Adaylar hedefin rol
+    grubundan (ör. kanat, bek) seçilir; FBref'in "MF" dediği bir kanat da
+    kanatlarla kıyaslanır.
+
+    Oyuncular isimle değil `Row_Key` (isim | doğum yılı | kulüp) ile seçilir;
+    çünkü veri setinde aynı isimli farklı oyuncular ve sezon içinde transfer
+    olup iki satırda görünen oyuncular bulunur.
     """
 
     POSITION_FEATURES = {
         "FW": [
-            "Gls_p90", "Ast_p90", "GA_non_pk_p90", "Sh/90", "SoT/90",
-            "G/Sh", "Crs_p90", "Fld_p90", "Def_Actions_p90"
+            "Gls_adj", "Ast_adj", "GA_non_pk_adj", "Sh_adj", "SoT_adj",
+            "G_Sh_adj", "Crs_adj", "Fld_adj", "Def_Actions_adj"
         ],
         "MF": [
-            "Gls_p90", "Ast_p90", "GA_non_pk_p90", "Sh/90", "Crs_p90",
-            "Fld_p90", "TklW_p90", "Int_p90", "Def_Actions_p90"
+            "Gls_adj", "Ast_adj", "GA_non_pk_adj", "Sh_adj", "Crs_adj",
+            "Fld_adj", "TklW_adj", "Int_adj", "Def_Actions_adj"
         ],
         "DF": [
-            "TklW_p90", "Int_p90", "Def_Actions_p90", "Crs_p90",
-            "Ast_p90", "Gls_p90", "Fld_p90", "Fls_p90"
+            "TklW_adj", "Int_adj", "Def_Actions_adj", "Crs_adj",
+            "Ast_adj", "Gls_adj", "Fld_adj", "Fls_adj"
         ],
         "GK": [
-            "Save%", "CS%", "GA90", "Saves_p90"
+            "SavePct_adj", "CSPct_adj", "GA90_adj", "Saves_adj"
         ],
+    }
+
+    # Rol grubu -> kullanilacak ozellik seti ve "rolu bilinmeyen" oyuncularin
+    # aday havuzuna katilacagi FBref genis mevkileri
+    ROLE_FEATURES = {
+        "GK": "GK", "CB": "DF", "FB": "DF", "DM": "MF", "CM": "MF",
+        "AM": "MF", "W": "FW", "ST": "FW",
+    }
+    ROLE_BROAD_POOL = {
+        "GK": ["GK"], "CB": ["DF"], "FB": ["DF", "MF"], "DM": ["MF"], "CM": ["MF"],
+        "AM": ["MF", "FW"], "W": ["MF", "FW"], "ST": ["FW"],
     }
 
     def __init__(self, df: pd.DataFrame):
@@ -33,44 +51,60 @@ class PlayerSimilarityEngine:
 
     def find_similar_players(
         self,
-        target_player: str,
+        target_key: str,
         top_n: int = 10,
         max_age: float = 40.0,
         leagues: list = None,
         exclude_same_squad: bool = True,
     ) -> pd.DataFrame:
-        if target_player not in self.df["Player"].values:
-            raise ValueError(f"Oyuncu bulunamadı: {target_player}")
+        """
+        `Similarity_Score`: ham kosinüs benzerliği x 100 (-100 ile +100 arası).
+        0 = ilişkisiz profil, 100 = aynı yönde profil. Eski (cos+1)/2 dönüşümü
+        ilişkisiz oyuncuları "%50 benzer" gösterdiği için kaldırıldı.
+        """
+        if target_key not in self.df["Row_Key"].values:
+            raise ValueError(f"Oyuncu bulunamadı: {target_key}")
 
-        target_row = self.df[self.df["Player"] == target_player].iloc[0]
-        pos = target_row["Primary_Pos"]
-        features = [f for f in self.POSITION_FEATURES[pos] if f in self.df.columns]
+        target_row = self.df[self.df["Row_Key"] == target_key].iloc[0]
+        group = target_row.get("Score_Group", target_row["Primary_Pos"])
 
-        # Aynı ana mevkideki oyuncuları al
-        pos_df = self.df[self.df["Primary_Pos"] == pos].copy().reset_index(drop=True)
+        if group in self.ROLE_FEATURES:
+            # Rolü bilinen hedef: aynı rol grubundakiler + rolü bilinmeyen uygun oyuncular
+            features = self.POSITION_FEATURES[self.ROLE_FEATURES[group]]
+            unknown_role = ~self.df["Score_Group"].isin(self.ROLE_FEATURES.keys())
+            pool_mask = (self.df["Score_Group"] == group) | (
+                unknown_role & self.df["Primary_Pos"].isin(self.ROLE_BROAD_POOL[group])
+            )
+        else:
+            # Rolü bilinmeyen hedef: FBref ana mevkisindeki tüm oyuncular
+            features = self.POSITION_FEATURES[target_row["Primary_Pos"]]
+            pool_mask = self.df["Primary_Pos"] == target_row["Primary_Pos"]
+
+        features = [f for f in features if f in self.df.columns]
+        pos_df = self.df[pool_mask].copy().reset_index(drop=True)
 
         # Z-Score (StandardScaler) ile tüm metrikleri aynı ölçeğe getir
         scaler = StandardScaler()
         feature_matrix = scaler.fit_transform(pos_df[features].fillna(0.0))
 
-        # Kosinüs Benzerliği Matrisini hesapla (-1 ile +1 arasını 0-100% ölçeğine çevir)
-        target_idx = pos_df[pos_df["Player"] == target_player].index[0]
+        target_idx = pos_df.index[pos_df["Row_Key"] == target_key][0]
         sim_scores = cosine_similarity(
             feature_matrix[target_idx].reshape(1, -1), feature_matrix
         ).flatten()
 
-        pos_df["Similarity_%"] = ((sim_scores + 1.0) / 2.0 * 100.0).round(1)
+        pos_df["Similarity_Score"] = (sim_scores * 100.0).round(1)
 
-        # Kendisini çıkar ve filtreleri uygula
-        results = pos_df[pos_df["Player"] != target_player].copy()
+        # Hedef oyuncunun kendisini (diğer kulüpteki satırı dahil) çıkar, filtreleri uygula
+        results = pos_df[pos_df["Player_ID"] != target_row["Player_ID"]].copy()
         results = results[results["Age"] <= max_age]
 
-        if leagues:
+        # None -> lig filtresi yok; boş liste -> hiç lig seçilmemiş, sonuç da boş
+        if leagues is not None:
             results = results[results["League"].isin(leagues)]
 
         if exclude_same_squad:
             results = results[results["Squad"] != target_row["Squad"]]
 
         return results.sort_values(
-            by=["Similarity_%", "OptiScout_Score"], ascending=[False, False]
+            by=["Similarity_Score", "OptiScout_Score"], ascending=[False, False]
         ).head(top_n)

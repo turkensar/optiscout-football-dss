@@ -1,7 +1,10 @@
-﻿__pycache__/
+__pycache__/
 *.py[cod]
 .idea/
 .vscode/
 .venv/
 venv/
 data/players_data-2026_2027.csv
+# Transfermarkt ham verisi (büyük); eşleştirilmiş özet data/market_values.csv repoda tutulur
+data/players.csv
+data/players.csv.gz
