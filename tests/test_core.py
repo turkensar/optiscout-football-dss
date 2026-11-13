@@ -194,3 +194,14 @@ def test_goalkeeper_never_tops_outfield_rankings(df):
     for col in ["Attacking_Score", "Creativity_Score", "Defensive_Score"]:
         top = df.sort_values(col, ascending=False, na_position="last").head(20)
         assert (top["Score_Group"] != "GK").all()
+
+
+def test_shrinkage_prior_uses_role_group_not_fbref_label(df):
+    # Ayni rol grubundaki (kanat) oyuncular, FBref etiketi ne olursa olsun ayni
+    # ortalamaya dogru cekilmeli: dusuk dakikali MF ve FW etiketli kanatlarin
+    # shrink yonu ayni prior'a gore olmali.
+    w = df[df["Score_Group"] == "W"]
+    assert set(w["Prior_Group"]) == {"W"}
+    k90 = 450 / 90
+    implied_prior = (w["Gls_adj"] * (w["90s_safe"] + k90) - w["Gls"]) / k90
+    assert implied_prior.round(6).nunique() == 1

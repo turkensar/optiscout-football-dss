@@ -195,7 +195,12 @@ class FootballDataProcessor:
         df["Saves_p90"] = (df["Saves"] / df["90s_safe"]).round(2)
 
         # 7. Kucuk orneklem duzeltmeli (shrinkage) metrikler. On bilgi (prior),
-        # dakika filtresinden ONCE tum mevki havuzundan hesaplanir.
+        # dakika filtresinden ONCE, oyuncunun ROL grubundan hesaplanir: bir kanat,
+        # FBref onu "MF" ya da "FW" dese de kanat ortalamasina dogru cekilir.
+        # Alt mevkisi bilinmeyen oyuncular icin FBref ana mevkisi kullanilir.
+        df["Prior_Group"] = (
+            df["TM_Sub_Position"].map(SUB_POSITION_TO_ROLE_GROUP).fillna(df["Primary_Pos"])
+        )
         k90 = SHRINK_MINUTES / 90.0
         per90_map = {
             "Gls_adj": "Gls",
@@ -242,9 +247,9 @@ class FootballDataProcessor:
 
     @staticmethod
     def _shrink_rate(df: pd.DataFrame, num: str, denom: str, k: float) -> pd.Series:
-        """(sayi + mevki_ortalamasi * k) / (payda + k). Payda kucukse deger
-        mevki ortalamasina yaklasir; payda buyudukce ham orana yakinsar."""
-        grp = df.groupby("Primary_Pos")
+        """(sayi + grup_ortalamasi * k) / (payda + k). Payda kucukse deger
+        grup (rol) ortalamasina yaklasir; payda buyudukce ham orana yakinsar."""
+        grp = df.groupby("Prior_Group")
         prior = grp[num].transform("sum") / grp[denom].transform("sum").replace(0, np.nan)
         prior = prior.fillna(0.0)
         return (df[num] + prior * k) / (df[denom] + k)

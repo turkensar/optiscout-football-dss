@@ -76,14 +76,14 @@ Karar vericinin asıl sorusu "en iyi 11 kim?" değil, **"bu bütçeyle kurabilec
 
 | Bütçe | Rol Uyumlu Ortalama Skor | Harcanan |
 | :--- | :--- | :--- |
-| €25M | 71.7 | €25M |
-| €50M | 75.2 | €50M |
-| €100M | 77.5 | €100M |
-| €200M | 78.0 | €165M |
-| €400M | 78.8 | €353M |
-| Sınırsız | 78.8 | €353M |
+| €25M | 71.6 | €25M |
+| €50M | 75.7 | €50M |
+| €100M | 77.8 | €100M |
+| €200M | 78.2 | €162M |
+| €400M | 79.2 | €308M |
+| Sınırsız | 79.2 | €308M |
 
-İlk €100M kadroyu yaklaşık 6 puan iyileştirirken, sonraki €250M yalnızca ~1 puan ekler; €353M'ın üzerindeki bütçe hiç kullanılmaz. Bu noktadan sonra her ek puan çok daha pahalıdır. Bu tür bir "azalan getiri" analizi, transfer bütçesinin nereye kadar anlamlı olduğunu gösterir.
+İlk €100M kadroyu yaklaşık 6 puan iyileştirirken, sonraki €200M yalnızca ~1,5 puan ekler; €308M'ın üzerindeki bütçe hiç kullanılmaz. Bu noktadan sonra her ek puan çok daha pahalıdır. Bu tür bir "azalan getiri" analizi, transfer bütçesinin nereye kadar anlamlı olduğunu gösterir.
 
 ### Piyasa değeri verisi
 
@@ -122,9 +122,9 @@ Kaleciler kurtarış yüzdesi, gol yemeden biten maç oranı, 90 dakikada yenen 
 
 ## 📉 Küçük Örneklem Düzeltmesi (Bayesian Shrinkage)
 
-Sezonun başında 300 dakika oynamış bir oyuncunun 3 golü, 90 dakika başına çok yüksek bir orana dönüşür. Bu gürültüyü azaltmak için skorlama ve benzerlik hesaplarında her oran, oyuncunun mevki ortalamasına doğru çekilir:
+Sezonun başında 300 dakika oynamış bir oyuncunun 3 golü, 90 dakika başına çok yüksek bir orana dönüşür. Bu gürültüyü azaltmak için skorlama ve benzerlik hesaplarında her oran, oyuncunun rol grubunun ortalamasına doğru çekilir (ör. bir kanat oyuncusu, FBref onu `MF` ya da `FW` olarak etiketlemiş olsun, kanat ortalamasına çekilir):
 
-$$\text{oran}_{adj} = \frac{\text{sayı} + \mu_{\text{mevki}} \cdot k}{\text{payda} + k}$$
+$$\text{oran}_{adj} = \frac{\text{sayı} + \mu_{\text{rol}} \cdot k}{\text{payda} + k}$$
 
 Per-90 metriklerde $k = 450$ dakikadır (5 maçlık sanal veri). Çok oynayan oyuncular neredeyse hiç etkilenmez. Tablolarda gösterilen `*_p90` değerleri ham değerlerdir.
 
