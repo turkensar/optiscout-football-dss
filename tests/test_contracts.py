@@ -19,6 +19,7 @@ def df():
 
 def test_contract_classification_and_fee_factors():
     t = pd.DataFrame({
+        "Min%": [50.0] * 5,  # rotasyon oyuncusu: rol carpani 1.0
         "Market_Value_EUR": [10e6, 10e6, 10e6, 10e6, 10e6],
         "TM_Contract_Expiry": ["2027-06-30", "2028-06-30", "2030-06-30", None, "2025-06-30"],
     })
@@ -29,10 +30,19 @@ def test_contract_classification_and_fee_factors():
     # Veri tarihinden once bitmis gorunen sozlesme eskimis kayittir -> bilinmiyor (tam bedel)
 
 
-def test_estimated_fee_never_exceeds_market_value(df):
+def test_estimated_fee_bounds_and_key_player_premium(df):
     v = df[df["Market_Value_EUR"].notna()]
-    assert (v["Est_Fee_EUR"] <= v["Market_Value_EUR"] + 1e-6).all()
+    max_factor = max(dp.IMPORTANCE_FACTORS.values())
+    assert (v["Est_Fee_EUR"] <= v["Market_Value_EUR"] * max_factor + 1e-6).all()
     assert set(df["Contract_Status"]) <= {"free", "last_year", "long", "unknown"}
+    # Uzun sozlesmeli kilit oyuncu piyasa degerinin ustunde, kenardaki oyuncu altinda satilir
+    key_long = v[(v["Importance"] == "key") & (v["Contract_Status"] == "long")]
+    fringe_long = v[(v["Importance"] == "fringe") & (v["Contract_Status"] == "long")]
+    assert (key_long["Est_Fee_EUR"] > key_long["Market_Value_EUR"]).all()
+    assert (fringe_long["Est_Fee_EUR"] < fringe_long["Market_Value_EUR"]).all()
+    # Bedelsiz oyuncuya prim uygulanmaz
+    free = v[v["Contract_Status"] == "free"]
+    assert (free["Est_Fee_EUR"] <= free["Market_Value_EUR"] * dp.FEE_FACTOR_FREE + 1e-6).all()
 
 
 @pytest.mark.parametrize("budget", [30e6, 100e6])

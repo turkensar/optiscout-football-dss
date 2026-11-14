@@ -4,7 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from data_processor import ROLE_GROUP_LABELS, FootballDataProcessor, applicable_sub_scores
+from data_processor import ROLE_GROUP_LABELS, FootballDataProcessor, add_decision_score, applicable_sub_scores
 from similarity_engine import PlayerSimilarityEngine
 from squad_optimizer import SquadOptimizer
 from value_model import MarketValueModel
@@ -35,29 +35,35 @@ def cached_similar_players(min_minutes: int, target_key: str, top_n: int, max_ag
     )
 
 
-def _league_pool(min_minutes: int, leagues: tuple):
+def _optimizer(min_minutes: int, form_weight: float, leagues: tuple = None) -> SquadOptimizer:
+    """Karar skoru (form + kalıcı kalite) eklenmiş havuzla optimizer kurar."""
     df, _, _ = load_processed_data(min_minutes)
-    return df[df["League"].isin(leagues)]
+    if leagues is not None:
+        df = df[df["League"].isin(leagues)]
+    return SquadOptimizer(add_decision_score(df, form_weight), score_column="Decision_Score")
 
 
 @st.cache_data(max_entries=64, show_spinner="Optimum 11 hesaplanıyor...")
-def cached_optimize(min_minutes: int, leagues: tuple, excluded_squads: tuple, **kwargs):
-    return SquadOptimizer(_league_pool(min_minutes, leagues)).optimize_starting_xi(
+def cached_optimize(min_minutes: int, form_weight: float, leagues: tuple, excluded_squads: tuple, **kwargs):
+    return _optimizer(min_minutes, form_weight, leagues).optimize_starting_xi(
         selected_leagues=list(leagues), excluded_squads=list(excluded_squads), **kwargs
     )
 
 
 @st.cache_data(max_entries=16, show_spinner="Bütçe eğrisi hesaplanıyor...")
-def cached_frontier(min_minutes: int, leagues: tuple, excluded_squads: tuple, budgets: tuple, **kwargs):
-    return SquadOptimizer(_league_pool(min_minutes, leagues)).budget_frontier(
+def cached_frontier(min_minutes: int, form_weight: float, leagues: tuple, excluded_squads: tuple,
+                    budgets: tuple, **kwargs):
+    return _optimizer(min_minutes, form_weight, leagues).budget_frontier(
         list(budgets), selected_leagues=list(leagues), excluded_squads=list(excluded_squads), **kwargs
     )
 
 
 @st.cache_data(max_entries=32, show_spinner="Transfer planı hesaplanıyor...")
-def cached_transfer_plan(min_minutes: int, leagues: tuple, club: str, **kwargs):
-    df, _, _ = load_processed_data(min_minutes)
-    return SquadOptimizer(df).plan_transfers(club, target_leagues=list(leagues), **kwargs)
+def cached_transfer_plan(min_minutes: int, form_weight: float, leagues: tuple, club: str,
+                         protected_ids: tuple = None, **kwargs):
+    return _optimizer(min_minutes, form_weight).plan_transfers(
+        club, target_leagues=list(leagues),
+        protected_ids=list(protected_ids) if protected_ids is not None else None, **kwargs)
 
 
 # Tablolarda kod adları yerine okunur Türkçe başlıklar gösterilir
@@ -70,7 +76,8 @@ COLUMN_LABELS = {
     "Similarity_Score": "Benzerlik", "Market_Value_M": "Piyasa Değeri",
     "Role_Fit": "Rol Uyumu", "Improvement": "Kazanç",
     "Pred_Value_M": "Tahmini Değer", "Value_Ratio": "Fırsat Katsayısı",
-    "Contract_Label": "Sözleşme", "Contract_Expiry": "Sözleşme Bitişi", "Est_Fee_M": "Tahmini Bedel",
+    "Contract_Label": "Sözleşme", "Sale_Value_M": "Satış Geliri", "Importance_Label": "Takımdaki Rolü",
+    "Decision_Score": "Karar Skoru", "Reputation_Score": "Kalıcı Kalite", "Impact_Score": "Takıma Etki", "Contract_Expiry": "Sözleşme Bitişi", "Est_Fee_M": "Tahmini Bedel",
     "Attacking_Score": "Hücum", "Creativity_Score": "Yaratıcılık", "Defensive_Score": "Savunma",
     "Goalkeeping_Score": "Kalecilik", "Discipline_Score": "Disiplin", "Saves_p90": "Kurtarış/90",
 }
@@ -104,10 +111,11 @@ def show_table(frame, **kwargs):
         "Piyasa Değeri": st.column_config.NumberColumn(format="€%.1fM"),
         "Tahmini Değer": st.column_config.NumberColumn(format="€%.1fM"),
         "Tahmini Bedel": st.column_config.NumberColumn(format="€%.1fM"),
+        "Satış Geliri": st.column_config.NumberColumn(format="€%.1fM"),
         "Fırsat Katsayısı": st.column_config.NumberColumn(format="%.1fx"),
         "Rol Uyumu": st.column_config.NumberColumn(format="%.2f"),
     }
-    for col in ["OptiScout", "Rol Skoru", "Benzerlik", "Kazanç", "Hücum", "Yaratıcılık",
+    for col in ["OptiScout", "Rol Skoru", "Benzerlik", "Karar Skoru", "Kalıcı Kalite", "Takıma Etki", "Kazanç", "Hücum", "Yaratıcılık",
                 "Savunma", "Kalecilik", "Disiplin"]:
         config[col] = st.column_config.NumberColumn(format="%.1f")
     for col in ["Gol/90", "Asist/90", "Savunma Aks./90", "PS'siz G+A/90", "Kurtarış/90"]:
@@ -223,14 +231,23 @@ if has_values:
     matched_share = df["Market_Value_EUR"].notna().mean() * 100
     st.sidebar.caption(f"Transfermarkt piyasa değeri eşleşmesi: %{matched_share:.0f}")
     use_contracts = st.sidebar.checkbox(
-        "📝 Sözleşme durumunu maliyete yansıt",
+        "📝 Gerçekçi transfer bedeli",
         value=True,
-        help="Açıkken transfer maliyeti olarak piyasa değeri yerine tahmini bedel kullanılır: "
-             "2027 yazında sözleşmesi bitecek oyuncu piyasa değerinin %15'i (imza ücreti vb.), "
-             "son yılına giren oyuncu %60'ı, diğerleri tam değeri.",
+        help="Açıkken maliyet olarak piyasa değeri yerine tahmini bedel kullanılır. "
+             "Sözleşme: 2027 yazında bitiyorsa değerin %15'i, son yılındaysa %60'ı. "
+             "Takımdaki rol: kilit oyuncu (dakikaların ≥ %65'i) ×1.4, kenarda kalan (< %40) ×0.75.",
+    )
+    form_pct = st.sidebar.slider(
+        "⚖️ Güncel form ağırlığı (%)", 0, 100, 70, 5,
+        help="Kadro ve transfer kararlarında kullanılan skor: bu sezonun formu (OptiScout) ile "
+             "oyuncunun kalıcı kalitesinin (piyasa değerinin rolü içindeki sırası) karışımı. "
+             "%100: yalnızca bu sezonun verisi. Daha düşük değerler, sezonun ilk haftalarındaki "
+             "gürültüye karşı oyuncunun yıllara yayılan itibarını da hesaba katar.",
     )
 else:
     use_contracts = False
+    form_pct = 100
+form_weight = form_pct / 100.0
 cost_col = "Est_Fee_EUR" if use_contracts else "Market_Value_EUR"
 cost_label = "Tahmini Transfer Bedeli" if use_contracts else "Piyasa Değeri"
 cost_m_col = "Est_Fee_M" if use_contracts else "Market_Value_M"
@@ -492,6 +509,7 @@ with tab3:
 
     result = cached_optimize(
         min_mins,
+        form_weight,
         tuple(selected_leagues),
         tuple(giant_clubs),
         formation=formation,
@@ -562,7 +580,7 @@ with tab3:
                 curves.append(("Sözleşme durumu dahil", "Est_Fee_EUR"))
             parts = []
             for name, col in curves:
-                fr = cached_frontier(min_mins, tuple(selected_leagues), tuple(giant_clubs), tuple(budgets),
+                fr = cached_frontier(min_mins, form_weight, tuple(selected_leagues), tuple(giant_clubs), tuple(budgets),
                                      cost_column=col, **common)
                 parts.append(fr.assign(Maliyet=name))
             frontier = pd.concat(parts, ignore_index=True)
@@ -592,7 +610,9 @@ with tab4:
         "Seçilen kulübün **mevcut oyuncularıyla kurabileceği en iyi 11** bulunur, en zayıf "
         "mevkiler (boşluklar) belirlenir ve bütçe içinde **hangi transferlerin takımı en çok "
         "iyileştireceği** MILP ile hesaplanır. Kulübün kendi oyuncuları maliyetsiz, dış oyuncular "
-        "piyasa değerleriyle modele girer; kimin alınacağına ve kimin yedeğe düşeceğine model karar verir."
+        "tahmini transfer bedelleriyle modele girer; kimin alınacağına ve kimin yedeğe düşeceğine model "
+        "karar verir. Kararlar kenar çubuğundaki form ağırlığına göre güncel form ile oyuncunun kalıcı "
+        "kalitesini birlikte dikkate alır."
     )
 
     if not has_values:
@@ -619,16 +639,44 @@ with tab4:
             plan_budget_m = st.slider("Transfer Bütçesi (milyon €)", 0, 300, 50, 5)
         with q2:
             max_signing_age = st.slider("Transferlerde Maks. Yaş", 18, 36, 28)
+        s1, s2 = st.columns([1, 3])
+        with s1:
+            allow_sales = st.checkbox(
+                "💸 Oyuncu satışına izin ver",
+                value=False,
+                help="Model kulübün oyuncularını satıp gelirini bütçeye ekleyebilir. Bir oyuncu "
+                     "yalnızca satışı daha iyi bir transferi finanse ediyorsa satılır.",
+            )
+        with s2:
+            max_sales = st.slider("Maksimum Satış", 1, 4, 2, disabled=not allow_sales)
+
+        protected_ids = None
+        if allow_sales:
+            own = df[df["Squad"] == club].sort_values("Min%", ascending=False)
+            id_to_name = dict(zip(own["Player_ID"], own["Player"] + " (%" + own["Min%"].round(0).astype(int).astype(str) + " dk)"))
+            protected_ids = st.multiselect(
+                "🔒 Satışa kapalı oyuncular",
+                options=list(id_to_name),
+                default=own.loc[own["Key_Player"], "Player_ID"].tolist(),
+                format_func=lambda pid: id_to_name[pid],
+                help="Varsayılan olarak kulübün kilit oyuncuları (takım dakikalarının ≥ %65'ini oynayanlar) "
+                     "korunur. Satmak istemediğiniz başka oyuncuları ekleyin ya da satılabilir olanları çıkarın: "
+                     "model öneri yapar, karar sizindir.",
+            )
 
         plan = cached_transfer_plan(
             min_mins,
+            form_weight,
             tuple(selected_leagues),
             club,
+            protected_ids=tuple(protected_ids) if protected_ids is not None else None,
             formation=plan_formation,
             budget_eur=plan_budget_m * 1e6,
             cost_column=cost_col,
             max_signings=max_signings,
             max_signing_age=max_signing_age,
+            allow_sales=allow_sales,
+            max_sales=max_sales,
         )
         st.caption(
             f"{club} kadrosu, kenar çubuğundaki minimum süre filtresini (≥ {min_mins} dk) geçen "
@@ -652,9 +700,15 @@ with tab4:
                     f"{after['avg_effective_score']}",
                     delta=f"{after['avg_effective_score'] - base['avg_effective_score']:+.1f}",
                 )
-                k3.metric("Harcanan", fmt_value(plan["spent_eur"] / 1e6),
-                          delta=f"{fmt_value(plan_budget_m - plan['spent_eur'] / 1e6)} kaldı",
-                          delta_color="off")
+                revenue_m = plan["sale_revenue_eur"] / 1e6
+                net_m = plan["spent_eur"] / 1e6 - revenue_m
+                k3.metric(
+                    "Harcanan" + (" (net)" if revenue_m > 0 else ""),
+                    fmt_value(net_m if revenue_m > 0 else plan["spent_eur"] / 1e6),
+                    delta=(f"alım {fmt_value(plan['spent_eur'] / 1e6)} − satış {fmt_value(revenue_m)}"
+                           if revenue_m > 0 else f"{fmt_value(plan_budget_m - plan['spent_eur'] / 1e6)} kaldı"),
+                    delta_color="off",
+                )
                 k4.metric("Transfer", f"{len(plan['signings'])} / {max_signings}")
             else:
                 k2.metric("Transfer Sonrası 11", "—")
@@ -687,10 +741,14 @@ with tab4:
                 else:
                     show_table(
                         plan["signings"][["Assigned_Role", "Player", "Squad"]
-                                         + (["Contract_Label", "Est_Fee_M"] if use_contracts else ["Market_Value_M"])
+                                         + (["Importance_Label", "Contract_Label", "Est_Fee_M"] if use_contracts else ["Market_Value_M"])
                                          + ["Effective_Score"]],
                         hide_index=True,
                     )
+                if not plan["sold"].empty:
+                    st.markdown("**💸 Satılanlar** (gelir bütçeye eklendi)")
+                    sold = plan["sold"].assign(Sale_Value_M=(plan["sold"]["Sale_Value_EUR"] / 1e6).round(1))
+                    show_table(sold[["Player", "TM_Sub_Position", "Importance_Label", "Age", "Sale_Value_M"]], hide_index=True)
                 if not plan["dropped"].empty:
                     st.markdown("**↘️ İlk 11'den çıkanlar**")
                     show_table(
@@ -716,7 +774,10 @@ with tab4:
                         )
 
             st.caption(
-                "Varsayımlar: Oyuncu satışları ve maaşlar modele dahil değildir. Maliyet olarak "
+                "Varsayımlar: Maaşlar modele dahil değildir. "
+                + ("Satış kararlarında model yalnızca ilk 11'in gücüne bakar; kadro derinliği ve oyuncunun "
+                   "varlık değeri hesaba katılmaz, bu yüzden satış sayısını sınırlı tutun. " if allow_sales else "")
+                + "Maliyet olarak "
                 + ("sözleşme durumuna göre tahmini bedel (2027 yazında bedelsiz: değerin %15'i, son yılı: %60'ı) "
                    if use_contracts else "Transfermarkt piyasa değeri ")
                 + "kullanılır; gerçek bonservis bedeli farklı olabilir."

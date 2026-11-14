@@ -55,8 +55,11 @@ class SquadOptimizer:
         "3-4-3":   {"GK": 1, "CB": 3, "LWB": 1, "RWB": 1, "CM": 2, "LW": 1, "RW": 1, "ST": 1},
     }
 
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame, score_column: str = "OptiScout_Score"):
+        """score_column: modelin maksimize ettiği skor (OptiScout ya da form + kalıcı kalite
+        karışımı olan Decision_Score)."""
         self.df = df.copy()
+        self.score_column = score_column if score_column in df.columns else "OptiScout_Score"
 
     @staticmethod
     def eligible_roles(row) -> dict:
@@ -140,6 +143,9 @@ class SquadOptimizer:
         max_external: int = None,
         emergency_mask: np.ndarray = None,
         emergency_fit: float = 0.5,
+        sale_mask: np.ndarray = None,
+        sale_value: np.ndarray = None,
+        max_sales: int = None,
     ) -> dict:
         """
         Ortak MILP çekirdeği. `pool` indeksi 0..n-1 olmalıdır.
@@ -147,6 +153,9 @@ class SquadOptimizer:
         cost / budget_eur  : oyuncu başı maliyet ve toplam bütçe (cost None ise bütçe yok)
         club_cap_exempt    : kulüp kotasından muaf kulüp (transfer planında kendi kulübü)
         external_mask      : "dışarıdan transfer" sayılan oyuncular; max_external ile sınırlanır
+        sale_mask/value    : satılabilir oyuncular ve satış gelirleri. Her biri için ek bir
+                             s[i] ∈ {0,1} değişkeni eklenir; satılan oyuncu oynayamaz ve
+                             geliri bütçeye eklenir: Σ maliyet·x ≤ bütçe + Σ gelir·s
         emergency_mask     : bu oyuncular, uygun oldukları roller dışındaki saha rollerinde de
                              `emergency_fit` katsayısıyla oynatılabilir (kadroda doğal oyuncusu
                              olmayan bir rol için son çare; kaleci rolü hariç)
@@ -156,7 +165,7 @@ class SquadOptimizer:
             return infeasible
 
         req_roles = self.FORMATIONS[formation]
-        scores = pool["OptiScout_Score"].to_numpy(dtype=float)
+        scores = pool[self.score_column].to_numpy(dtype=float)
 
         var_player, var_role, var_fit = [], [], []
         for i, row in enumerate(pool.to_dict("records")):
@@ -200,9 +209,12 @@ class SquadOptimizer:
 
         # Kisit 2: Ayni kisi en fazla bir kez secilir (birden fazla rol degiskeni
         # veya sezon icinde transfer nedeniyle iki kulup satiri olsa bile)
+        person_rows = {}  # oyuncu satırı -> kişi kısıtı satır numarası (satış değişkeni için)
         for _, idx in pool.groupby("Player_ID").groups.items():
             mask = np.zeros(len(pool), dtype=bool)
             mask[list(idx)] = True
+            for i in idx:
+                person_rows[int(i)] = len(A_rows)
             A_rows.append(player_row(mask))
             lb_list.append(0.0)
             ub_list.append(1.0)
@@ -223,7 +235,9 @@ class SquadOptimizer:
             ub_list.append(11.0 * float(max_avg_age))
 
         # Kisit 5: Butce (toplam piyasa degeri)
+        budget_row = None
         if cost is not None and budget_eur is not None:
+            budget_row = len(A_rows)
             A_rows.append(cost[var_player])
             lb_list.append(0.0)
             ub_list.append(float(budget_eur))
@@ -234,13 +248,35 @@ class SquadOptimizer:
             lb_list.append(0.0)
             ub_list.append(float(max_external))
 
-        constraints = LinearConstraint(
-            np.array(A_rows), np.array(lb_list), np.array(ub_list)
-        )
+        A = np.array(A_rows)
+
+        # Satış değişkenleri s[i]: x değişkenlerinin sağına eklenir
+        sale_idx = np.where(np.asarray(sale_mask))[0] if sale_mask is not None else np.array([], dtype=int)
+        n_s = len(sale_idx)
+        if n_s:
+            if budget_row is None:
+                raise ValueError("Satış için bütçe ve maliyet gerekli")
+            sale_value = np.asarray(sale_value, dtype=float)
+            A = np.hstack([A, np.zeros((len(A), n_s))])
+            for k, i in enumerate(sale_idx):
+                # Kisit 7a: satılan oyuncu sahada olamaz (kişi kısıtına s[i] eklenir)
+                A[person_rows[int(i)], n_vars + k] = 1.0
+            # Kisit 7b: satış geliri bütçeye eklenir
+            A[budget_row, n_vars:] = -sale_value[sale_idx]
+            if max_sales is not None:
+                row = np.zeros(n_vars + n_s)
+                row[n_vars:] = 1.0
+                A = np.vstack([A, row])
+                lb_list.append(0.0)
+                ub_list.append(float(max_sales))
+            # Gereksiz satışı önlemek için çok küçük ceza (yalnızca transferi finanse ediyorsa satılır)
+            c = np.concatenate([c, 1e-10 * sale_value[sale_idx]])
+
+        constraints = LinearConstraint(A, np.array(lb_list), np.array(ub_list))
 
         res = milp(
             c=c,
-            integrality=np.ones(n_vars),
+            integrality=np.ones(n_vars + n_s),
             bounds=Bounds(0, 1),
             constraints=constraints,
         )
@@ -248,13 +284,14 @@ class SquadOptimizer:
         if not res.success or res.x is None:
             return infeasible
 
-        chosen = np.where(res.x > 0.5)[0]
+        sold_idx = sale_idx[res.x[n_vars:] > 0.5] if n_s else np.array([], dtype=int)
+        chosen = np.where(res.x[:n_vars] > 0.5)[0]
         selected_df = pool.iloc[var_player[chosen]].copy()
         selected_df["Assigned_Role"] = var_role[chosen]
         selected_df["Assigned_Pos"] = selected_df["Assigned_Role"].map(ROLE_GROUP)
         selected_df["Role_Fit"] = var_fit[chosen]
         selected_df["Out_Of_Position"] = selected_df["Role_Fit"] < 1.0
-        selected_df["Effective_Score"] = (selected_df["OptiScout_Score"] * selected_df["Role_Fit"]).round(1)
+        selected_df["Effective_Score"] = (selected_df[self.score_column] * selected_df["Role_Fit"]).round(1)
         if external_mask is not None:
             selected_df["New_Signing"] = np.asarray(external_mask)[var_player[chosen]]
 
@@ -272,9 +309,15 @@ class SquadOptimizer:
 
         total_cost = float(cost[var_player[chosen]].sum()) if cost is not None else None
 
+        sold_df = pool.iloc[sold_idx].copy()
+        if n_s:
+            sold_df["Sale_Value_EUR"] = sale_value[sold_idx]
+
         return {
             "status": "Optimal",
             "squad": selected_df,
+            "sold": sold_df,
+            "sale_revenue_eur": float(sale_value[sold_idx].sum()) if n_s else 0.0,
             "total_cost_eur": total_cost,
             "avg_score": round(selected_df["OptiScout_Score"].mean(), 1),
             # Modelin maksimize ettigi deger: rol uygunlugu ile duzeltilmis ortalama skor
@@ -297,6 +340,9 @@ class SquadOptimizer:
         n_candidates: int = 5,
         n_gaps: int = 3,
         cost_column: str = "Market_Value_EUR",
+        allow_sales: bool = False,
+        max_sales: int = 2,
+        protected_ids: list = None,
     ) -> dict:
         """
         Kulüp boşluk analizi ve transfer planı.
@@ -310,6 +356,11 @@ class SquadOptimizer:
            iyi 11 kurulur. Kimin alınacağına ve kimin yedeğe düşeceğine model karar verir.
         4) Alternatif adaylar: her boşluk rolü için, bütçeye sığan ve mevcut oyuncudan
            daha iyi olan en iyi `n_candidates` aday (tek tek değerlendirme).
+
+        `allow_sales=True` ise kulübün oyuncuları (en fazla `max_sales` tanesi) satılıp
+        geliri bütçeye eklenebilir; satış geliri de `cost_column` ile hesaplanır
+        (sözleşmesi biten oyuncu az gelir getirir). Kimin satılacağına model karar verir;
+        bir oyuncu yalnızca satışı daha iyi bir transferi finanse ediyorsa satılır.
         """
         if formation not in self.FORMATIONS:
             raise ValueError(f"Gecersiz formasyon: {formation}")
@@ -338,6 +389,19 @@ class SquadOptimizer:
         pool = pd.concat([own, ext], ignore_index=True)
         is_external = np.r_[np.zeros(len(own), dtype=bool), np.ones(len(ext), dtype=bool)]
         cost = np.where(is_external, pool[cost_column].fillna(0.0).to_numpy(dtype=float), 0.0)
+        sale_kwargs = {}
+        if allow_sales:
+            own_value = pool[cost_column].to_numpy(dtype=float)
+            # Satışa kapalı oyuncular: verilmezse kulübün kilit oyuncuları korunur
+            if protected_ids is None:
+                key = pool["Key_Player"] if "Key_Player" in pool.columns else pd.Series(False, index=pool.index)
+                protected_ids = pool.loc[(~is_external) & key.to_numpy(), "Player_ID"].tolist()
+            protected = pool["Player_ID"].isin(protected_ids).to_numpy()
+            sale_kwargs = dict(
+                sale_mask=(~is_external) & ~np.isnan(own_value) & ~protected,
+                sale_value=np.nan_to_num(own_value),
+                max_sales=max_sales,
+            )
         plan = self._solve(
             pool, formation,
             allow_out_of_position=allow_out_of_position,
@@ -349,6 +413,7 @@ class SquadOptimizer:
             max_external=max_signings,
             emergency_mask=~is_external,
             emergency_fit=emergency_fit,
+            **sale_kwargs,
         )
 
         result = {
@@ -360,6 +425,9 @@ class SquadOptimizer:
             "candidates": {},
             "signings": pd.DataFrame(),
             "dropped": pd.DataFrame(),
+            "sold": pd.DataFrame(),
+            "spent_eur": 0.0,
+            "sale_revenue_eur": 0.0,
         }
 
         if baseline["status"] == "Optimal":
@@ -378,7 +446,7 @@ class SquadOptimizer:
                         continue
                     if rec[cost_column] > budget_eur:
                         continue
-                    eff = rec["OptiScout_Score"] * fit
+                    eff = rec[self.score_column] * fit
                     if eff <= gap["Effective_Score"]:
                         continue
                     rows.append({**rec, "Role_Fit": fit, "Effective_Score": round(eff, 1),
@@ -395,6 +463,12 @@ class SquadOptimizer:
                 kept = set(plan_xi["Player_ID"])
                 result["dropped"] = baseline["squad"][~baseline["squad"]["Player_ID"].isin(kept)]
             result["spent_eur"] = float(result["signings"][cost_column].sum())
+            result["sold"] = plan.get("sold", pd.DataFrame())
+            result["sale_revenue_eur"] = plan.get("sale_revenue_eur", 0.0)
+            if not result["dropped"].empty and not result["sold"].empty:
+                # Satılan oyuncu "ilk 11'den çıkanlar" listesinde ayrıca gösterilmez
+                result["dropped"] = result["dropped"][
+                    ~result["dropped"]["Player_ID"].isin(result["sold"]["Player_ID"])]
 
         return result
 

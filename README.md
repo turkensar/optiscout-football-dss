@@ -24,7 +24,7 @@ Modern futbol analitiğinde oyuncu izleme (scouting) ve kadro planlama süreçle
 
 | Modül | Dosya | Kullanılan Yöntem & Algoritma | Açıklama |
 | :--- | :--- | :--- | :--- |
-| **1. Veri Mühendisliği & Skorlama** | `data_processor.py` | Per-90 Normalizasyon & Rol Bazlı Yüzdelik Dilim (`Percentile Rank`) | Ham FBref verilerini temizler, oyuncuları Transfermarkt alt mevkilerine göre rol gruplarına ayırır, az dakika alan oyuncuların şişmiş oranlarını **Bayesian shrinkage** ile rol ortalamasına çeker ve Hücum, Yaratıcılık, Savunma, Disiplin alt kırılımlarıyla `0-100` arası **OptiScout_Score** üretir. |
+| **1. Veri Mühendisliği & Skorlama** | `data_processor.py` | Per-90 Normalizasyon & Rol Bazlı Yüzdelik Dilim (`Percentile Rank`) | Ham FBref verilerini temizler, oyuncuları Transfermarkt alt mevkilerine göre rol gruplarına ayırır, savunma metriklerini topa sahip olmaya göre düzeltir, oyuncunun takıma etkisini (sahadayken gol farkı) ölçer, az dakika alan oyuncuların şişmiş oranlarını **Bayesian shrinkage** ile rol ortalamasına çeker ve Hücum, Yaratıcılık, Savunma, Disiplin alt kırılımlarıyla `0-100` arası **OptiScout_Score** üretir. |
 | **2. İkame Oyuncu Motoru** | `similarity_engine.py` | `StandardScaler` (Z-Score) + `Cosine Similarity` (`scikit-learn`) | Oyuncuların rol bazlı Per-90 vektörlerini standartlaştırır ve seçilen referans oyuncuya en yüksek kosinüs benzerliği gösteren alternatifleri listeler. Model eğitimi gerektirmeyen, açıklanabilir bir mesafe ölçüsüdür. |
 | **3. Optimum İlk 11 Çözücü** | `squad_optimizer.py` | Karışık Tamsayılı Doğrusal Programlama (`scipy.optimize.milp` - HiGHS Solver) | Seçilen formasyon (`4-3-3`, `4-2-3-1`, `3-5-2` vb.), **transfer bütçesi**, maksimum yaş ortalaması ve kulüp sınırı kısıtları altında toplam kadro skorunu maksimize eder; bütçe-performans eğrisini çizer ve **kulüp bazlı transfer planı** üretir. Formasyonlar Transfermarkt alt mevkilerine dayalı **taktik rollerle** (LB, CB, DM, AM, RW, ST...) tanımlanır. |
 | **4. Piyasa Değeri Modeli** | `value_model.py` | Ridge regresyon, 5 katlı çapraz doğrulama (out-of-fold tahmin) | Performans, yaş, lig ve rolden beklenen piyasa değerini tahmin eder; gerçek değeri tahminin çok altında kalan üst dilim oyuncuları fırsat olarak listeler. |
@@ -91,18 +91,18 @@ Bütçe kısıtı açıkken piyasa değeri bilinmeyen oyuncular havuzdan çıkar
 
 ## 💶 Bütçe Kısıtlı Kadro ve Bütçe-Performans Eğrisi
 
-Karar vericinin asıl sorusu "en iyi 11 kim?" değil, **"bu bütçeyle kurabileceğim en iyi 11 kim?"** sorusudur. Model, aynı kısıtlarla farklı bütçe seviyeleri için tekrar çözülerek bir **bütçe-performans eğrisi** üretir. Varsayılan ayarlarla (4-3-3, kulüp başına en fazla 2, yaş ortalaması ≤ 26,5) örnek sonuçlar:
+Karar vericinin asıl sorusu "en iyi 11 kim?" değil, **"bu bütçeyle kurabileceğim en iyi 11 kim?"** sorusudur. Model, aynı kısıtlarla farklı bütçe seviyeleri için tekrar çözülerek bir **bütçe-performans eğrisi** üretir. Örnek sonuçlar (4-3-3, kulüp başına en fazla 2, yaş ortalaması ≤ 26,5, yalnızca bu sezonun formu, maliyet = piyasa değeri):
 
 | Bütçe | Rol Uyumlu Ortalama Skor | Harcanan |
 | :--- | :--- | :--- |
-| €25M | 71.6 | €25M |
-| €50M | 75.7 | €50M |
-| €100M | 77.8 | €100M |
-| €200M | 78.2 | €162M |
-| €400M | 79.2 | €308M |
-| Sınırsız | 79.2 | €308M |
+| €25M | 66.2 | €25M |
+| €50M | 70.6 | €49M |
+| €100M | 73.9 | €94M |
+| €200M | 76.3 | €179M |
+| €400M | 77.8 | €366M |
+| Sınırsız | 77.9 | €516M |
 
-İlk €100M kadroyu yaklaşık 6 puan iyileştirirken, sonraki €200M yalnızca ~1,5 puan ekler; €308M'ın üzerindeki bütçe hiç kullanılmaz. Bu noktadan sonra her ek puan çok daha pahalıdır. Bu tür bir "azalan getiri" analizi, transfer bütçesinin nereye kadar anlamlı olduğunu gösterir.
+İlk €100M kadroyu ~8 puan iyileştirirken (€25M → €100M), sonraki €300M yalnızca ~4 puan ekler ve €400M'dan sonra eğri tamamen düzleşir. Bu noktadan sonra her ek puan çok daha pahalıdır. Bu tür bir "azalan getiri" analizi, transfer bütçesinin nereye kadar anlamlı olduğunu gösterir.
 
 ### Piyasa değeri verisi
 
@@ -129,7 +129,15 @@ $$\sum_{i \in \text{Dış}} \sum_{r} \text{Value}_i \cdot x_{i,r} \le B \qquad \
 
 Kimin alınacağına **ve kimin yedeğe düşeceğine** model kendisi karar verir; örneğin yeni bir bek alınınca, daha önce o rolde zorunlu oynayan stoper kendi mevkisine döner. Ayrıca her boşluk için, bütçeye sığan ve mevcut oyuncudan daha iyi olan alternatif adaylar listelenir; böylece karar verici tek bir "optimum" öneriyle sınırlı kalmaz.
 
-**Örnek (Juventus, 4-3-3, €30M, en fazla 1 transfer):** Kadroda doğal sol bek olmadığı için Bremer (stoper) sol bekte oynar ve rol uyumlu skoru 23,3'e düşer. Model €7M'luk bir sol bek önerir ve takımın rol uyumlu ortalaması 49,7'den 55,1'e çıkar. Bütçe €50M ve 2 transfere çıkınca bir santrfor da eklenir.
+**Oyuncu satışı (isteğe bağlı):** Kulübün her oyuncusu için ek bir ikili değişken $s_i$ ("satılsın mı?") tanımlanır. Satılan oyuncu sahada olamaz ve satış geliri bütçeye eklenir:
+
+$$\sum_{i \in \text{Dış}} \sum_{r} \text{Bedel}_i \cdot x_{i,r} \;\le\; B + \sum_{i \in \text{Kulüp}} \text{Gelir}_i \cdot s_i \qquad \sum_{r} x_{i,r} + s_i \le 1 \qquad \sum_i s_i \le N_{\text{satış}}$$
+
+Satış geliri de gerçekçi bedelle hesaplanır (sözleşmesi biten oyuncu az, kilit oyuncu primli getirir) ve hedef fonksiyondaki çok küçük bir ceza sayesinde bir oyuncu yalnızca satışı daha iyi bir transferi finanse ediyorsa satılır.
+
+**Kilit oyuncular ve insan kararı:** Takım dakikalarının ≥ %65'ini oynayan **kilit oyuncular varsayılan olarak satışa kapalıdır**; bir kulüp formdaki kilit oyuncusunu yalnızca sayısal bir iyileşme için satmaz. Kullanıcı "satışa kapalı oyuncular" listesine istediği oyuncuyu ekleyip çıkarabilir: model öneri yapar, karar karar vericinindir. Örneğin sıfır bütçeli bir senaryoda Real Madrid, kilit oyuncularına dokunmadan rotasyon ve kenar oyuncularını (Dumfries, Rüdiger) satıp gelirle bir stoper, bir sol bek ve bir orta saha alır; rol uyumlu skor 63,3'ten 68,5'e çıkar.
+
+**Örnek (Juventus, 4-3-3, €30M, en fazla 1 transfer, yalnızca form):** Kadroda doğal sol bek olmadığı için bir stoper (Lucumí) sol bekte oynar ve rol uyumlu skoru 26,1'e düşer. Model €7M'luk bir sol bek önerir ve takımın rol uyumlu ortalaması 52,0'den 56,4'e çıkar. Bütçe €50M ve 2 transfere çıkınca bir santrfor da eklenir.
 
 ---
 
@@ -143,19 +151,29 @@ Piyasa değeri, bir oyuncunun gerçekte kaça alınabileceğini her zaman göste
 | Son yılında (2028'de bitiyor) | Piyasa değerinin %60'ı |
 | Daha uzun / bilinmiyor | Piyasa değerinin tamamı |
 
-Kenar çubuğundaki seçenekle açılıp kapatılabilir; açıkken bütçe kısıtı, transfer planı ve fırsat listesi bu tahmini bedeli kullanır.
+Bedel ayrıca oyuncunun **takımındaki rolüne** göre ayarlanır, çünkü bir kulüp formdaki kilit oyuncusunu piyasa değerine bırakmaz:
 
-**Etkisi en çok küçük bütçelerde görülür** (4-3-3, kulüp başına en fazla 2, yaş ortalaması ≤ 26,5):
+| Takımdaki rol (takım dakikalarından aldığı pay) | Çarpan |
+| :--- | :---: |
+| Kilit oyuncu (≥ %65) | ×1.40 |
+| Rotasyon (%40–65) | ×1.00 |
+| Kenarda (< %40) | ×0.75 |
+
+Sözleşmesi biten oyuncuya rol primi uygulanmaz (kulübün pazarlık gücü yoktur).
+
+Kenar çubuğundaki "Gerçekçi transfer bedeli" seçeneğiyle açılıp kapatılabilir; açıkken bütçe kısıtı, transfer planı, satış gelirleri ve fırsat listesi bu tahmini bedeli kullanır.
+
+**Etkisi en çok küçük bütçelerde görülür** (4-3-3, kulüp başına en fazla 2, yaş ortalaması ≤ 26,5, yalnızca form):
 
 | Bütçe | Yalnızca piyasa değeri | Sözleşme durumu dahil |
 | :--- | :---: | :---: |
-| €10M | 65.1 | **70.7** |
-| €25M | 71.6 | **75.0** |
-| €50M | 75.7 | **76.9** |
-| €100M | 77.8 | 78.1 |
-| €200M | 78.2 | 78.2 |
+| €10M | 60.9 | **67.1** |
+| €25M | 66.2 | **70.1** |
+| €50M | 70.6 | **72.9** |
+| €100M | 73.9 | 74.6 |
+| €200M | 76.3 | 76.3 |
 
-Sözleşmesi biten oyuncuları takip etmek, küçük bütçeli bir kulübün aynı parayla belirgin şekilde daha iyi bir kadro kurmasını sağlar; büyük bütçede fark kapanır. Örneğin fırsat listesinin başındaki Sergio Camello'nun (Rayo Vallecano, €3M) sözleşmesi Haziran 2027'de bitmektedir.
+Sözleşmesi biten oyuncuları takip etmek, küçük bütçeli bir kulübün aynı parayla belirgin şekilde daha iyi bir kadro kurmasını sağlar; büyük bütçede fark kapanır. Örneğin fırsat listesindeki Sergio Camello'nun (Rayo Vallecano, €3M) sözleşmesi Haziran 2027'de bitmektedir.
 
 ---
 
@@ -173,10 +191,10 @@ Bir **Ridge regresyon** modeli, oyuncunun bu sezonki performansından (OptiScout
 | Model | Açıklanan varyans (R²) |
 | :--- | :---: |
 | Yalnızca yaş + lig + rol | 0.29 |
-| + bu sezonun performansı (**fırsat modeli**) | 0.33 |
+| + bu sezonun performansı (**fırsat modeli**) | 0.37 |
 | + kulüp gücü (karşılaştırma) | 0.64 |
 
-Fırsat modelinin tipik (medyan) tahmin hatası ±%57'dir. **Bulgu:** Bu sezonun performansı piyasa değerinin küçük bir kısmını açıklar; değeri asıl belirleyen kulüp, lig ve itibardır. Örneğin aynı performans ve yaştaki bir oyuncu Premier League'de ortalama lige göre ~2,4 kat değerlidir, 30 yaşındaki bir oyuncu 26 yaşındakinden ~%36 ucuzdur. Piyasanın güncel performansı yeterince fiyatlamaması, fırsat tespitinin dayandığı boşluktur (*Moneyball* yaklaşımı).
+Fırsat modelinin tipik (medyan) tahmin hatası ±%56'dır. **Bulgu:** Bu sezonun performansı piyasa değerinin küçük bir kısmını açıklar; değeri asıl belirleyen kulüp, lig ve itibardır. Örneğin aynı performans ve yaştaki bir oyuncu Premier League'de ortalama lige göre ~2,4 kat değerlidir, 30 yaşındaki bir oyuncu 26 yaşındakinden ~%36 ucuzdur. Piyasanın güncel performansı yeterince fiyatlamaması, fırsat tespitinin dayandığı boşluktur (*Moneyball* yaklaşımı).
 
 Bu nedenle liste bir **karar değil, ön elemedir**: sakatlık geçmişi, sözleşme süresi, potansiyel ve sezonun ilk haftalarındaki şans faktörü modelde yoktur.
 
@@ -186,21 +204,36 @@ Bu nedenle liste bir **karar değil, ön elemedir**: sakatlık geçmişi, sözle
 
 FBref yalnızca dört geniş mevki verir (`GK`, `DF`, `MF`, `FW`). Bu kaba ayrımda bir bek stoperlerle, bir kanat oyuncusu merkez orta sahalarla kıyaslanır. Veride FBref'in `MF` dediği 125'ten fazla kanat ve 60'tan fazla bek vardır. OptiScout, Transfermarkt alt mevkisini kullanarak her oyuncuyu bir **rol grubu** içinde puanlar ve her role ayrı ağırlıklar uygular:
 
-| Rol | Savunma | Yaratıcılık | Hücum | Disiplin |
-| :--- | :---: | :---: | :---: | :---: |
-| Stoper (CB) | 0.65 | 0.10 | 0.10 | 0.15 |
-| Bek (FB) | 0.45 | 0.35 | 0.05 | 0.15 |
-| Ön Libero (DM) | 0.50 | 0.25 | 0.10 | 0.15 |
-| Merkez Orta Saha (CM) | 0.30 | 0.35 | 0.25 | 0.10 |
-| 10 Numara (AM) | 0.05 | 0.45 | 0.45 | 0.05 |
-| Kanat (W) | 0.05 | 0.35 | 0.55 | 0.05 |
-| Santrfor (ST) | 0.05 | 0.15 | 0.75 | 0.05 |
+| Rol | Savunma | Takıma Etki | Yaratıcılık | Hücum | Disiplin |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| Kaleci (GK) | — (kalecilik 0.70) | 0.25 | — | — | 0.05 |
+| Stoper (CB) | 0.40 | 0.30 | 0.05 | 0.10 | 0.15 |
+| Bek (FB) | 0.30 | 0.20 | 0.30 | 0.05 | 0.15 |
+| Ön Libero (DM) | 0.35 | 0.25 | 0.20 | 0.05 | 0.15 |
+| Merkez Orta Saha (CM) | 0.25 | 0.20 | 0.30 | 0.20 | 0.05 |
+| 10 Numara (AM) | — | 0.20 | 0.35 | 0.40 | 0.05 |
+| Kanat (W) | — | 0.20 | 0.30 | 0.45 | 0.05 |
+| Santrfor (ST) | — | 0.20 | 0.10 | 0.65 | 0.05 |
 
 **Alt skorlar:** Hücum = penaltısız gol+asist (%40), gol (%25), isabetli şut (%20), şut başına gol (%15). Yaratıcılık = asist (%60), faul yaptırma (%25), orta (%15). Bekler için ortaların ağırlığı %30'dur, çünkü orta yalnızca bekler için anlamlı bir yaratıcılık göstergesidir; aksi halde çok orta yapan bir kanat oyuncusu, içe kat eden bir dribling oyuncusunu geride bırakır. Savunma = top kapma + araya girme.
+
+**Takıma Etki:** Oyuncu sahadayken takımın sonuçlarından hesaplanır: 90 dakikada gol farkı (%40), sahadayken yenen gol (%35, az olan iyi) ve sahadayken/sahada değilken takımın performans farkı (On-Off, %25). Top kapma ve araya girme sayısı bir stoperin değerini tek başına yakalayamaz; takımın o oyuncu sahadayken gol yememesi çok daha güçlü bir sinyaldir. On-Off çok gürültülü olduğu için sıfıra doğru güçlü şekilde çekilir.
+
+**Topa sahip olma düzeltmesi (PAdj):** Topu çok elinde tutan takımların (Arsenal, PSG, Manchester City) oyuncuları daha az savunma yapmak zorunda kalır ve ham top kapma/araya girme sayıları onları haksız yere düşük gösterir. Veride topa sahip olma oranı olmadığından, takımın 90 dakikada yaptığı toplam savunma aksiyonu vekil olarak kullanılır: her oyuncunun savunma aksiyonları `lig ortalaması / takım değeri` katsayısıyla (0.7–1.4 arası) ölçeklenir. Örneğin Arsenal ~1.27, Crystal Palace ~0.75 katsayı alır.
 
 **Yüzdelik dilim + z-skor:** Her metrik puanı, yüzdelik dilim ile ölçeklenmiş z-skorun yarı yarıya karışımıdır. Yalnızca yüzdelik dilim kullanılsaydı 15 gol ile 4 gol aynı "%99'luk dilim" sayılır ve fark kaybolurdu. z-skor ise oyuncunun ortalamadan ne kadar uzak olduğunu korur (aşırı uç değerlerin etkisini sınırlamak için ±3 standart sapmada kesilir). Bu yüzden skorlar 0–100 aralığının tamamını kullanmaz; rol içindeki en iyi oyuncular genellikle 75–85 aralığındadır.
 
 Kaleciler kurtarış yüzdesi, gol yemeden biten maç oranı, 90 dakikada yenen gol ve kurtarış sayısıyla puanlanır. Alt mevkisi bilinmeyen oyuncular ile 20'den az oyuncu içeren rol grupları (ör. dakika filtresi çok yüksek seçildiğinde) FBref'in geniş mevki grubu içinde puanlanır; `Score_Group` sütunu her oyuncunun hangi grupta puanlandığını gösterir. Benzerlik motoru da aynı rol gruplarını kullanır, böylece bir kanat oyuncusunun alternatifleri FBref etiketinden bağımsız olarak diğer kanatlar arasından aranır.
+
+---
+
+## ⚖️ Güncel Form mu, Kalıcı Kalite mi? (Karar Skoru)
+
+Bu sezonun ilk 10 maçı gürültülüdür: elit bir stoper birkaç kötü maçla sıralamada geride görünebilir. Her şey yalnızca veri değildir; piyasa değeri ise oyuncunun yıllara yayılan performansını ve itibarını yansıtır. Kadro ve transfer kararlarında kullanılan **karar skoru** iki kaynağı karıştırır:
+
+$$\text{Karar Skoru} = w \cdot \text{OptiScout (form)} + (1 - w) \cdot \text{Kalıcı Kalite}$$
+
+Kalıcı kalite, oyuncunun piyasa değerinin kendi rolü içindeki yüzdelik sırasıdır. Ağırlık $w$ kenar çubuğundan seçilir (varsayılan %70): %100 yalnızca bu sezonun verisine güvenir, daha düşük değerler sezon başı gürültüsüne karşı oyuncunun itibarını da hesaba katar. Oyuncu sıralaması ve fırsat modeli yalnızca formu kullanır; karar skoru kadro ve transfer kararlarında devreye girer.
 
 ---
 
@@ -217,9 +250,9 @@ Per-90 metriklerde $k = 450$ dakikadır (5 maçlık sanal veri). Çok oynayan oy
 ## ⚠️ Bilinen Sınırlamalar
 
 * **xG/xA yok:** FBref artık gelişmiş Opta metriklerini yayınlamadığı için skorlar gol, asist ve şut gibi temel istatistiklere dayanır.
-* **Sözleşme bedeli varsayımları:** %15 ve %60 oranları sektör pratiğine dayalı varsayımlardır; sözleşme tarihleri Temmuz 2026 tarihlidir ve sonrasında yapılan uzatmaları içermez. Veriden önce bitmiş görünen sözleşmeler eskimiş kayıt sayılır ve tam bedel uygulanır.
-* **Değer modeli:** Bu sezonun ilk haftalarındaki performansa dayanır ve piyasa değerindeki değişimin yalnızca üçte birini açıklar (R² ≈ 0.33); fırsat listesi bir ön eleme aracıdır.
-* **Transfer planı varsayımları:** Oyuncu satışları ve maaşlar modele dahil değildir; maliyet olarak piyasa değeri kullanılır. Kulüp kadrosu yalnızca süre filtresini geçen oyunculardan oluşur; sakat veya az oynamış oyuncular için filtre düşürülmelidir.
+* **Bedel ve etki varsayımları:** Takıma etki metrikleri takımın genel gücünden de etkilenir (iyi takımda oynayan oyuncunun gol farkı yüksektir); bu yüzden takımın gücünden bağımsız olan On-Off da kullanılır. Topa sahip olma düzeltmesi gerçek topa sahip olma oranı yerine bir vekil kullanır. Kilit oyuncu eşiği (%65) ve rol çarpanları (×1.4 / ×0.75) varsayımdır. %15 ve %60 oranları sektör pratiğine dayalı varsayımlardır; sözleşme tarihleri Temmuz 2026 tarihlidir ve sonrasında yapılan uzatmaları içermez. Veriden önce bitmiş görünen sözleşmeler eskimiş kayıt sayılır ve tam bedel uygulanır.
+* **Değer modeli:** Bu sezonun ilk haftalarındaki performansa dayanır ve piyasa değerindeki değişimin yalnızca üçte birini açıklar (R² ≈ 0.37); fırsat listesi bir ön eleme aracıdır.
+* **Transfer planı varsayımları:** Maaşlar modele dahil değildir. Satış kararlarında model yalnızca ilk 11'in gücüne bakar; kadro derinliğini ve oyuncunun varlık değerini hesaba katmaz (ör. ilk 11'i çok az iyileştirmek için değerli bir oyuncuyu satabilir), bu yüzden satış sayısı sınırlı tutulmalıdır. Maliyet olarak piyasa değeri ya da sözleşme durumuna göre tahmini bedel kullanılır. Kulüp kadrosu yalnızca süre filtresini geçen oyunculardan oluşur; sakat veya az oynamış oyuncular için filtre düşürülmelidir.
 * **Penaltısız, dakika başına üretim:** Skorlar toplam gol sayısını değil penaltısız 90 dakika başına üretimi ödüllendirir. Bu yüzden örneğin penaltı golleri olan ve çok oynayan bir yıldız, daha az oynayıp yüksek oranla gol atan bir oyuncunun gerisinde kalabilir.
 * **Rol verisi:** Roller Transfermarkt'ın tek bir "ana" alt mevkisine dayanır; birden fazla rolde oynayan oyuncular yalnızca ana rolünde puanlanır (MILP'de diğer rollere uygunluk katsayısıyla yerleştirilebilir). Rol ağırlıkları uzman görüşüne dayalı varsayımlardır.
 * **Takım ve lig bağlamı:** Savunma aksiyonları topa sahip olma oranından, kaleci metrikleri takım savunmasından etkilenir; ligler arası güç farkı henüz modelde yoktur.

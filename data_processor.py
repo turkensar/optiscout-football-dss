@@ -12,6 +12,7 @@ SHRINK_MINUTES = 450.0
 SHRINK_SHOTS = 10.0        # G/Sh icin
 SHRINK_SHOTS_FACED = 20.0  # Save% icin
 SHRINK_MATCHES = 5.0       # CS% icin
+SHRINK_ONOFF_MINUTES = 900.0  # On-Off icin (cok gurultulu oldugundan daha guclu cekim)
 
 VALID_POSITIONS = ["GK", "DF", "MF", "FW"]
 
@@ -23,6 +24,14 @@ TRANSFER_WINDOW = pd.Timestamp("2027-07-01")
 TM_SNAPSHOT_DATE = pd.Timestamp("2026-07-06")  # Transfermarkt verisinin tarihi
 FEE_FACTOR_FREE = 0.15
 FEE_FACTOR_LAST_YEAR = 0.60
+# Takımdaki rol -> bedel çarpanı. Kulüp kilit oyuncusunu piyasa değerine bırakmaz (prim
+# ister), kenarda kalan oyuncuyu ise indirimli verir. Rol, oyuncunun takımının toplam
+# dakikalarından aldığı paydan (Min%) belirlenir. Sözleşmesi biten oyuncuya prim uygulanmaz.
+KEY_PLAYER_MIN_SHARE = 65.0
+FRINGE_PLAYER_MIN_SHARE = 40.0
+IMPORTANCE_FACTORS = {"key": 1.40, "regular": 1.00, "fringe": 0.75}
+IMPORTANCE_LABELS = {"key": "Kilit", "regular": "Rotasyon", "fringe": "Kenarda"}
+
 CONTRACT_STATUS_LABELS = {
     "free": "Bedelsiz 2027",
     "last_year": "Son yılı",
@@ -46,19 +55,24 @@ ROLE_GROUP_LABELS = {
     "AM": "10 Numara", "W": "Kanat", "ST": "Santrfor",
     "DF": "Defans (rol bilinmiyor)", "MF": "Orta Saha (rol bilinmiyor)", "FW": "Forvet (rol bilinmiyor)",
 }
+# Topa sahip olma düzeltmesi katsayısının sınırları (uç değerleri yumuşatmak için)
+PADJ_MIN, PADJ_MAX = 0.7, 1.4
+
 # Bu sayidan az oyunculu rol grubunda yuzdelik dilim anlamsizlasir -> genis gruba dusulur
 MIN_ROLE_GROUP = 20
 
 # Genel skor agirliklari: att=Hucum, cre=Yaraticilik, def=Savunma, gk=Kalecilik, disc=Disiplin
+# imp = Takıma Etki (oyuncu sahadayken takımın sonuçları). Savunma rollerinde daha
+# ağırdır: bir stoperin değerini top kapma sayısından çok takımın gol yememesi gösterir.
 ROLE_WEIGHTS = {
-    "GK": {"gk": 0.90, "disc": 0.10},
-    "CB": {"def": 0.65, "cre": 0.10, "att": 0.10, "disc": 0.15},
-    "FB": {"def": 0.45, "cre": 0.35, "att": 0.05, "disc": 0.15},
-    "DM": {"def": 0.50, "cre": 0.25, "att": 0.10, "disc": 0.15},
-    "CM": {"def": 0.30, "cre": 0.35, "att": 0.25, "disc": 0.10},
-    "AM": {"att": 0.45, "cre": 0.45, "def": 0.05, "disc": 0.05},
-    "W":  {"att": 0.55, "cre": 0.35, "def": 0.05, "disc": 0.05},
-    "ST": {"att": 0.75, "cre": 0.15, "def": 0.05, "disc": 0.05},
+    "GK": {"gk": 0.70, "imp": 0.25, "disc": 0.05},
+    "CB": {"def": 0.40, "imp": 0.30, "cre": 0.05, "att": 0.10, "disc": 0.15},
+    "FB": {"def": 0.30, "imp": 0.20, "cre": 0.30, "att": 0.05, "disc": 0.15},
+    "DM": {"def": 0.35, "imp": 0.25, "cre": 0.20, "att": 0.05, "disc": 0.15},
+    "CM": {"def": 0.25, "imp": 0.20, "cre": 0.30, "att": 0.20, "disc": 0.05},
+    "AM": {"att": 0.40, "imp": 0.20, "cre": 0.35, "disc": 0.05},
+    "W":  {"att": 0.45, "imp": 0.20, "cre": 0.30, "disc": 0.05},
+    "ST": {"att": 0.65, "imp": 0.20, "cre": 0.10, "disc": 0.05},
 }
 # Yaraticilik alt skoru: asist / orta / faul yaptirma agirliklari. Ortalar yalnizca
 # bekler icin anlamli bir yaraticilik gostergesi; digerlerinde agirligi dusuk tutulur
@@ -91,10 +105,10 @@ def applicable_sub_scores(group: str) -> list:
 
 # Rolu bilinmeyen oyuncular icin (onceki FBref mevki agirliklari)
 BROAD_WEIGHTS = {
-    "FW": {"att": 0.65, "cre": 0.25, "def": 0.05, "disc": 0.05},
-    "MF": {"att": 0.30, "cre": 0.35, "def": 0.25, "disc": 0.10},
-    "DF": {"att": 0.10, "cre": 0.15, "def": 0.60, "disc": 0.15},
-    "GK": {"gk": 0.90, "disc": 0.10},
+    "FW": {"att": 0.55, "imp": 0.20, "cre": 0.20, "disc": 0.05},
+    "MF": {"att": 0.25, "imp": 0.20, "cre": 0.30, "def": 0.20, "disc": 0.05},
+    "DF": {"att": 0.10, "imp": 0.20, "cre": 0.10, "def": 0.45, "disc": 0.15},
+    "GK": {"gk": 0.70, "imp": 0.25, "disc": 0.05},
 }
 
 
@@ -184,6 +198,7 @@ class FootballDataProcessor:
             "SoT%", "Sh/90", "SoT/90", "G/Sh", "G/SoT", "Crs", "TklW",
             "Int", "Fld", "Fls", "GA", "GA90", "SoTA", "Saves", "Save%",
             "W", "D", "L", "CS", "CS%", "PKsv",
+            "PPM", "onG", "onGA", "+/-", "+/-90", "On-Off", "Min%",
         ]
         optional_advanced_cols = ["xG", "npxG", "xAG", "PrgC", "PrgP", "KP", "SCA", "GCA"]
         for col in numeric_cols + optional_advanced_cols:
@@ -198,6 +213,13 @@ class FootballDataProcessor:
         # orandir. Tekrar 90'a bolunmemesi icin penaltisiz gol+asist SAYISI ayrica uretilir.
         df["NPGA"] = df["G-PK"] + df["Ast"]
         df["Def_Actions"] = df["TklW"] + df["Int"]
+
+        # Topa sahip olma düzeltmesi (PAdj): Topu çok elinde tutan takımın oyuncuları daha az
+        # savunma yapmak zorunda kalır; ham top kapma/araya girme sayısı onları haksız yere
+        # düşük gösterir. Veride topa sahip olma oranı yok; takımın 90 dakikada yaptığı toplam
+        # savunma aksiyonu vekil olarak kullanılır ve ligin ortalamasına göre ölçeklenir.
+        df = self._possession_adjust(df)
+        df = df.copy()  # çok sayıda sütun eklendi: tabloyu birleştir (pandas PerformanceWarning)
         df["Disc_Points"] = df["CrdY"] + 3 * df["CrdR"] + 0.2 * df["Fls"]
 
         df["Gls_p90"] = (df["Gls"] / df["90s_safe"]).round(2)
@@ -238,6 +260,17 @@ class FootballDataProcessor:
             df[new_col] = self._shrink_rate(df, num, "90s_safe", k90)
 
         df["Discipline_adj"] = -1.0 * self._shrink_rate(df, "Disc_Points", "90s_safe", k90)
+
+        # Takıma etki: oyuncu sahadayken takımın sonuçları (FBref "playing time" tablosu).
+        # Eski veri dosyalarında bu sütunlar yoksa etki skoru nötr kalır.
+        self.has_impact = all(c in df.columns for c in ["+/-", "onGA", "On-Off"])
+        if self.has_impact:
+            df["PlusMinus_adj"] = self._shrink_rate(df, "+/-", "90s_safe", k90)
+            df["OnGA_adj"] = self._shrink_rate(df, "onGA", "90s_safe", k90)
+            # On-Off zaten 90 dk başına bir fark ve çok gürültülü: 0'a doğru güçlü çekilir
+            df["OnOff_adj"] = df["On-Off"].fillna(0.0) * (df["Min"] / (df["Min"] + SHRINK_ONOFF_MINUTES))
+        else:
+            df["PlusMinus_adj"] = df["OnGA_adj"] = df["OnOff_adj"] = 0.0
         df["G_Sh_adj"] = self._shrink_rate(df, "G-PK", "Sh", SHRINK_SHOTS)
         df["SavePct_adj"] = 100.0 * self._shrink_rate(df, "Saves", "SoTA", SHRINK_SHOTS_FACED)
         df["CSPct_adj"] = 100.0 * self._shrink_rate(df, "CS", "MP", SHRINK_MATCHES)
@@ -285,12 +318,37 @@ class FootballDataProcessor:
         factor = pd.Series(status, index=df.index).map(
             {"free": FEE_FACTOR_FREE, "last_year": FEE_FACTOR_LAST_YEAR, "long": 1.0, "unknown": 1.0}
         )
+        # Takımdaki rol primi/indirimi (sözleşmesi biten oyuncuda kulübün pazarlık gücü yoktur)
+        share = df["Min%"] if "Min%" in df.columns else pd.Series(np.nan, index=df.index)
+        importance = np.select(
+            [share >= KEY_PLAYER_MIN_SHARE, share < FRINGE_PLAYER_MIN_SHARE],
+            ["key", "fringe"], default="regular",
+        )
+        importance = pd.Series(importance, index=df.index).where(share.notna(), "regular")
+        imp_factor = importance.map(IMPORTANCE_FACTORS).where(pd.Series(status, index=df.index) != "free", 1.0)
+        df["Importance"] = importance
+        df["Importance_Label"] = importance.map(IMPORTANCE_LABELS)
+        df["Key_Player"] = importance == "key"
+        factor = factor * imp_factor
         df["Contract_Expiry"] = expiry.dt.strftime("%Y-%m")
         df["Contract_Years_Left"] = years_left.clip(lower=0).round(1)
         df["Contract_Status"] = status
         df["Contract_Label"] = pd.Series(status, index=df.index).map(CONTRACT_STATUS_LABELS)
         df["Est_Fee_EUR"] = df["Market_Value_EUR"] * factor
         df["Est_Fee_M"] = (df["Est_Fee_EUR"] / 1e6).round(1)
+        return df
+
+    @staticmethod
+    def _possession_adjust(df: pd.DataFrame) -> pd.DataFrame:
+        team = df.groupby("Squad").agg(def_act=("Def_Actions", "sum"), mins=("Min", "sum"),
+                                       league=("League", "first"))
+        team["team_def_p90"] = team["def_act"] / (team["mins"] / 990.0).clip(lower=1.0)
+        league_mean = team.groupby("league")["team_def_p90"].transform("mean")
+        team["PAdj_Factor"] = (league_mean / team["team_def_p90"]).clip(PADJ_MIN, PADJ_MAX)
+        df["PAdj_Factor"] = df["Squad"].map(team["PAdj_Factor"]).fillna(1.0)
+        df["TklW_raw"], df["Int_raw"], df["Def_Actions_raw"] = df["TklW"], df["Int"], df["Def_Actions"]
+        for col in ["TklW", "Int", "Def_Actions"]:
+            df[col] = df[col] * df["PAdj_Factor"]
         return df
 
     @staticmethod
@@ -311,7 +369,7 @@ class FootballDataProcessor:
         `Score_Group` sutunu her oyuncunun hangi grupta puanlandigini gosterir.
         """
         for col in ["Attacking_Score", "Creativity_Score", "Defensive_Score",
-                    "Goalkeeping_Score", "Discipline_Score", "OptiScout_Score"]:
+                    "Goalkeeping_Score", "Discipline_Score", "Impact_Score", "OptiScout_Score"]:
             df[col] = 0.0
 
         sub_pos = df["TM_Sub_Position"] if "TM_Sub_Position" in df.columns else pd.Series(None, index=df.index)
@@ -366,6 +424,8 @@ class FootballDataProcessor:
             "gk": 0.40 * pct("SavePct_adj") + 0.30 * pct("CSPct_adj")
                   + 0.20 * pct("GA90_adj", ascending=False) + 0.10 * pct("Saves_adj"),
             "disc": pct("Discipline_adj"),
+            "imp": 0.40 * pct("PlusMinus_adj") + 0.35 * pct("OnGA_adj", ascending=False)
+                   + 0.25 * pct("OnOff_adj"),
         }
         overall = sum(weights.get(k, 0.0) * v for k, v in parts.items())
 
@@ -375,8 +435,28 @@ class FootballDataProcessor:
         df.loc[idx, "Defensive_Score"] = parts["def"].loc[idx].round(1)
         df.loc[idx, "Goalkeeping_Score"] = parts["gk"].loc[idx].round(1)
         df.loc[idx, "Discipline_Score"] = parts["disc"].loc[idx].round(1)
+        df.loc[idx, "Impact_Score"] = parts["imp"].loc[idx].round(1)
         df.loc[idx, "OptiScout_Score"] = overall.loc[idx].round(1)
 
         # Role uygulanamayan alt skorlar bos (NaN) birakilir
         not_applicable = OUTFIELD_SUB_SCORES if group == "GK" else GK_SUB_SCORES
         df.loc[idx, not_applicable] = np.nan
+
+
+def add_decision_score(df: pd.DataFrame, form_weight: float = 1.0) -> pd.DataFrame:
+    """
+    Karar skoru = form_weight x OptiScout (bu sezonun formu)
+                + (1 - form_weight) x Kalıcı Kalite (piyasa değerinin rol içindeki yüzdelik sırası).
+
+    Sezonun ilk haftalarındaki veri gürültülüdür; piyasa değeri ise oyuncunun yıllara yayılan
+    performansını ve itibarını yansıtır. Karar verici iki kaynağa ne kadar güveneceğini seçer.
+    Piyasa değeri bilinmeyen oyuncuda karar skoru yalnızca formdur.
+    """
+    d = df.copy()
+    log_value = np.log(d["Market_Value_EUR"].where(d["Market_Value_EUR"] > 0))
+    d["Reputation_Score"] = (log_value.groupby(d["Score_Group"]).rank(pct=True) * 100).round(1)
+    w = float(np.clip(form_weight, 0.0, 1.0))
+    blended = w * d["OptiScout_Score"] + (1 - w) * d["Reputation_Score"]
+    d["Decision_Score"] = blended.fillna(d["OptiScout_Score"]).round(1)
+    return d
+
