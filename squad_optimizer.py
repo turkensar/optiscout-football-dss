@@ -81,6 +81,7 @@ class SquadOptimizer:
         excluded_squads: list = None,
         allow_out_of_position: bool = True,
         budget_eur: float = None,
+        cost_column: str = "Market_Value_EUR",
     ) -> dict:
         """
         Karar değişkeni x[i, r] = 1 -> i. oyuncu r rolünde (ör. LB, DM, RW) oynar.
@@ -88,9 +89,10 @@ class SquadOptimizer:
         doğal rolü dışındaki bir rolde skoru uygunluk katsayısıyla çarpılır.
         `allow_out_of_position=False` ise yalnızca katsayısı 1.0 olan roller kullanılır.
 
-        `budget_eur` verilirse toplam Transfermarkt piyasa değeri bütçeyi
-        aşamaz. Piyasa değeri bilinmeyen oyuncular bu durumda havuzdan çıkarılır
-        (maliyeti bilinmeyen oyuncu bütçeye "bedava" girmesin diye).
+        `budget_eur` verilirse toplam maliyet (`cost_column`: piyasa değeri ya da
+        sözleşme durumuna göre tahmini transfer bedeli `Est_Fee_EUR`) bütçeyi
+        aşamaz. Maliyeti bilinmeyen oyuncular bu durumda havuzdan çıkarılır
+        (bütçeye "bedava" girmesinler diye).
         """
         if formation not in self.FORMATIONS:
             raise ValueError(f"Gecersiz formasyon: {formation}")
@@ -107,10 +109,10 @@ class SquadOptimizer:
         excluded_no_value = 0
         cost = None
         if budget_eur is not None:
-            has_value = pool["Market_Value_EUR"].notna() if "Market_Value_EUR" in pool.columns else pd.Series(False, index=pool.index)
+            has_value = pool[cost_column].notna() if cost_column in pool.columns else pd.Series(False, index=pool.index)
             excluded_no_value = int((~has_value).sum())
             pool = pool[has_value]
-            cost = pool["Market_Value_EUR"].to_numpy(dtype=float)
+            cost = pool[cost_column].to_numpy(dtype=float)
 
         res = self._solve(
             pool.reset_index(drop=True),
@@ -268,9 +270,12 @@ class SquadOptimizer:
             else None
         )
 
+        total_cost = float(cost[var_player[chosen]].sum()) if cost is not None else None
+
         return {
             "status": "Optimal",
             "squad": selected_df,
+            "total_cost_eur": total_cost,
             "avg_score": round(selected_df["OptiScout_Score"].mean(), 1),
             # Modelin maksimize ettigi deger: rol uygunlugu ile duzeltilmis ortalama skor
             "avg_effective_score": round(selected_df["Effective_Score"].mean(), 1),
@@ -291,6 +296,7 @@ class SquadOptimizer:
         emergency_fit: float = 0.5,
         n_candidates: int = 5,
         n_gaps: int = 3,
+        cost_column: str = "Market_Value_EUR",
     ) -> dict:
         """
         Kulüp boşluk analizi ve transfer planı.
@@ -315,7 +321,7 @@ class SquadOptimizer:
         ext = self.df[(self.df["Squad"] != club) & (self.df["Age"] <= max_signing_age)]
         if target_leagues is not None:
             ext = ext[ext["League"].isin(target_leagues)]
-        ext = ext[ext["Market_Value_EUR"].notna()] if "Market_Value_EUR" in ext.columns else ext.iloc[0:0]
+        ext = ext[ext[cost_column].notna()] if cost_column in ext.columns else ext.iloc[0:0]
         # Kulübün kendi oyuncusu başka bir kulüp satırıyla da görünüyorsa (sezon içi transfer) dışla
         ext = ext[~ext["Player_ID"].isin(own["Player_ID"])]
 
@@ -331,7 +337,7 @@ class SquadOptimizer:
         # 3) Transfer planı
         pool = pd.concat([own, ext], ignore_index=True)
         is_external = np.r_[np.zeros(len(own), dtype=bool), np.ones(len(ext), dtype=bool)]
-        cost = np.where(is_external, pool["Market_Value_EUR"].fillna(0.0).to_numpy(dtype=float), 0.0)
+        cost = np.where(is_external, pool[cost_column].fillna(0.0).to_numpy(dtype=float), 0.0)
         plan = self._solve(
             pool, formation,
             allow_out_of_position=allow_out_of_position,
@@ -370,7 +376,7 @@ class SquadOptimizer:
                     fit = self.eligible_roles(rec).get(role)
                     if fit is None or (not allow_out_of_position and fit < 1.0):
                         continue
-                    if rec["Market_Value_EUR"] > budget_eur:
+                    if rec[cost_column] > budget_eur:
                         continue
                     eff = rec["OptiScout_Score"] * fit
                     if eff <= gap["Effective_Score"]:
@@ -379,7 +385,7 @@ class SquadOptimizer:
                                  "Improvement": round(eff - gap["Effective_Score"], 1)})
                 cand = pd.DataFrame(rows)
                 if not cand.empty:
-                    cand = cand.sort_values(["Improvement", "Market_Value_EUR"], ascending=[False, True]).head(n_candidates)
+                    cand = cand.sort_values(["Improvement", cost_column], ascending=[False, True]).head(n_candidates)
                 result["candidates"][f"{role}|{gap['Row_Key']}"] = cand
 
         if plan["status"] == "Optimal":
@@ -388,7 +394,7 @@ class SquadOptimizer:
             if baseline["status"] == "Optimal":
                 kept = set(plan_xi["Player_ID"])
                 result["dropped"] = baseline["squad"][~baseline["squad"]["Player_ID"].isin(kept)]
-            result["spent_eur"] = float(result["signings"]["Market_Value_EUR"].sum())
+            result["spent_eur"] = float(result["signings"][cost_column].sum())
 
         return result
 
@@ -405,6 +411,6 @@ class SquadOptimizer:
                 "Budget_M": budget / 1e6,
                 "Status": res["status"],
                 "Avg_Score": res.get("avg_effective_score"),
-                "Spent_M": (res["total_value_eur"] / 1e6) if res.get("total_value_eur") is not None else None,
+                "Spent_M": (res["total_cost_eur"] / 1e6) if res.get("total_cost_eur") is not None else None,
             })
         return pd.DataFrame(rows)

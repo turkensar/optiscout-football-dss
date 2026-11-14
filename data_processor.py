@@ -15,6 +15,21 @@ SHRINK_MATCHES = 5.0       # CS% icin
 
 VALID_POSITIONS = ["GK", "DF", "MF", "FW"]
 
+# Sözleşme durumu -> tahmini transfer maliyeti. Hesap anı bir sonraki yaz transfer dönemi.
+# Sözleşmesi o tarihte biten oyuncu bedelsiz gelir (yalnızca imza ücreti/menajer payı gibi
+# masraflar: piyasa değerinin %15'i); son yılına giren oyuncuyu kulüp bedelsiz kaybetmemek
+# için indirimli satar (%60); diğerleri tam piyasa değeri. Oranlar varsayımdır.
+TRANSFER_WINDOW = pd.Timestamp("2027-07-01")
+TM_SNAPSHOT_DATE = pd.Timestamp("2026-07-06")  # Transfermarkt verisinin tarihi
+FEE_FACTOR_FREE = 0.15
+FEE_FACTOR_LAST_YEAR = 0.60
+CONTRACT_STATUS_LABELS = {
+    "free": "Bedelsiz 2027",
+    "last_year": "Son yılı",
+    "long": "Uzun",
+    "unknown": "—",
+}
+
 # Transfermarkt alt mevkisi -> skorlama rol grubu
 SUB_POSITION_TO_ROLE_GROUP = {
     "Goalkeeper": "GK",
@@ -237,14 +252,45 @@ class FootballDataProcessor:
 
     def _attach_market_values(self, df: pd.DataFrame) -> pd.DataFrame:
         if os.path.exists(self.market_path):
-            mv = pd.read_csv(self.market_path, usecols=["Row_Key", "Market_Value_EUR", "TM_Sub_Position"])
-            mv = mv.drop_duplicates("Row_Key")
+            mv = pd.read_csv(self.market_path)
+            wanted = ["Row_Key", "Market_Value_EUR", "TM_Sub_Position",
+                      "TM_Contract_Expiry", "TM_Foot", "TM_Height_cm"]
+            for col in wanted:
+                if col not in mv.columns:  # eski market_values.csv ile geriye uyumluluk
+                    mv[col] = np.nan
+            mv = mv[wanted].drop_duplicates("Row_Key")
             df = df.merge(mv, on="Row_Key", how="left")
             self.has_market_values = bool(mv["Market_Value_EUR"].notna().any())
         else:
             df["Market_Value_EUR"] = np.nan
             df["TM_Sub_Position"] = None
+            df["TM_Contract_Expiry"] = np.nan
+            df["TM_Foot"] = None
+            df["TM_Height_cm"] = np.nan
         df["Market_Value_M"] = (df["Market_Value_EUR"] / 1e6).round(1)
+        return self._attach_contract_costs(df)
+
+    @staticmethod
+    def _attach_contract_costs(df: pd.DataFrame) -> pd.DataFrame:
+        """Sözleşme bitişinden tahmini transfer maliyeti (Est_Fee_EUR) üretir."""
+        expiry = pd.to_datetime(df["TM_Contract_Expiry"], errors="coerce")
+        # Veri tarihinden önce bitmiş görünen sözleşmeler eskimiş kayıttır (yenilenmiş olabilir)
+        expiry = expiry.where(expiry >= TM_SNAPSHOT_DATE)
+        years_left = (expiry - TRANSFER_WINDOW).dt.days / 365.25
+        status = np.select(
+            [expiry.isna(), years_left <= 0.05, years_left <= 1.05],
+            ["unknown", "free", "last_year"],
+            default="long",
+        )
+        factor = pd.Series(status, index=df.index).map(
+            {"free": FEE_FACTOR_FREE, "last_year": FEE_FACTOR_LAST_YEAR, "long": 1.0, "unknown": 1.0}
+        )
+        df["Contract_Expiry"] = expiry.dt.strftime("%Y-%m")
+        df["Contract_Years_Left"] = years_left.clip(lower=0).round(1)
+        df["Contract_Status"] = status
+        df["Contract_Label"] = pd.Series(status, index=df.index).map(CONTRACT_STATUS_LABELS)
+        df["Est_Fee_EUR"] = df["Market_Value_EUR"] * factor
+        df["Est_Fee_M"] = (df["Est_Fee_EUR"] / 1e6).round(1)
         return df
 
     @staticmethod

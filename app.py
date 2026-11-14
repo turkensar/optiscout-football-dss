@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
@@ -65,10 +66,11 @@ COLUMN_LABELS = {
     "Score_Group": "Rol", "TM_Sub_Position": "Alt Mevki (TM)", "Assigned_Role": "Görev",
     "Gls": "Gol", "Ast": "Asist", "Gls_p90": "Gol/90", "Ast_p90": "Asist/90",
     "Def_Actions_p90": "Savunma Aks./90", "GA_non_pk_p90": "PS'siz G+A/90",
-    "OptiScout_Score": "OptiScout", "Effective_Score": "Rol Uyumlu Skor",
+    "OptiScout_Score": "OptiScout", "Effective_Score": "Rol Skoru",
     "Similarity_Score": "Benzerlik", "Market_Value_M": "Piyasa Değeri",
     "Role_Fit": "Rol Uyumu", "Improvement": "Kazanç",
     "Pred_Value_M": "Tahmini Değer", "Value_Ratio": "Fırsat Katsayısı",
+    "Contract_Label": "Sözleşme", "Contract_Expiry": "Sözleşme Bitişi", "Est_Fee_M": "Tahmini Bedel",
     "Attacking_Score": "Hücum", "Creativity_Score": "Yaratıcılık", "Defensive_Score": "Savunma",
     "Goalkeeping_Score": "Kalecilik", "Discipline_Score": "Disiplin", "Saves_p90": "Kurtarış/90",
 }
@@ -101,10 +103,11 @@ def show_table(frame, **kwargs):
     config = {
         "Piyasa Değeri": st.column_config.NumberColumn(format="€%.1fM"),
         "Tahmini Değer": st.column_config.NumberColumn(format="€%.1fM"),
+        "Tahmini Bedel": st.column_config.NumberColumn(format="€%.1fM"),
         "Fırsat Katsayısı": st.column_config.NumberColumn(format="%.1fx"),
         "Rol Uyumu": st.column_config.NumberColumn(format="%.2f"),
     }
-    for col in ["OptiScout", "Rol Uyumlu Skor", "Benzerlik", "Kazanç", "Hücum", "Yaratıcılık",
+    for col in ["OptiScout", "Rol Skoru", "Benzerlik", "Kazanç", "Hücum", "Yaratıcılık",
                 "Savunma", "Kalecilik", "Disiplin"]:
         config[col] = st.column_config.NumberColumn(format="%.1f")
     for col in ["Gol/90", "Asist/90", "Savunma Aks./90", "PS'siz G+A/90", "Kurtarış/90"]:
@@ -219,6 +222,18 @@ st.sidebar.caption(f"Veri kaynağı: `{source_file}`")
 if has_values:
     matched_share = df["Market_Value_EUR"].notna().mean() * 100
     st.sidebar.caption(f"Transfermarkt piyasa değeri eşleşmesi: %{matched_share:.0f}")
+    use_contracts = st.sidebar.checkbox(
+        "📝 Sözleşme durumunu maliyete yansıt",
+        value=True,
+        help="Açıkken transfer maliyeti olarak piyasa değeri yerine tahmini bedel kullanılır: "
+             "2027 yazında sözleşmesi bitecek oyuncu piyasa değerinin %15'i (imza ücreti vb.), "
+             "son yılına giren oyuncu %60'ı, diğerleri tam değeri.",
+    )
+else:
+    use_contracts = False
+cost_col = "Est_Fee_EUR" if use_contracts else "Market_Value_EUR"
+cost_label = "Tahmini Transfer Bedeli" if use_contracts else "Piyasa Değeri"
+cost_m_col = "Est_Fee_M" if use_contracts else "Market_Value_M"
 
 all_leagues = sorted(df["League"].unique().tolist())
 selected_leagues = st.sidebar.multiselect(
@@ -458,7 +473,7 @@ with tab3:
             use_budget = st.checkbox("💶 Bütçe kısıtı", value=True)
         with b2:
             budget_m = st.slider(
-                "Toplam Transfer Bütçesi (milyon €, Transfermarkt piyasa değeri)",
+                f"Toplam Transfer Bütçesi (milyon €, {cost_label.lower()})",
                 min_value=10, max_value=1500, value=250, step=10,
                 disabled=not use_budget,
             )
@@ -484,6 +499,7 @@ with tab3:
         max_avg_age=max_avg_age,
         allow_out_of_position=allow_oop,
         budget_eur=budget_eur,
+        cost_column=cost_col,
     )
 
     if result["status"] == "Optimal":
@@ -497,10 +513,11 @@ with tab3:
                  f"Ham ortalama: {result['avg_score']}",
         )
         m3.metric("İlk 11 Yaş Ortalaması", f"{result['avg_age']} Yaş")
-        if result.get("total_value_eur") is not None:
-            spent_m = result["total_value_eur"] / 1e6
+        spent_eur = result.get("total_cost_eur") if budget_eur else result.get("total_value_eur")
+        if spent_eur is not None:
+            spent_m = spent_eur / 1e6
             m4.metric(
-                "İlk 11 Toplam Piyasa Değeri",
+                f"İlk 11 Toplam {cost_label if budget_eur else 'Piyasa Değeri'}",
                 fmt_value(spent_m),
                 delta=f"{fmt_value(budget_eur / 1e6 - spent_m)} bütçe kaldı" if budget_eur else None,
                 delta_color="off",
@@ -511,17 +528,15 @@ with tab3:
                 "maliyeti bilinmediği için bütçeli çözümde havuz dışı bırakıldı."
             )
 
-        col_pitch, col_xi_table = st.columns([3, 2])
+        col_pitch, col_xi_table = st.columns([11, 9])
         with col_pitch:
             st.plotly_chart(draw_tactical_pitch(xi_df, has_values))
             if xi_df["Out_Of_Position"].any():
                 st.caption("* Doğal rolü dışında oynatılan oyuncu (skoru uygunluk katsayısıyla indirimli)")
         with col_xi_table:
             show_table(
-                xi_df[[
-                    "Assigned_Role", "Player", "TM_Sub_Position", "Squad", "League", "Age",
-                    "Min", "Gls", "Ast", "OptiScout_Score"
-                ] + (["Market_Value_M"] if has_values else [])],
+                xi_df[["Assigned_Role", "Player", "Squad", "OptiScout_Score"]
+                      + ([cost_m_col] + (["Contract_Label"] if use_contracts else []) if has_values else [])],
                 hide_index=True,
                 height=(len(xi_df) + 1) * 35 + 3,
             )
@@ -539,29 +554,37 @@ with tab3:
             "nokta, ek harcamanın kadroyu artık anlamlı iyileştirmediği bütçedir."
         )
         if st.button("Eğriyi hesapla"):
-            budgets = [b * 1e6 for b in (25, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1000, 1500)]
-            frontier = cached_frontier(
-                min_mins,
-                tuple(selected_leagues),
-                tuple(giant_clubs),
-                tuple(budgets),
-                formation=formation,
-                max_players_per_club=max_club,
-                max_avg_age=max_avg_age,
-                allow_out_of_position=allow_oop,
-            )
+            budgets = [b * 1e6 for b in (10, 25, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1000, 1500)]
+            common = dict(formation=formation, max_players_per_club=max_club,
+                          max_avg_age=max_avg_age, allow_out_of_position=allow_oop)
+            curves = [("Piyasa değeri ile", "Market_Value_EUR")]
+            if use_contracts:
+                curves.append(("Sözleşme durumu dahil", "Est_Fee_EUR"))
+            parts = []
+            for name, col in curves:
+                fr = cached_frontier(min_mins, tuple(selected_leagues), tuple(giant_clubs), tuple(budgets),
+                                     cost_column=col, **common)
+                parts.append(fr.assign(Maliyet=name))
+            frontier = pd.concat(parts, ignore_index=True)
             ok = frontier[frontier["Status"] == "Optimal"]
             if ok.empty:
                 st.warning("Bu kısıtlarla hiçbir bütçe seviyesinde çözüm bulunamadı.")
             else:
                 fig_frontier = px.line(
-                    ok, x="Budget_M", y="Avg_Score", markers=True,
-                    hover_data={"Spent_M": ":.0f"},
+                    ok, x="Budget_M", y="Avg_Score", color="Maliyet", markers=True,
+                    hover_data={"Spent_M": ":.0f", "Maliyet": False},
                     labels={"Budget_M": "Bütçe (milyon €)", "Avg_Score": "Rol Uyumlu Ortalama Skor",
-                            "Spent_M": "Harcanan (milyon €)"},
-                    template="plotly_dark", height=420,
+                            "Spent_M": "Harcanan (milyon €)", "Maliyet": "Maliyet hesabı"},
+                    color_discrete_map={"Piyasa değeri ile": "#64748b", "Sözleşme durumu dahil": "#facc15"},
+                    template="plotly_dark", height=420, log_x=True,
                 )
+                fig_frontier.update_layout(legend=dict(orientation="h", y=1.08, x=0))
                 st.plotly_chart(fig_frontier)
+                if use_contracts:
+                    st.caption(
+                        "Sözleşmesi biten oyuncuları hesaba katmak en çok küçük bütçelerde fark yaratır: "
+                        "aynı parayla belirgin şekilde daha iyi bir kadro kurulabilir."
+                    )
 
 with tab4:
     st.subheader("🏟️ Kulüp Boşluk Analizi & Transfer Planı")
@@ -603,6 +626,7 @@ with tab4:
             club,
             formation=plan_formation,
             budget_eur=plan_budget_m * 1e6,
+            cost_column=cost_col,
             max_signings=max_signings,
             max_signing_age=max_signing_age,
         )
@@ -662,8 +686,9 @@ with tab4:
                     st.write("Bu bütçeyle mevcut 11'i iyileştiren bir transfer bulunamadı.")
                 else:
                     show_table(
-                        plan["signings"][["Assigned_Role", "Player", "Squad",
-                                          "Market_Value_M", "Effective_Score"]],
+                        plan["signings"][["Assigned_Role", "Player", "Squad"]
+                                         + (["Contract_Label", "Est_Fee_M"] if use_contracts else ["Market_Value_M"])
+                                         + ["Effective_Score"]],
                         hide_index=True,
                     )
                 if not plan["dropped"].empty:
@@ -684,14 +709,17 @@ with tab4:
                         st.write("Bütçeye sığan daha iyi bir aday yok.")
                     else:
                         show_table(
-                            cand[["Player", "Squad", "League", "Age", "TM_Sub_Position",
-                                  "Market_Value_M", "Effective_Score", "Improvement"]],
+                            cand[["Player", "Squad", "League", "Age", "TM_Sub_Position", "Market_Value_M"]
+                                 + (["Contract_Label", "Est_Fee_M"] if use_contracts else [])
+                                 + ["Effective_Score", "Improvement"]],
                             hide_index=True,
                         )
 
             st.caption(
-                "Varsayımlar: Oyuncu satışları ve maaşlar modele dahil değildir; maliyet olarak "
-                "Transfermarkt piyasa değeri kullanılır (gerçek bonservis bedeli farklı olabilir)."
+                "Varsayımlar: Oyuncu satışları ve maaşlar modele dahil değildir. Maliyet olarak "
+                + ("sözleşme durumuna göre tahmini bedel (2027 yazında bedelsiz: değerin %15'i, son yılı: %60'ı) "
+                   if use_contracts else "Transfermarkt piyasa değeri ")
+                + "kullanılır; gerçek bonservis bedeli farklı olabilir."
             )
 
 with tab5:
@@ -724,7 +752,7 @@ with tab5:
             "konsaydı model \"küçük kulüpteki iyi oyuncu ucuzdur\" diye öğrenip aranan oyuncuları ıskalardı."
         )
 
-        f1, f2, f3, f4 = st.columns(4)
+        f1, f2, f3, f4, f5 = st.columns([3, 2, 2, 2, 2])
         with f1:
             role_codes = [g for g in ["GK", "CB", "FB", "DM", "CM", "AM", "W", "ST"]
                           if g in set(vm.predictions["Score_Group"])]
@@ -738,6 +766,12 @@ with tab5:
         with f4:
             perf_label = st.selectbox("Performans Eşiği", ["Rolünde en iyi %10", "Rolünde en iyi %25",
                                                            "Rolünde en iyi %50"], index=1)
+        with f5:
+            only_expiring = st.checkbox(
+                "Sözleşmesi 2028'e kadar bitenler",
+                help="Yalnızca önümüzdeki yaz bedelsiz olacak ya da son yılına girecek oyuncular: "
+                     "bunlar tahminen çok daha ucuza alınabilir.",
+            )
         quantile = {"Rolünde en iyi %10": 0.9, "Rolünde en iyi %25": 0.75, "Rolünde en iyi %50": 0.5}[perf_label]
 
         opp = vm.opportunities(
@@ -748,14 +782,17 @@ with tab5:
             roles=opp_roles or None,
             top_n=200,
         )
-        opp = opp[opp["League"].isin(selected_leagues)].head(25)
+        opp = opp[opp["League"].isin(selected_leagues)]
+        if only_expiring:
+            opp = opp[opp["Contract_Status"].isin(["free", "last_year"])]
+        opp = opp.head(25)
 
         st.markdown(f"**{len(opp)} fırsat oyuncu** (en az 450 dakika; fırsat katsayısı = tahmini değer / gerçek değer)")
         if opp.empty:
             st.write("Bu filtrelerle fırsat oyuncu bulunamadı.")
         else:
-            show_table(opp[["Player", "Squad", "League", "Score_Group", "Age", "Min", "OptiScout_Score",
-                            "Market_Value_M", "Pred_Value_M", "Value_Ratio"]])
+            show_table(opp[["Player", "Squad", "Score_Group", "Age", "OptiScout_Score",
+                            "Market_Value_M", "Pred_Value_M", "Value_Ratio", "Contract_Label", "Est_Fee_M"]])
 
         ch1, ch2 = st.columns([3, 2])
         with ch1:

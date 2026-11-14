@@ -28,7 +28,7 @@ Modern futbol analitiğinde oyuncu izleme (scouting) ve kadro planlama süreçle
 | **2. İkame Oyuncu Motoru** | `similarity_engine.py` | `StandardScaler` (Z-Score) + `Cosine Similarity` (`scikit-learn`) | Oyuncuların rol bazlı Per-90 vektörlerini standartlaştırır ve seçilen referans oyuncuya en yüksek kosinüs benzerliği gösteren alternatifleri listeler. Model eğitimi gerektirmeyen, açıklanabilir bir mesafe ölçüsüdür. |
 | **3. Optimum İlk 11 Çözücü** | `squad_optimizer.py` | Karışık Tamsayılı Doğrusal Programlama (`scipy.optimize.milp` - HiGHS Solver) | Seçilen formasyon (`4-3-3`, `4-2-3-1`, `3-5-2` vb.), **transfer bütçesi**, maksimum yaş ortalaması ve kulüp sınırı kısıtları altında toplam kadro skorunu maksimize eder; bütçe-performans eğrisini çizer ve **kulüp bazlı transfer planı** üretir. Formasyonlar Transfermarkt alt mevkilerine dayalı **taktik rollerle** (LB, CB, DM, AM, RW, ST...) tanımlanır. |
 | **4. Piyasa Değeri Modeli** | `value_model.py` | Ridge regresyon, 5 katlı çapraz doğrulama (out-of-fold tahmin) | Performans, yaş, lig ve rolden beklenen piyasa değerini tahmin eder; gerçek değeri tahminin çok altında kalan üst dilim oyuncuları fırsat olarak listeler. |
-| **5. Piyasa Değeri Eşleştirme** | `scripts/build_market_values.py` | İsim normalizasyonu + doğum yılı + kulüp benzerliği ile kademeli eşleştirme | FBref oyuncularını Transfermarkt piyasa değerleri ve alt mevkileriyle eşleştirir ve `data/market_values.csv` dosyasını üretir. |
+| **5. Piyasa Değeri Eşleştirme** | `scripts/build_market_values.py` | İsim normalizasyonu + doğum yılı + kulüp benzerliği ile kademeli eşleştirme | FBref oyuncularını Transfermarkt piyasa değerleri, alt mevkileri ve sözleşme bitiş tarihleriyle eşleştirir ve `data/market_values.csv` dosyasını üretir. |
 | **6. İnteraktif KDS Arayüzü** | `app.py` | `Streamlit` & `Plotly` | Rol bazlı oyuncu sıralaması, dört kadranlı aykırı değer (outlier) haritası, radar karşılaştırması, taktik tahtası ve bütçe-performans eğrisi sunar. |
 
 ---
@@ -133,6 +133,32 @@ Kimin alınacağına **ve kimin yedeğe düşeceğine** model kendisi karar veri
 
 ---
 
+## 📝 Sözleşme Durumu ve Tahmini Transfer Bedeli
+
+Piyasa değeri, bir oyuncunun gerçekte kaça alınabileceğini her zaman göstermez. Sözleşmesi bitmek üzere olan bir oyuncuyu kulübü bedelsiz kaybetmemek için ucuza satar; sözleşmesi bitmiş oyuncu ise bedelsiz gelir. OptiScout, Transfermarkt'taki sözleşme bitiş tarihini kullanarak bir sonraki yaz transfer dönemi (1 Temmuz 2027) için **tahmini transfer bedeli** hesaplar:
+
+| Sözleşme durumu (Temmuz 2027) | Tahmini bedel |
+| :--- | :--- |
+| Bitmiş (bedelsiz) | Piyasa değerinin %15'i (imza ücreti, menajer payı gibi masraflar) |
+| Son yılında (2028'de bitiyor) | Piyasa değerinin %60'ı |
+| Daha uzun / bilinmiyor | Piyasa değerinin tamamı |
+
+Kenar çubuğundaki seçenekle açılıp kapatılabilir; açıkken bütçe kısıtı, transfer planı ve fırsat listesi bu tahmini bedeli kullanır.
+
+**Etkisi en çok küçük bütçelerde görülür** (4-3-3, kulüp başına en fazla 2, yaş ortalaması ≤ 26,5):
+
+| Bütçe | Yalnızca piyasa değeri | Sözleşme durumu dahil |
+| :--- | :---: | :---: |
+| €10M | 65.1 | **70.7** |
+| €25M | 71.6 | **75.0** |
+| €50M | 75.7 | **76.9** |
+| €100M | 77.8 | 78.1 |
+| €200M | 78.2 | 78.2 |
+
+Sözleşmesi biten oyuncuları takip etmek, küçük bütçeli bir kulübün aynı parayla belirgin şekilde daha iyi bir kadro kurmasını sağlar; büyük bütçede fark kapanır. Örneğin fırsat listesinin başındaki Sergio Camello'nun (Rayo Vallecano, €3M) sözleşmesi Haziran 2027'de bitmektedir.
+
+---
+
 ## 💎 Fırsat Oyuncular: Piyasa Değeri Modeli
 
 Bir **Ridge regresyon** modeli, oyuncunun bu sezonki performansından (OptiScout ve alt skorlar), yaşından, dakikasından, ilk 11 oranından, liginden ve rolünden **log(piyasa değeri)** tahmin eder. Rolünde üst dilimde oynayan ama gerçek değeri tahminin çok altında kalan oyuncular **fırsat** olarak listelenir (fırsat katsayısı = tahmini değer / gerçek değer).
@@ -191,6 +217,7 @@ Per-90 metriklerde $k = 450$ dakikadır (5 maçlık sanal veri). Çok oynayan oy
 ## ⚠️ Bilinen Sınırlamalar
 
 * **xG/xA yok:** FBref artık gelişmiş Opta metriklerini yayınlamadığı için skorlar gol, asist ve şut gibi temel istatistiklere dayanır.
+* **Sözleşme bedeli varsayımları:** %15 ve %60 oranları sektör pratiğine dayalı varsayımlardır; sözleşme tarihleri Temmuz 2026 tarihlidir ve sonrasında yapılan uzatmaları içermez. Veriden önce bitmiş görünen sözleşmeler eskimiş kayıt sayılır ve tam bedel uygulanır.
 * **Değer modeli:** Bu sezonun ilk haftalarındaki performansa dayanır ve piyasa değerindeki değişimin yalnızca üçte birini açıklar (R² ≈ 0.33); fırsat listesi bir ön eleme aracıdır.
 * **Transfer planı varsayımları:** Oyuncu satışları ve maaşlar modele dahil değildir; maliyet olarak piyasa değeri kullanılır. Kulüp kadrosu yalnızca süre filtresini geçen oyunculardan oluşur; sakat veya az oynamış oyuncular için filtre düşürülmelidir.
 * **Penaltısız, dakika başına üretim:** Skorlar toplam gol sayısını değil penaltısız 90 dakika başına üretimi ödüllendirir. Bu yüzden örneğin penaltı golleri olan ve çok oynayan bir yıldız, daha az oynayıp yüksek oranla gol atan bir oyuncunun gerisinde kalabilir.

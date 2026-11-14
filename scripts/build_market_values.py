@@ -135,6 +135,9 @@ def match(fb: pd.DataFrame, tm: pd.DataFrame) -> pd.DataFrame:
             "TM_Name": c.name,
             "TM_Club": c.current_club_name,
             "TM_Sub_Position": getattr(c, "sub_position", None),
+            "TM_Contract_Expiry": getattr(c, "contract_expiration_date", None),
+            "TM_Foot": getattr(c, "foot", None),
+            "TM_Height_cm": getattr(c, "height_in_cm", None),
             "Market_Value_EUR": int(c.market_value_in_eur),
             "Match_Method": method,
         })
