@@ -3,7 +3,7 @@
 
 # ⚽ OptiScout: Data-Driven Football Scouting & Squad Optimization DSS
 
-Avrupa'nın 5 büyük ligindeki (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) **2026-2027 sezonu FBref** verileri üzerine inşa edilmiş; **Veri Mühendisliği**, **İstatistiksel Benzerlik Analizi (Cosine Similarity)**, **Makine Öğrenmesi (piyasa değeri regresyonu)** ve **Yöneylem Araştırması (Mixed-Integer Linear Programming - MILP)** yöntemlerini birleştiren interaktif bir **Karar Destek Sistemi (Decision Support System - DSS)**.
+Avrupa'nın 5 büyük ligi (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) ve **Süper Lig**'in **2026-2027 sezonu FBref** verileri üzerine inşa edilmiş; **Veri Mühendisliği**, **İstatistiksel Benzerlik Analizi (Cosine Similarity)**, **Makine Öğrenmesi (piyasa değeri regresyonu)** ve **Yöneylem Araştırması (Mixed-Integer Linear Programming - MILP)** yöntemlerini birleştiren interaktif bir **Karar Destek Sistemi (Decision Support System - DSS)**.
 
 ![OptiScout demo](images/demo.gif)
 
@@ -29,7 +29,8 @@ Modern futbol analitiğinde oyuncu izleme (scouting) ve kadro planlama süreçle
 | **3. Optimum İlk 11 Çözücü** | `squad_optimizer.py` | Karışık Tamsayılı Doğrusal Programlama (`scipy.optimize.milp` - HiGHS Solver) | Seçilen formasyon (`4-3-3`, `4-2-3-1`, `3-5-2` vb.), **transfer bütçesi**, maksimum yaş ortalaması ve kulüp sınırı kısıtları altında toplam kadro skorunu maksimize eder; bütçe-performans eğrisini çizer ve **kulüp bazlı transfer planı** üretir. Formasyonlar Transfermarkt alt mevkilerine dayalı **taktik rollerle** (LB, CB, DM, AM, RW, ST...) tanımlanır. |
 | **4. Piyasa Değeri Modeli** | `value_model.py` | Ridge regresyon, 5 katlı çapraz doğrulama (out-of-fold tahmin) | Performans, yaş, lig ve rolden beklenen piyasa değerini tahmin eder; gerçek değeri tahminin çok altında kalan üst dilim oyuncuları fırsat olarak listeler. |
 | **5. Piyasa Değeri Eşleştirme** | `scripts/build_market_values.py` | İsim normalizasyonu + doğum yılı + kulüp benzerliği ile kademeli eşleştirme | FBref oyuncularını Transfermarkt piyasa değerleri, alt mevkileri ve sözleşme bitiş tarihleriyle eşleştirir ve `data/market_values.csv` dosyasını üretir. |
-| **6. İnteraktif KDS Arayüzü** | `app.py` | `Streamlit` & `Plotly` | Rol bazlı oyuncu sıralaması, dört kadranlı aykırı değer (outlier) haritası, radar karşılaştırması, taktik tahtası ve bütçe-performans eğrisi sunar. |
+| **6. Ek Lig Ekleme** | `scripts/add_league.py` | FBref tablolarının oyuncu kimliğiyle birleştirilmesi | FBref'ten indirilen 5 tabloyu (standart, kaleci, şut, oynama süresi, çeşitli) ana veriyle aynı sütun biçimine çevirir ve `data/leagues/` klasörüne yazar. Uygulama bu klasördeki her ligi otomatik yükler. |
+| **7. İnteraktif KDS Arayüzü** | `app.py` | `Streamlit` & `Plotly` | Rol bazlı oyuncu sıralaması, dört kadranlı aykırı değer (outlier) haritası, radar karşılaştırması, taktik tahtası ve bütçe-performans eğrisi sunar. |
 
 ---
 
@@ -141,6 +142,15 @@ Satış geliri de gerçekçi bedelle hesaplanır (sözleşmesi biten oyuncu az, 
 
 ---
 
+### 🧭 Gerçekçi transfer hedefleri (kulüp ve oyuncu katsayıları)
+
+Gerçekçilik kuralı olmadan model her kulübe skor/fiyat oranı en iyi birkaç oyuncuyu önerir. Denemede 40 kulübün 14'üne Rodri, 12'sine Harry Kane önerildi; bunlara küçük kulüpler de dahildi. Bu yüzden aday havuzu iki katsayıyla süzülür:
+
+* **Kulüp katsayısı** = kadronun toplam Transfermarkt değeri. Bir oyuncu, mevcut kulübünün değerinin en az **%50'si** kadar değerli bir kulübe aday gösterilir (Rennes'in sol beki Alanyaspor'a önerilmez). Kariyerinin sonundaki oyuncular daha kolay alt seviyeye iner; bu yüzden **31 yaş ve üstü** için eşik **%25**'tir.
+* **Oyuncu katsayısı** = oyuncunun piyasa değeri. Bu değer, alıcı kulübün toplam kadro değerinin **%25'ini** geçemez.
+
+Bu kurallarla aynı oyuncunun önerildiği en fazla kulüp sayısı 14'ten 5'e düştü. Kural arayüzden kapatılabilir; %50'lik eşik "Kulüp seviyesi toleransı" ayarıyla değiştirilebilir. Eşikler varsayımdır: maaş, oyuncunun isteği ve Avrupa kupası gibi etkenler modelde yoktur.
+
 ## 📝 Sözleşme Durumu ve Tahmini Transfer Bedeli
 
 Piyasa değeri, bir oyuncunun gerçekte kaça alınabileceğini her zaman göstermez. Sözleşmesi bitmek üzere olan bir oyuncuyu kulübü bedelsiz kaybetmemek için ucuza satar; sözleşmesi bitmiş oyuncu ise bedelsiz gelir. OptiScout, Transfermarkt'taki sözleşme bitiş tarihini kullanarak bir sonraki yaz transfer dönemi (1 Temmuz 2027) için **tahmini transfer bedeli** hesaplar:
@@ -247,6 +257,29 @@ Per-90 metriklerde $k = 450$ dakikadır (5 maçlık sanal veri). Çok oynayan oy
 
 ---
 
+## 🇹🇷 Süper Lig ve Lig Gücü Katsayısı
+
+Süper Lig verisi FBref'in Süper Lig oyuncu tablolarından gelir ve `scripts/add_league.py` ile ana veri biçimine çevrilir:
+
+```bash
+# data/super_lig/ içinde: stats.csv keepers.csv shooting.csv playingtime.csv misc.csv
+python scripts/add_league.py --src data/super_lig --comp "tr Süper Lig"
+python scripts/build_market_values.py   # Transfermarkt eşleştirmesini yeni ligle yeniler
+```
+
+Aynı yöntemle başka bir lig de eklenebilir (`--comp "nl Eredivisie"` gibi).
+
+**Sorun:** Skorlar bütün liglerin oyuncuları birlikte sıralanarak hesaplanır. Düzeltme yapılmazsa Süper Lig'de 90 dakikada 1 gol atan bir santrfor, Premier League'de aynı oranı tutturanla aynı puanı alır. Düzeltmesiz denemede Süper Lig, en iyi 100 oyuncu içinde 23 oyuncuyla en kalabalık lig çıkıyordu (Premier League: 10).
+
+**Çözüm, iki adım:**
+
+1. **Lig katsayısı ($f$):** Ek ligin üretim metrikleri sıralamadan önce katsayıyla ölçeklenir. Gol, asist, şut, top kapma ve artı/eksi gibi yüksek olması iyi metrikler $f$ ile çarpılır; yenilen gol $f$'ye bölünür. Kalecinin gol yeme oranı da $(100 - \text{kurtarış}\%) / f$ olarak büyütülür. Varsayılan $f = 0.75$'tir ve kenar çubuğundan değiştirilebilir. Bu değer bir varsayımdır: Opta güç sıralamasında Süper Lig kulüp ortalaması ~78, Big-5 ligleri ~85 ve üzeridir. Bu fark, İngiltere'de Championship ile Premier League arasındaki farka yakındır.
+2. **Referans havuzu:** Yüzdelik dilimler, z-skorlar, küçük örneklem ön bilgisi ve itibar skoru yalnızca Big-5 oyuncularının dağılımından hesaplanır. Ek ligin oyuncuları bu dağılıma yerleştirilir. Sonuç olarak yeni bir lig eklemek ya da katsayıyı değiştirmek **Big-5 oyuncularının skorlarını hiç değiştirmez**; bu durum testlerle güvenceye alınmıştır.
+
+$f = 0.75$ ile en iyi 100 oyuncuda Süper Lig'den 5 oyuncu kalır; ligin en yüksek skorlu oyuncusu Victor Osimhen'dir.
+
+---
+
 ## ⚠️ Bilinen Sınırlamalar
 
 * **xG/xA yok:** FBref artık gelişmiş Opta metriklerini yayınlamadığı için skorlar gol, asist ve şut gibi temel istatistiklere dayanır.
@@ -255,7 +288,7 @@ Per-90 metriklerde $k = 450$ dakikadır (5 maçlık sanal veri). Çok oynayan oy
 * **Transfer planı varsayımları:** Maaşlar modele dahil değildir. Satış kararlarında model yalnızca ilk 11'in gücüne bakar; kadro derinliğini ve oyuncunun varlık değerini hesaba katmaz (ör. ilk 11'i çok az iyileştirmek için değerli bir oyuncuyu satabilir), bu yüzden satış sayısı sınırlı tutulmalıdır. Maliyet olarak piyasa değeri ya da sözleşme durumuna göre tahmini bedel kullanılır. Kulüp kadrosu yalnızca süre filtresini geçen oyunculardan oluşur; sakat veya az oynamış oyuncular için filtre düşürülmelidir.
 * **Penaltısız, dakika başına üretim:** Skorlar toplam gol sayısını değil penaltısız 90 dakika başına üretimi ödüllendirir. Bu yüzden örneğin penaltı golleri olan ve çok oynayan bir yıldız, daha az oynayıp yüksek oranla gol atan bir oyuncunun gerisinde kalabilir.
 * **Rol verisi:** Roller Transfermarkt'ın tek bir "ana" alt mevkisine dayanır; birden fazla rolde oynayan oyuncular yalnızca ana rolünde puanlanır (MILP'de diğer rollere uygunluk katsayısıyla yerleştirilebilir). Rol ağırlıkları uzman görüşüne dayalı varsayımlardır.
-* **Takım ve lig bağlamı:** Savunma aksiyonları topa sahip olma oranından, kaleci metrikleri takım savunmasından etkilenir; ligler arası güç farkı henüz modelde yoktur.
+* **Takım ve lig bağlamı:** Savunma aksiyonları topa sahip olma oranından, kaleci metrikleri takım savunmasından etkilenir. Big-5 ligleri birbirine eşit kabul edilir; Süper Lig için tek bir lig katsayısı kullanılır ve bu katsayı her metrik ve her rol için aynıdır (gerçekte ligler arası fark mevkiye göre değişebilir).
 * **Piyasa değeri tarihi:** Transfermarkt verisi 6 Temmuz 2026 tarihli bir anlık görüntüdür; yaz transfer dönemindeki değer değişimlerini içermez. Piyasa değeri bir tahmindir, gerçek bonservis bedeli değildir.
 * **Oyuncu kimliği:** Veride benzersiz oyuncu ID'si yok; kimlik `isim + doğum yılı` ile kurulur. Aynı isim ve doğum yılına sahip iki farklı oyuncu (ör. iki "Vitinha") tek kişi sayılır. Yaşı ve doğum yılı boş olan oyuncular analizden çıkarılır.
 

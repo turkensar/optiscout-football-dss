@@ -200,7 +200,8 @@ def test_shrinkage_prior_uses_role_group_not_fbref_label(df):
     # Ayni rol grubundaki (kanat) oyuncular, FBref etiketi ne olursa olsun ayni
     # ortalamaya dogru cekilmeli: dusuk dakikali MF ve FW etiketli kanatlarin
     # shrink yonu ayni prior'a gore olmali.
-    w = df[df["Score_Group"] == "W"]
+    # (Ek liglerin metrikleri lig katsayisiyla olceklendigi icin yalnizca Big-5 bakilir.)
+    w = df[(df["Score_Group"] == "W") & df["Is_Reference"]]
     assert set(w["Prior_Group"]) == {"W"}
     k90 = 450 / 90
     implied_prior = (w["Gls_adj"] * (w["90s_safe"] + k90) - w["Gls"]) / k90

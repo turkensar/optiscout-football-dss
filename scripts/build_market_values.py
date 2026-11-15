@@ -7,7 +7,9 @@ Kaynak: transfermarkt-datasets (CC0) players tablosu
 
 Kullanim (repo kok dizininde):
     python scripts/build_market_values.py
-    python scripts/build_market_values.py --tm data/players.csv.gz --fbref data/players_data_light-2026_2027.csv
+    python scripts/build_market_values.py --tm data/players.csv.gz --fbref data/players_data_light-2026_2027.csv data/leagues/super_lig-2026_2027.csv
+
+Varsayilan olarak ana veri dosyasi + `data/leagues/` klasorundeki tum ek lig dosyalari eslestirilir.
 
 Eslestirme adimlari (her FBref satiri icin, ayni dogum yilindaki adaylar arasinda):
     1. exact   : normalize edilmis tam isim ayni
@@ -90,8 +92,11 @@ def load_transfermarkt(path: str) -> pd.DataFrame:
     return tm
 
 
-def load_fbref(path: str) -> pd.DataFrame:
-    fb = pd.read_csv(path, usecols=["Player", "Squad", "Born", "Age"])
+def load_fbref(paths) -> pd.DataFrame:
+    if isinstance(paths, str):
+        paths = [paths]
+    fb = pd.concat([pd.read_csv(p, usecols=["Player", "Squad", "Born", "Age"]) for p in paths],
+                   ignore_index=True)
     fb["Player"] = fb["Player"].fillna("").astype(str).str.strip()
     fb["Squad"] = fb["Squad"].fillna("").astype(str).str.strip()
     fb["Born"] = pd.to_numeric(fb["Born"], errors="coerce")
@@ -147,7 +152,11 @@ def match(fb: pd.DataFrame, tm: pd.DataFrame) -> pd.DataFrame:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--tm", default=os.path.join(BASE_DIR, "data", "players.csv.gz"))
-    parser.add_argument("--fbref", default=os.path.join(BASE_DIR, "data", "players_data_light-2026_2027.csv"))
+    leagues_dir = os.path.join(BASE_DIR, "data", "leagues")
+    default_fbref = [os.path.join(BASE_DIR, "data", "players_data_light-2026_2027.csv")]
+    if os.path.isdir(leagues_dir):
+        default_fbref += sorted(os.path.join(leagues_dir, f) for f in os.listdir(leagues_dir) if f.endswith(".csv"))
+    parser.add_argument("--fbref", nargs="+", default=default_fbref)
     parser.add_argument("--out", default=os.path.join(BASE_DIR, "data", "market_values.csv"))
     args = parser.parse_args(argv)
 

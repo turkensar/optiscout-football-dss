@@ -58,6 +58,22 @@ ROLE_GROUP_LABELS = {
 # Topa sahip olma düzeltmesi katsayısının sınırları (uç değerleri yumuşatmak için)
 PADJ_MIN, PADJ_MAX = 0.7, 1.4
 
+# Lig gücü katsayısı: skorlar bütün liglerin oyuncuları birlikte sıralanarak hesaplanır.
+# Daha zayıf bir ligde aynı üretim (gol, şut, top kapma, artı/eksi) daha az şey ifade
+# eder; bu ligin üretim metrikleri katsayıyla çarpılır (daha düşük olması iyi olanlar
+# bölünür). Big-5 ligleri referanstır (1.0). Süper Lig değeri bir VARSAYIMDIR:
+# Opta Power Rankings'te Süper Lig kulüp ortalaması ~78, Big-5 ~85 ve üzeri; bu fark
+# İngiltere Championship ile Premier League arasındaki farka yakındır. Uygulamada
+# kenar çubuğundan değiştirilebilir.
+DEFAULT_LEAGUE_STRENGTH = {"Süper Lig": 0.75}
+# Katsayının uygulandığı "yüksek olması iyi" metrikler
+LEAGUE_SCALED_METRICS = [
+    "Gls_adj", "Ast_adj", "GA_non_pk_adj", "Sh_adj", "SoT_adj", "Crs_adj", "TklW_adj",
+    "Int_adj", "Def_Actions_adj", "Fld_adj", "G_Sh_adj", "PlusMinus_adj", "OnOff_adj",
+]
+# "Düşük olması iyi" metrikler (katsayıya bölünür)
+LEAGUE_INVERSE_METRICS = ["GA90_adj", "OnGA_adj"]
+
 # Bu sayidan az oyunculu rol grubunda yuzdelik dilim anlamsizlasir -> genis gruba dusulur
 MIN_ROLE_GROUP = 20
 
@@ -129,13 +145,30 @@ class FootballDataProcessor:
         light_path: str = "data/players_data_light-2026_2027.csv",
         full_path: str = "data/players_data-2026_2027.csv",
         market_path: str = "data/market_values.csv",
+        leagues_dir: str = "data/leagues",
     ):
         base_dir = os.path.dirname(os.path.abspath(__file__))
         self.light_path = os.path.join(base_dir, light_path) if not os.path.isabs(light_path) else light_path
         self.full_path = os.path.join(base_dir, full_path) if not os.path.isabs(full_path) else full_path
         self.market_path = os.path.join(base_dir, market_path) if not os.path.isabs(market_path) else market_path
+        self.leagues_dir = os.path.join(base_dir, leagues_dir) if not os.path.isabs(leagues_dir) else leagues_dir
         self.source_file = None
         self.has_market_values = False
+
+    def extra_league_files(self) -> list:
+        """`data/leagues/` icindeki ek lig dosyalari (scripts/add_league.py ile uretilir)."""
+        if not os.path.isdir(self.leagues_dir):
+            return []
+        return sorted(os.path.join(self.leagues_dir, f) for f in os.listdir(self.leagues_dir)
+                      if f.lower().endswith(".csv"))
+
+    def extra_league_names(self) -> list:
+        """Ek lig dosyalarindaki lig adlari (ör. ['Süper Lig']); kenar cubugu ayarlari icin."""
+        names = set()
+        for path in self.extra_league_files():
+            comps = pd.read_csv(path, usecols=["Comp"])["Comp"].dropna().astype(str).unique()
+            names.update(" ".join(c.split()[1:]) if len(c.split()) > 1 else c for c in comps)
+        return sorted(names)
 
     def load_raw_data(self) -> pd.DataFrame:
         if os.path.exists(self.full_path):
@@ -144,11 +177,24 @@ class FootballDataProcessor:
             path = self.light_path
         else:
             raise FileNotFoundError(f"Veri dosyasi bulunamadi: {self.light_path}")
-        self.source_file = os.path.basename(path)
-        return pd.read_csv(path)
+        main = pd.read_csv(path)
+        main["Is_Reference"] = True  # Big-5: yüzdelik sıralamanın referans havuzu
+        frames = [main]
+        names = [os.path.basename(path)]
+        for extra in self.extra_league_files():
+            frames.append(pd.read_csv(extra).assign(Is_Reference=False))
+            names.append(os.path.basename(extra))
+        self.source_file = " + ".join(names)
+        return pd.concat(frames, ignore_index=True, sort=False)
 
-    def clean_and_engineer(self, min_minutes: int = 180) -> pd.DataFrame:
+    def clean_and_engineer(self, min_minutes: int = 180, league_strength: dict = None) -> pd.DataFrame:
+        """`league_strength`: {lig adı: katsayı}. None ise DEFAULT_LEAGUE_STRENGTH kullanılır;
+        listede olmayan ligler 1.0 (Big-5 seviyesi) kabul edilir."""
+        self.league_strength = dict(DEFAULT_LEAGUE_STRENGTH if league_strength is None else league_strength)
         df = self.load_raw_data().copy()
+        if "Is_Reference" not in df.columns:
+            df["Is_Reference"] = True
+        df["Is_Reference"] = df["Is_Reference"].fillna(True).astype(bool)
 
         # 1. Metin Sutunlarini Tip-Guvenli Temizle (NaN float hatalarini engeller)
         df["Player"] = df["Player"].fillna("").astype(str).str.strip()
@@ -275,6 +321,17 @@ class FootballDataProcessor:
         df["SavePct_adj"] = 100.0 * self._shrink_rate(df, "Saves", "SoTA", SHRINK_SHOTS_FACED)
         df["CSPct_adj"] = 100.0 * self._shrink_rate(df, "CS", "MP", SHRINK_MATCHES)
 
+        # 7b. Lig gücü: zayıf liglerdeki üretim, ortak sıralamaya girmeden önce indirilir
+        df = self._league_adjust(df, self.league_strength)
+
+        # 7c. Kulüp katsayısı: kadronun toplam piyasa değeri (süre filtresinden ÖNCE, tüm
+        # oyuncular üzerinden). Transfer planında "bu oyuncu bu kulübe gelir mi?" sorusu için.
+        if "Market_Value_EUR" in df.columns:
+            club_value = df.drop_duplicates("Row_Key").groupby("Squad")["Market_Value_EUR"].sum(min_count=1)
+            df["Club_Value_EUR"] = df["Squad"].map(club_value)
+        else:
+            df["Club_Value_EUR"] = np.nan
+
         # 8. Minimum Sure Filtresi
         df = df[df["Min"] >= min_minutes].copy()
 
@@ -352,12 +409,40 @@ class FootballDataProcessor:
         return df
 
     @staticmethod
+    def _league_adjust(df: pd.DataFrame, league_strength: dict) -> pd.DataFrame:
+        """Küçültülmüş (_adj) metrikleri lig katsayısıyla ölçekler.
+
+        Yüksek olması iyi metrik: pozitifse x*f, negatifse x/f (eksi artı/eksi daha da kötüleşir).
+        Düşük olması iyi metrik (yenilen gol): x/f.
+        """
+        factor = df["League"].map(league_strength).fillna(1.0).clip(lower=0.1, upper=1.5)
+        df["League_Factor"] = factor
+        if (factor == 1.0).all():
+            return df
+        for col in LEAGUE_SCALED_METRICS:
+            if col in df.columns:
+                x = df[col]
+                df[col] = np.where(x >= 0, x * factor, x / factor)
+        for col in LEAGUE_INVERSE_METRICS:
+            if col in df.columns:
+                df[col] = df[col] / factor
+        # Kurtarış yüzdesi: kalecinin "gol yeme oranı" (100 - kurtarış%) zayıf ligde büyütülür
+        if "SavePct_adj" in df.columns:
+            df["SavePct_adj"] = (100.0 - (100.0 - df["SavePct_adj"]) / factor).clip(lower=0.0)
+        if "CSPct_adj" in df.columns:
+            df["CSPct_adj"] = df["CSPct_adj"] * factor
+        return df
+
+    @staticmethod
     def _shrink_rate(df: pd.DataFrame, num: str, denom: str, k: float) -> pd.Series:
         """(sayi + grup_ortalamasi * k) / (payda + k). Payda kucukse deger
         grup (rol) ortalamasina yaklasir; payda buyudukce ham orana yakinsar."""
-        grp = df.groupby("Prior_Group")
-        prior = grp[num].transform("sum") / grp[denom].transform("sum").replace(0, np.nan)
-        prior = prior.fillna(0.0)
+        # On bilgi yalnizca referans (Big-5) oyunculardan hesaplanir: ek lig eklemek
+        # mevcut oyuncularin skorlarini degistirmez.
+        ref = df[df["Is_Reference"]] if "Is_Reference" in df.columns else df
+        sums = ref.groupby("Prior_Group")[[num, denom]].sum()
+        prior_map = (sums[num] / sums[denom].replace(0, np.nan)).fillna(0.0)
+        prior = df["Prior_Group"].map(prior_map).fillna(0.0)
         return (df[num] + prior * k) / (df[denom] + k)
 
     def _compute_position_scores(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -374,7 +459,8 @@ class FootballDataProcessor:
 
         sub_pos = df["TM_Sub_Position"] if "TM_Sub_Position" in df.columns else pd.Series(None, index=df.index)
         role = sub_pos.map(SUB_POSITION_TO_ROLE_GROUP)
-        role_sizes = role.value_counts()
+        is_ref = df["Is_Reference"] if "Is_Reference" in df.columns else pd.Series(True, index=df.index)
+        role_sizes = role[is_ref].value_counts()
         small_roles = set(role_sizes[role_sizes < MIN_ROLE_GROUP].index)
         use_role = role.notna() & ~role.isin(small_roles)
         df["Score_Group"] = np.where(use_role, role, df["Primary_Pos"])
@@ -398,17 +484,46 @@ class FootballDataProcessor:
     @staticmethod
     def _score_group(df: pd.DataFrame, ref_mask: pd.Series, target_mask: pd.Series,
                      weights: dict, group: str) -> None:
-        """`ref_mask` grubuna gore metrik puanlarini hesaplar, `target_mask` satirlarina yazar."""
-        sub = df.loc[ref_mask]
+        """`ref_mask` grubuna gore metrik puanlarini hesaplar, `target_mask` satirlarina yazar.
+
+        Yuzdelik dilim ve z-skor, gruptaki REFERANS (Big-5) oyuncularin dagilimina gore
+        hesaplanir; ek liglerin oyunculari bu dagilima yerlestirilir. Boylece yeni bir lig
+        eklemek mevcut oyuncularin skorlarini degistirmez.
+        """
+        sub = df.loc[ref_mask | target_mask]
+        if "Is_Reference" in sub.columns:
+            ref_rows = sub["Is_Reference"] & ref_mask.loc[sub.index]
+            if ref_rows.sum() < MIN_ROLE_GROUP:  # referans cok kucukse tum grup kullanilir
+                ref_rows = ref_mask.loc[sub.index]
+        else:
+            ref_rows = ref_mask.loc[sub.index]
 
         def pct(col_name: str, ascending: bool = True) -> pd.Series:
             """0-100 metrik puani: yuzdelik dilim ile olceklenmis z-skorun karisimi."""
             if col_name not in sub.columns:
                 return pd.Series(50.0, index=sub.index)
-            col = sub[col_name]
-            rank = (col.rank(pct=True, ascending=ascending) * 100.0).fillna(50.0)
-            std = col.std(ddof=0)
-            z = (col - col.mean()) / std if std and std > 0 else col * 0.0
+            col = sub[col_name].astype(float)
+            ref_vals = np.sort(col[ref_rows].dropna().to_numpy())
+            n = len(ref_vals)
+            if n == 0:
+                return pd.Series(50.0, index=sub.index)
+            # pandas rank(pct=True, method="average") ile ayni formul, referansa gore
+            left = np.searchsorted(ref_vals, col.to_numpy(), side="left")
+            right = np.searchsorted(ref_vals, col.to_numpy(), side="right")
+            ties = right - left
+            if ascending:
+                below = left
+            else:
+                below = n - right
+            # Referans satiri: pandas ile birebir ayni -> (alttakiler + (esitler + 1) / 2) / n.
+            # Disaridan gelen satir: referansa eklenmis gibi -> (alttakiler + (esitler + 1) / 2) / (n + 1).
+            is_ref_row = ref_rows.to_numpy()
+            denom = np.where(is_ref_row, n, n + 1)
+            rank_vals = (below + (ties + 1.0) / 2.0) / denom
+            rank = pd.Series(rank_vals * 100.0, index=sub.index).where(col.notna()).clip(0, 100).fillna(50.0)
+            ref_series = col[ref_rows]
+            mu, std = ref_series.mean(), ref_series.std(ddof=0)
+            z = (col - mu) / std if std and std > 0 else col * 0.0
             if not ascending:
                 z = -z
             z_scaled = (50.0 + (50.0 / Z_CAP) * z.clip(-Z_CAP, Z_CAP)).fillna(50.0)
@@ -454,7 +569,24 @@ def add_decision_score(df: pd.DataFrame, form_weight: float = 1.0) -> pd.DataFra
     """
     d = df.copy()
     log_value = np.log(d["Market_Value_EUR"].where(d["Market_Value_EUR"] > 0))
-    d["Reputation_Score"] = (log_value.groupby(d["Score_Group"]).rank(pct=True) * 100).round(1)
+    is_ref = d["Is_Reference"] if "Is_Reference" in d.columns else pd.Series(True, index=d.index)
+    rep = pd.Series(np.nan, index=d.index)
+    # Rol icindeki siralama referans (Big-5) oyunculara gore yapilir: ek lig eklemek
+    # Big-5 oyuncularinin itibar skorunu degistirmez.
+    for _, idx in d.groupby("Score_Group").groups.items():
+        vals = log_value.loc[idx]
+        ref_vals = np.sort(vals[is_ref.loc[idx]].dropna().to_numpy())
+        if len(ref_vals) == 0:
+            ref_vals = np.sort(vals.dropna().to_numpy())
+        n = len(ref_vals)
+        if n == 0:
+            continue
+        left = np.searchsorted(ref_vals, vals.to_numpy(), side="left")
+        right = np.searchsorted(ref_vals, vals.to_numpy(), side="right")
+        denom = np.where(is_ref.loc[idx].to_numpy(), n, n + 1)
+        pct = (left + (right - left + 1.0) / 2.0) / denom * 100.0
+        rep.loc[idx] = np.where(vals.notna(), np.clip(pct, 0, 100), np.nan)
+    d["Reputation_Score"] = rep.round(1)
     w = float(np.clip(form_weight, 0.0, 1.0))
     blended = w * d["OptiScout_Score"] + (1 - w) * d["Reputation_Score"]
     d["Decision_Score"] = blended.fillna(d["OptiScout_Score"]).round(1)

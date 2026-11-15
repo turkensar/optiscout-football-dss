@@ -4,7 +4,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from data_processor import ROLE_GROUP_LABELS, FootballDataProcessor, add_decision_score, applicable_sub_scores
+from data_processor import (DEFAULT_LEAGUE_STRENGTH, ROLE_GROUP_LABELS, FootballDataProcessor,
+                            add_decision_score, applicable_sub_scores)
 from similarity_engine import PlayerSimilarityEngine
 from squad_optimizer import SquadOptimizer
 from value_model import MarketValueModel
@@ -17,10 +18,22 @@ st.set_page_config(
 
 
 @st.cache_data
-def load_processed_data(min_minutes: int):
+def load_processed_data(data_key):
+    """data_key = (minimum dakika, ((lig, katsayı), ...)). Tek bir anahtar olarak
+    taşınır; böylece aşağıdaki önbellekli fonksiyonlar her iki ayar değişince de yenilenir."""
+    if isinstance(data_key, (int, np.integer)):
+        data_key = (int(data_key), ())
+    min_minutes, league_items = data_key
     processor = FootballDataProcessor()
-    df = processor.clean_and_engineer(min_minutes=min_minutes)
+    strength = dict(DEFAULT_LEAGUE_STRENGTH)
+    strength.update(dict(league_items))
+    df = processor.clean_and_engineer(min_minutes=min_minutes, league_strength=strength)
     return df, processor.source_file, processor.has_market_values
+
+
+@st.cache_data
+def extra_leagues() -> list:
+    return FootballDataProcessor().extra_league_names()
 
 
 # Streamlit her etkileşimde (kaydırıcı, filtre) bütün sayfayı baştan çalıştırır.
@@ -220,12 +233,26 @@ def draw_tactical_pitch(xi_df, has_values: bool = False,
 
 
 st.sidebar.title("⚽ OptiScout DSS")
-st.sidebar.caption("2026-2027 Avrupa 5 Büyük Lig Karar Destek Sistemi")
+_extra = extra_leagues()
+st.sidebar.caption("2026-2027 Avrupa 5 Büyük Lig" + (f" + {', '.join(_extra)}" if _extra else "")
+                   + " Karar Destek Sistemi")
 
 min_mins = st.sidebar.slider(
     "Minimum Süre Filtresi (Dakika)", min_value=90, max_value=720, value=270, step=45
 )
-df, source_file, has_values = load_processed_data(min_mins)
+league_items = []
+for _lg in _extra:
+    _f = st.sidebar.slider(
+        f"🏟️ {_lg} lig katsayısı", 0.50, 1.00, float(DEFAULT_LEAGUE_STRENGTH.get(_lg, 1.0)), 0.05,
+        key=f"league_factor_{_lg}",
+        help="Bu ligdeki üretim (gol, şut, top kapma, artı/eksi) Big-5 ile kıyaslanmadan önce "
+             "bu katsayıyla çarpılır. 1.00: Big-5 seviyesinde kabul et. Varsayılan bir varsayımdır: "
+             "Opta güç sıralamasında Süper Lig kulüp ortalaması ~78, Big-5 ~85 ve üzeri. "
+             "Big-5 oyuncularının skorları bu ayardan etkilenmez.",
+    )
+    league_items.append((_lg, round(_f, 2)))
+data_key = (min_mins, tuple(league_items))
+df, source_file, has_values = load_processed_data(data_key)
 st.sidebar.caption(f"Veri kaynağı: `{source_file}`")
 if has_values:
     matched_share = df["Market_Value_EUR"].notna().mean() * 100
@@ -390,7 +417,7 @@ with tab2:
         top_n_sim = st.slider("Listelenecek Oyuncu Sayısı", 5, 20, 10)
 
     similar_df = cached_similar_players(
-        min_mins, target_key, top_n_sim, sim_max_age, tuple(selected_leagues)
+        data_key, target_key, top_n_sim, sim_max_age, tuple(selected_leagues)
     )
 
     ref_row = df[df["Row_Key"] == target_key].iloc[0]
@@ -508,7 +535,7 @@ with tab3:
     ] if exclude_giants else []
 
     result = cached_optimize(
-        min_mins,
+        data_key,
         form_weight,
         tuple(selected_leagues),
         tuple(giant_clubs),
@@ -580,7 +607,7 @@ with tab3:
                 curves.append(("Sözleşme durumu dahil", "Est_Fee_EUR"))
             parts = []
             for name, col in curves:
-                fr = cached_frontier(min_mins, form_weight, tuple(selected_leagues), tuple(giant_clubs), tuple(budgets),
+                fr = cached_frontier(data_key, form_weight, tuple(selected_leagues), tuple(giant_clubs), tuple(budgets),
                                      cost_column=col, **common)
                 parts.append(fr.assign(Maliyet=name))
             frontier = pd.concat(parts, ignore_index=True)
@@ -639,6 +666,23 @@ with tab4:
             plan_budget_m = st.slider("Transfer Bütçesi (milyon €)", 0, 300, 50, 5)
         with q2:
             max_signing_age = st.slider("Transferlerde Maks. Yaş", 18, 36, 28)
+        r1, r2 = st.columns([1, 3])
+        with r1:
+            realistic = st.checkbox(
+                "🧭 Gerçekçi hedefler",
+                value=True,
+                help="Kulüp katsayısı = kadronun toplam piyasa değeri. Bir oyuncu, kulübünün değerinin "
+                     "belirlenen oranından daha düşük değerli bir kulübe aday gösterilmez (31 yaş ve üstü "
+                     f"için eşik en fazla %{int(SquadOptimizer.VETERAN_STEP_DOWN * 100)}). Ayrıca oyuncunun "
+                     f"değeri alıcı kulübün kadro değerinin %{int(SquadOptimizer.MAX_VALUE_SHARE * 100)}'ini geçemez.",
+            )
+        with r2:
+            step_down_pct = st.slider(
+                "Kulüp seviyesi toleransı (%)", 10, 100, int(SquadOptimizer.STEP_DOWN * 100), 5,
+                disabled=not realistic,
+                help="%50: bir oyuncu, en az mevcut kulübünün yarısı kadar değerli bir kulübe gider. "
+                     "Düşürdükçe daha büyük kulüplerden oyuncu almak mümkün olur.",
+            )
         s1, s2 = st.columns([1, 3])
         with s1:
             allow_sales = st.checkbox(
@@ -665,7 +709,7 @@ with tab4:
             )
 
         plan = cached_transfer_plan(
-            min_mins,
+            data_key,
             form_weight,
             tuple(selected_leagues),
             club,
@@ -677,6 +721,8 @@ with tab4:
             max_signing_age=max_signing_age,
             allow_sales=allow_sales,
             max_sales=max_sales,
+            realistic=realistic,
+            step_down=step_down_pct / 100.0,
         )
         st.caption(
             f"{club} kadrosu, kenar çubuğundaki minimum süre filtresini (≥ {min_mins} dk) geçen "
@@ -684,6 +730,12 @@ with tab4:
             "katmak için filtreyi düşürün. Transfer hedefleri seçili liglerden aranır; "
             "aynı kulüpten en fazla 1 oyuncu alınır."
         )
+        if realistic and plan.get("excluded_unrealistic", 0) > 0 and np.isfinite(plan.get("club_value_eur", np.nan)):
+            st.caption(
+                f"🧭 {club} kadro değeri: **{fmt_value(plan['club_value_eur'] / 1e6)}**. "
+                f"Kulübün seviyesine göre gelmesi beklenmeyen **{plan['excluded_unrealistic']} oyuncu** "
+                "aday listesinden çıkarıldı."
+            )
 
         base, after = plan["baseline"], plan["plan"]
         if base["status"] != "Optimal":
@@ -796,7 +848,7 @@ with tab5:
     if not has_values:
         st.info("Değer modeli için piyasa değerleri gerekli (`data/market_values.csv`).")
     else:
-        vm = cached_value_model(min_mins)
+        vm = cached_value_model(data_key)
         mt = vm.metrics
         v1, v2, v3, v4 = st.columns(4)
         v1.metric("Açıklanan Varyans (R², çapraz doğrulama)", f"{mt['r2']:.2f}")
