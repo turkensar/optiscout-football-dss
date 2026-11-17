@@ -48,6 +48,8 @@ VERSIONS_PATH = os.path.join(DATA_DIR, "data_versions.json")
 # Yeni dosya eskisinin bu oranindan az oyuncu iceriyorsa bozuk kabul edilir
 MIN_ROW_RATIO = 0.8
 MIN_TM_PLAYERS = 20000
+# Kaynak bu kadar gunden uzun suredir guncellenmediyse uyari verilir
+STALE_AFTER_DAYS = 45
 
 
 class UpdateError(RuntimeError):
@@ -85,6 +87,18 @@ def kaggle_file_date(dataset: str, file_name: str):
         if row.get("name") == file_name and row.get("creationDate"):
             return row["creationDate"][:10]
     return None
+
+
+def warn_if_stale(label: str, date_str, today: dt.date) -> None:
+    """Kaynak dosya uzun suredir yenilenmediyse uyari yazar (GitHub Actions'ta sari uyari olur)."""
+    if not date_str:
+        return
+    age = (today - dt.date.fromisoformat(date_str)).days
+    if age > STALE_AFTER_DAYS:
+        msg = (f"{label} kaynagi {age} gundur guncellenmedi (son: {date_str}). "
+               "Veri eski kalabilir; README > Veri Guncelleme'deki alternatiflere bakin.")
+        prefix = "::warning::" if os.environ.get("GITHUB_ACTIONS") else "UYARI: "
+        print(prefix + msg)
 
 
 def find_file(root: str, name: str) -> str:
@@ -186,6 +200,9 @@ def main(argv=None) -> int:
                 if path:
                     return dt.date.fromtimestamp(os.path.getmtime(path)).isoformat()
                 return kaggle_date or today
+            today_d = dt.date.fromisoformat(today)
+            warn_if_stale("Big-5 (Kaggle)", big5_date, today_d)
+            warn_if_stale("Transfermarkt (Kaggle)", tm_date, today_d)
             write_versions(
                 big5_updated=file_date(args.big5_file, big5_date) if big5_info else None,
                 transfermarkt_snapshot=file_date(args.tm_file, tm_date) if tm_info else None,

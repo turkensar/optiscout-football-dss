@@ -278,6 +278,12 @@ if _versions:
         + " · Ek ligler " + _versions.get("leagues_updated", "—")
         + " · Transfermarkt " + _versions.get("transfermarkt_snapshot", "—")
     )
+    _tm_date = _versions.get("transfermarkt_snapshot")
+    if _tm_date and (pd.Timestamp.today().normalize() - pd.Timestamp(_tm_date)).days > 60:
+        st.sidebar.warning(
+            f"Transfermarkt verisi {_tm_date} tarihli. Piyasa değerleri ve sözleşmeler o tarihten "
+            "sonraki değişiklikleri içermiyor; bedel ve transfer önerilerini buna göre yorumlayın."
+        )
 if has_values:
     matched_share = df["Market_Value_EUR"].notna().mean() * 100
     st.sidebar.caption(f"Transfermarkt piyasa değeri eşleşmesi: %{matched_share:.0f}")

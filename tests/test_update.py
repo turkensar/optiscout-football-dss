@@ -99,3 +99,12 @@ def test_saved_page_detection():
             '</head><body>' + FBREF_HTML + '</body></html>')
     assert detect_saved_page(html) == ("super_lig", "stats")
     assert detect_saved_page(FBREF_HTML) is None  # canonical yoksa taninmaz
+
+
+def test_stale_source_warning(capsys):
+    import datetime as dt
+    update_data.warn_if_stale("Transfermarkt", "2026-09-05", dt.date(2026, 11, 17))
+    assert "73 gundur" in capsys.readouterr().out
+    update_data.warn_if_stale("Big-5", "2026-11-16", dt.date(2026, 11, 17))
+    update_data.warn_if_stale("Big-5", None, dt.date(2026, 11, 17))
+    assert capsys.readouterr().out == ""
