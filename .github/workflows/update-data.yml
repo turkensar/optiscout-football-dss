@@ -5,7 +5,7 @@ name: update-data
 # Elle calistirmak icin: Actions -> update-data -> Run workflow.
 #
 # Gerekli repo sirlari (Settings -> Secrets and variables -> Actions):
-#   KAGGLE_USERNAME, KAGGLE_KEY   (kaggle.com -> Settings -> API -> Create New Token)
+#   KAGGLE_USERNAME, KAGGLE_KEY   (kaggle.com -> Settings -> API -> Create Legacy API Key -> kaggle.json)
 on:
   schedule:
     - cron: "17 4 * * 1"   # pazartesi 04:17 UTC (07:17 TR)
@@ -23,9 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -33,7 +33,7 @@ jobs:
       - name: Bagimliliklari kur
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt pytest kaggle
+          pip install -r requirements.txt pytest kaggle six
 
       - name: Kaggle anahtarini kontrol et
         env:

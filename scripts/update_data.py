@@ -17,8 +17,10 @@ hicbir sey yazilmaz ve betik hata koduyla cikar.
 """
 
 import argparse
+import csv
 import datetime as dt
 import glob
+import io
 import json
 import os
 import shutil
@@ -68,6 +70,21 @@ def kaggle_download(dataset: str, dest: str, file_name: str) -> None:
                 if os.path.basename(member) == file_name:
                     with zf.open(member) as src, open(os.path.join(dest, file_name), "wb") as dst:
                         shutil.copyfileobj(src, dst)
+
+
+def kaggle_file_date(dataset: str, file_name: str):
+    """Dosyanin Kaggle'da yayinlandigi tarih (YYYY-MM-DD) ya da bulunamazsa None.
+
+    Verinin tarihi indirme gunu degil, kaynagin dosyayi yayinladigi gundur; kaynak bir
+    sure guncellenmezse uygulamadaki tarih de (ve sozlesme hesaplari) eski kalir.
+    """
+    result = subprocess.run(["kaggle", "datasets", "files", dataset, "-v"], capture_output=True, text=True)
+    if result.returncode != 0:
+        return None
+    for row in csv.DictReader(io.StringIO(result.stdout)):
+        if row.get("name") == file_name and row.get("creationDate"):
+            return row["creationDate"][:10]
+    return None
 
 
 def find_file(root: str, name: str) -> str:
@@ -146,9 +163,11 @@ def main(argv=None) -> int:
     try:
         with tempfile.TemporaryDirectory() as tmp:
             big5_info = tm_info = None
+            big5_date = tm_date = None
             if not args.skip_big5:
                 src = args.big5_file
                 if not src:
+                    big5_date = kaggle_file_date(BIG5_DATASET, BIG5_FULL_NAME)
                     kaggle_download(BIG5_DATASET, os.path.join(tmp, "big5"), BIG5_FULL_NAME)
                     src = find_file(os.path.join(tmp, "big5"), BIG5_FULL_NAME)
                 big5_info = update_big5(src)
@@ -157,16 +176,19 @@ def main(argv=None) -> int:
             if not args.skip_tm:
                 src = args.tm_file
                 if not src:
+                    tm_date = kaggle_file_date(TM_DATASET, TM_FILE_NAME)
                     kaggle_download(TM_DATASET, os.path.join(tmp, "tm"), TM_FILE_NAME)
                     src = find_file(os.path.join(tmp, "tm"), TM_FILE_NAME)
                 tm_info = update_transfermarkt(src)
                 print(f"Transfermarkt: {tm_info['players']} oyuncu")
-            def file_date(path):
-                # Elle verilen dosyada tarih = dosyanin degistirilme tarihi; Kaggle'dan inende bugun
-                return dt.date.fromtimestamp(os.path.getmtime(path)).isoformat() if path else today
+            def file_date(path, kaggle_date):
+                # Elle verilen dosya: degistirilme tarihi; Kaggle: yayin tarihi (yoksa bugun)
+                if path:
+                    return dt.date.fromtimestamp(os.path.getmtime(path)).isoformat()
+                return kaggle_date or today
             write_versions(
-                big5_updated=file_date(args.big5_file) if big5_info else None,
-                transfermarkt_snapshot=file_date(args.tm_file) if tm_info else None,
+                big5_updated=file_date(args.big5_file, big5_date) if big5_info else None,
+                transfermarkt_snapshot=file_date(args.tm_file, tm_date) if tm_info else None,
             )
     except UpdateError as exc:
         print(f"HATA: {exc}", file=sys.stderr)

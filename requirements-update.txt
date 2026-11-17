@@ -1,3 +1,4 @@
 kaggle>=1.6
+six  # kaggle CLI bunu kendisi kurmuyor
 playwright>=1.45
 beautifulsoup4>=4.12
