@@ -58,8 +58,8 @@ Alexandre Alemão|1998|Rayo Vallecano,Alexandre Alemão,Rayo Vallecano,560417,Al
 Carles Aleñá|1998|Alavés,Carles Aleñá,Alavés,284854,Carles Aleñá,Deportivo Alavés,Central Midfield,2029-06-30 00:00:00,left,180.0,3000000.0,exact
 Trent Alexander-Arnold|1998|Real Madrid,Trent Alexander-Arnold,Real Madrid,314353,Trent Alexander-Arnold,Real Madrid,Right-Back,2031-06-30 00:00:00,right,180.0,60000000.0,exact
 Alfon|1999|Sevilla,Alfon,Sevilla,357628,Alfon González,Villarreal CF,Left Winger,2028-06-30 00:00:00,,172.0,3000000.0,tokens
-Mohamed Ali Cho|2004|Nice,Mohamed Ali Cho,Nice,670847,Mohamed-Ali Cho,OGC Nice,Right Winger,2028-06-30 00:00:00,left,182.0,15000000.0,exact
 Mohamed Ali Cho|2004|Hull City,Mohamed Ali Cho,Hull City,670847,Mohamed-Ali Cho,OGC Nice,Right Winger,2028-06-30 00:00:00,left,182.0,15000000.0,exact
+Mohamed Ali Cho|2004|Nice,Mohamed Ali Cho,Nice,670847,Mohamed-Ali Cho,OGC Nice,Right Winger,2028-06-30 00:00:00,left,182.0,15000000.0,exact
 Alisson|1992|Liverpool,Alisson,Liverpool,105470,Alisson,Liverpool FC,Goalkeeper,2027-06-30 00:00:00,right,193.0,15000000.0,exact
 Allan|2004|Manchester City,Allan,Manchester City,1082631,Allan,Sociedade Esportiva Palmeiras,Right Winger,2029-12-31 00:00:00,left,174.0,20000000.0,exact
 Jim Allevinah|1995|Angers,Jim Allevinah,Angers,646733,Jim Allevinah,Angers SCO,Right Winger,2027-06-30 00:00:00,right,172.0,1000000.0,exact
@@ -581,6 +581,7 @@ Sindre Egeli|2006|Ipswich Town,Sindre Egeli,Ipswich Town,923504,Sindre Walle Ege
 Maximilian Eggestein|1996|Freiburg,Maximilian Eggestein,Freiburg,190284,Maximilian Eggestein,SC Freiburg,Central Midfield,,right,181.0,10000000.0,exact
 Kingsley Ehizibue|1995|Genoa,Kingsley Ehizibue,Genoa,272812,Kingsley Ehizibue,Udinese Calcio,Right-Back,,right,189.0,2000000.0,exact
 Chidera Ejuke|1998|Sevilla,Chidera Ejuke,Sevilla,500067,Chidera Ejuke,Sevilla FC,Left Winger,2027-06-30 00:00:00,right,176.0,4000000.0,exact
+Jeff Ekhator|2006|Juventus,Jeff Ekhator,Juventus,934878,Jeff Ekhator,Genoa CFC,Centre-Forward,2031-06-30 00:00:00,right,188.0,18000000.0,exact
 Jurgen Ekkelenkamp|2000|Udinese,Jurgen Ekkelenkamp,Udinese,361068,Jurgen Ekkelenkamp,Udinese Calcio,Central Midfield,2029-06-30 00:00:00,right,188.0,10000000.0,exact
 Jacques Ekomie|2003|Angers,Jacques Ekomie,Angers,970279,Jacques Ekomié,Angers SCO,Left-Back,2027-06-30 00:00:00,left,179.0,9000000.0,exact
 Pierre Ekwah Elimby|2002|Auxerre,Pierre Ekwah Elimby,Auxerre,538994,Pierre Ekwah,AS Saint-Étienne,Defensive Midfield,2026-06-30 00:00:00,left,189.0,500000.0,tokens
@@ -652,6 +653,7 @@ Manga Foe Ondoa|2005|Monza,Manga Foe Ondoa,Monza,1143375,Foe Ondoa,GD Estoril Pr
 Malick Fofana|2005|Sunderland,Malick Fofana,Sunderland,743386,Malick Fofana,Olympique Lyon,Left Winger,2028-06-30 00:00:00,right,169.0,30000000.0,exact
 Malick Fofana|2005|Lyon,Malick Fofana,Lyon,743386,Malick Fofana,Olympique Lyon,Left Winger,2028-06-30 00:00:00,right,169.0,30000000.0,exact
 Rayan Fofana|2006|Le Havre,Rayan Fofana,Le Havre,1160814,Rayan Fofana,RC Lens,Centre-Forward,2029-06-30 00:00:00,right,187.0,8000000.0,exact
+Sadik Fofana|2003|Lecce,Sadik Fofana,Lecce,644613,Sadik Fofana,US Lecce,Defensive Midfield,2029-06-30 00:00:00,right,192.0,800000.0,exact
 Wesley Fofana|2000|Chelsea,Wesley Fofana,Chelsea,475411,Wesley Fofana,Chelsea FC,Centre-Back,2029-06-30 00:00:00,right,188.0,28000000.0,exact
 Youssouf Fofana|1999|Sevilla,Youssouf Fofana,Sevilla,569598,Youssouf Fofana,AC Milan,Defensive Midfield,2028-06-30 00:00:00,right,185.0,23000000.0,exact
 Michael Folorunsho|1998|Monza,Michael Folorunsho,Monza,377042,Michael Folorunsho,Cagliari Calcio,Central Midfield,2029-06-30 00:00:00,right,190.0,5000000.0,exact
@@ -704,6 +706,7 @@ Ulisses Garcia|1996|Marseille,Ulisses Garcia,Marseille,192616,Ulisses Garcia,Oly
 Víctor García|1997|Levante,Víctor García,Levante,590690,Víctor García,Levante UD,Right Winger,2027-06-30 00:00:00,right,180.0,1500000.0,exact
 Alejandro Garnacho|2004|Aston Villa,Alejandro Garnacho,Aston Villa,811779,Alejandro Garnacho,Chelsea FC,Left Winger,2032-06-30 00:00:00,right,180.0,28000000.0,exact
 James Garner|2001|Everton,James Garner,Everton,505219,James Garner,Everton FC,Defensive Midfield,2030-06-30 00:00:00,right,182.0,45000000.0,exact
+Kialonda Gaspar|1997|Lecce,Kialonda Gaspar,Lecce,836441,Gaspar,US Lecce,Centre-Back,2027-06-30 00:00:00,right,193.0,3000000.0,tokens
 Federico Gatti|1998|Juventus,Federico Gatti,Juventus,509022,Federico Gatti,Juventus FC,Centre-Back,2030-06-30 00:00:00,right,190.0,14000000.0,exact
 Gavi|2004|Barcelona,Gavi,Barcelona,646740,Gavi,FC Barcelona,Central Midfield,2030-06-30 00:00:00,right,173.0,30000000.0,exact
 Yann Gboho|2001|Toulouse,Yann Gboho,Toulouse,463613,Yann Gboho,FC Toulouse,Left Winger,2027-06-30 00:00:00,right,178.0,18000000.0,exact
@@ -764,6 +767,7 @@ Lucas Gourna-Douath|2003|Hull City,Lucas Gourna-Douath,Hull City,620313,Lucas Go
 Jeffrey Gouweleeuw|1991|Augsburg,Jeffrey Gouweleeuw,Augsburg,106405,Jeffrey Gouweleeuw,FC Augsburg,Centre-Back,2027-06-30 00:00:00,right,188.0,1000000.0,exact
 Zavier Gozo|2007|Crystal Palace,Zavier Gozo,Crystal Palace,1007383,Zavier Gozo,Real Salt Lake,Right Winger,2027-12-31 00:00:00,right,180.0,6000000.0,exact
 Jonathan Gradit|1992|Lens,Jonathan Gradit,Lens,126557,Jonathan Gradit,RC Lens,Centre-Back,2028-06-30 00:00:00,right,180.0,2500000.0,exact
+Nicola Grandu|2006|Cagliari,Nicola Grandu,Cagliari,1048013,Nicola Grandu,Cagliari Calcio,Left Midfield,,right,,,exact_position_only
 Ryan Gravenberch|2002|Liverpool,Ryan Gravenberch,Liverpool,478573,Ryan Gravenberch,Liverpool FC,Defensive Midfield,2032-06-30 00:00:00,right,190.0,80000000.0,exact
 Archie Gray|2006|Tottenham,Archie Gray,Tottenham,922693,Archie Gray,Tottenham Hotspur,Defensive Midfield,2030-06-30 00:00:00,right,187.0,35000000.0,exact
 Jack Grealish|1995|Manchester City,Jack Grealish,Manchester City,203460,Jack Grealish,Everton FC,Left Winger,2027-06-30 00:00:00,right,180.0,20000000.0,exact
@@ -777,6 +781,7 @@ Matt Grimes|1995|Coventry City,Matt Grimes,Coventry City,265471,Matt Grimes,Swan
 Pascal Groß|1991|Brighton,Pascal Groß,Brighton,82873,Pascal Groß,Borussia Dortmund,Central Midfield,2027-06-30 00:00:00,right,181.0,2500000.0,exact
 Fabio Gruber|2002|Mainz 05,Fabio Gruber,Mainz 05,594731,Fabio Gruber,1.FC Nuremberg,Centre-Back,,right,188.0,3000000.0,exact
 Brajan Gruda|2004|RB Leipzig,Brajan Gruda,RB Leipzig,700106,Brajan Gruda,RB Leipzig,Attacking Midfield,2028-06-30 00:00:00,left,178.0,28000000.0,exact
+Ilia Gruev|2000|Leeds United,Ilia Gruev,Leeds United,381753,Ilia Gruev,Leeds United,Defensive Midfield,2027-06-30 00:00:00,left,185.0,12000000.0,exact
 Marco Grüll|1998|Werder Bremen,Marco Grüll,Werder Bremen,391766,Marco Grüll,SV Werder Bremen,Left Winger,,both,181.0,4000000.0,exact
 Albert Grønbaek|2001|Hamburger SV,Albert Grønbaek,Hamburger SV,503866,Albert Grønbaek,Hamburger SV,Attacking Midfield,2030-06-30 00:00:00,right,181.0,5000000.0,exact
 Nemanja Gudelj|1991|Getafe,Nemanja Gudelj,Getafe,74294,Nemanja Gudelj,Sevilla FC,Defensive Midfield,,right,187.0,2000000.0,exact
@@ -823,6 +828,7 @@ Conrad Harder|2005|RB Leipzig,Conrad Harder,RB Leipzig,807386,Conrad Harder,RB L
 Conrad Harder|2005|Strasbourg,Conrad Harder,Strasbourg,807386,Conrad Harder,RB Leipzig,Centre-Forward,2030-06-30 00:00:00,left,185.0,17000000.0,exact
 Amine Harit|1997|Marseille,Amine Harit,Marseille,372711,Amine Harit,Olympique Marseille,Left Winger,2027-06-30 00:00:00,right,180.0,5000000.0,exact
 Quilindschy Hartman|2001|Espanyol,Quilindschy Hartman,Espanyol,514285,Quilindschy Hartman,Burnley FC,Left-Back,2027-06-30 00:00:00,left,183.0,16000000.0,exact
+Taylor Harwood-Bellis|2002|Aston Villa,Taylor Harwood-Bellis,Aston Villa,503977,Taylor Harwood-Bellis,Southampton FC,Centre-Back,2028-06-30 00:00:00,right,188.0,20000000.0,exact
 Luis Hasa|2004|Frosinone,Luis Hasa,Frosinone,724178,Luis Hasa,SSC Napoli,Central Midfield,2029-06-30 00:00:00,right,172.0,2000000.0,exact
 Daiki Hashioka|1999|Gladbach,Daiki Hashioka,Gladbach,387191,Daiki Hashioka,SK Slavia Prague,Right-Back,2029-06-30 00:00:00,right,184.0,1500000.0,exact
 Ewan Hatfout|2000|Le Mans,Ewan Hatfout,Le Mans,725963,Ewan Hatfout,Dijon FCO,Goalkeeper,,,194.0,,exact_position_only
@@ -882,11 +888,13 @@ Oscar Højlund|2005|Frankfurt,Oscar Højlund,Frankfurt,846310,Oscar Højlund,Ein
 Rasmus Højlund|2003|Napoli,Rasmus Højlund,Napoli,610442,Rasmus Højlund,SSC Napoli,Centre-Forward,2030-06-30 00:00:00,left,191.0,60000000.0,exact
 Pablo Ibáñez|1998|Alavés,Pablo Ibáñez,Alavés,785353,Pablo Ibáñez,Deportivo Alavés,Central Midfield,2030-06-30 00:00:00,right,179.0,4000000.0,exact
 Arijon Ibrahimović|2005|Augsburg,Arijon Ibrahimović,Augsburg,744728,Arijon Ibrahimovic,1. Fußballclub Heidenheim 1846,Attacking Midfield,2028-06-30 00:00:00,right,178.0,10000000.0,exact
+Javison Idele|2007|Atalanta,Javison Idele,Atalanta,1170813,Javison Idele,Atalanta BC,Right Midfield,,right,187.0,,exact_position_only
 Stanis Idumbo|2005|Monaco,Stanis Idumbo,Monaco,743387,Stanis Idumbo,Sevilla FC,Attacking Midfield,2030-06-30 00:00:00,right,171.0,4000000.0,exact
 Jay Idzes|2000|Sassuolo,Jay Idzes,Sassuolo,546926,Jay Idzes,US Sassuolo,Centre-Back,2029-06-30 00:00:00,right,190.0,14000000.0,exact
 Iglesias|1998|Sevilla,Iglesias,Sevilla,390688,Juan Iglesias,Getafe CF,Right-Back,2030-06-30 00:00:00,right,187.0,5000000.0,tokens
 Borja Iglesias|1993|Celta Vigo,Borja Iglesias,Celta Vigo,278359,Borja Iglesias,Celta de Vigo,Centre-Forward,2027-06-30 00:00:00,right,187.0,2800000.0,exact
 Jonathan Ikone|1998|Paris FC,Jonathan Ikone,Paris FC,324690,Jonathan Ikoné,Paris FC,Right Winger,2027-06-30 00:00:00,left,175.0,4000000.0,exact
+Andrej Ilic|2000|Union Berlin,Andrej Ilic,Union Berlin,583699,Andrej Ilic,1.FC Union Berlin,Centre-Forward,2027-06-30 00:00:00,right,189.0,9000000.0,exact
 Ivan Ilić|2001|Lecce,Ivan Ilić,Lecce,470794,Ivan Ilić,Torino FC,Central Midfield,2027-06-30 00:00:00,left,186.0,7000000.0,exact
 Emirhan İlkhan|2004|Torino,Emirhan İlkhan,Torino,743091,Emirhan İlkhan,Torino FC,Central Midfield,2027-06-30 00:00:00,right,175.0,6000000.0,exact
 Kastriot Imeri|2000|Union Berlin,Kastriot Imeri,Union Berlin,469957,Kastriot Imeri,FC Thun,Left Midfield,2027-06-30 00:00:00,right,178.0,2000000.0,exact
@@ -1126,6 +1134,7 @@ Maxime Lopez|1997|Paris FC,Maxime Lopez,Paris FC,290862,Maxime Lopez,Paris FC,De
 Oscar Lopez|2006|Getafe,Oscar Lopez,Getafe,1343439,Óscar López,,Central Midfield,2027-06-30 00:00:00,right,187.0,200000.0,exact
 Unai López|1995|Rayo Vallecano,Unai López,Rayo Vallecano,192009,Unai López,Rayo Vallecano,Central Midfield,2029-06-30 00:00:00,right,170.0,2500000.0,exact
 Marius Louer|2007|Angers,Marius Louer,Angers,1103652,Marius Louër,Angers SCO,Right-Back,2028-06-30 00:00:00,right,181.0,2000000.0,exact
+Johaneko Louis-Jean|2004|Athletic Club,Johaneko Louis-Jean,Athletic Club,926766,Johaneko Louis-Jean,FC Girondins Bordeaux,Right-Back,,right,175.0,,exact_position_only
 Sandi Lovrić|1998|Udinese,Sandi Lovrić,Udinese,268429,Sandi Lovrić,Hellas Verona,Central Midfield,2027-06-30 00:00:00,right,180.0,3500000.0,exact
 Pol Lozano|1999|Espanyol,Pol Lozano,Espanyol,412045,Pol Lozano,RCD Espanyol Barcelona,Central Midfield,2027-06-30 00:00:00,right,176.0,6000000.0,exact
 Lorenzo Lucca|2000|Napoli,Lorenzo Lucca,Napoli,572265,Lorenzo Lucca,SSC Napoli,Centre-Forward,2030-06-30 00:00:00,right,201.0,20000000.0,exact
@@ -1283,6 +1292,7 @@ Yerry Mina|1994|Cagliari,Yerry Mina,Cagliari,289446,Yerry Mina,Cagliari Calcio,C
 Takumi Minamino|1995|Monaco,Takumi Minamino,Monaco,165793,Takumi Minamino,AS Monaco,Left Winger,2027-06-30 00:00:00,right,172.0,10000000.0,exact
 Tyrone Mings|1993|Aston Villa,Tyrone Mings,Aston Villa,253677,Tyrone Mings,Aston Villa,Centre-Back,2027-06-30 00:00:00,left,196.0,3000000.0,exact
 Óscar Mingueza|1999|Crystal Palace,Óscar Mingueza,Crystal Palace,331505,Óscar Mingueza,Celta de Vigo,Right-Back,2030-06-30 00:00:00,right,184.0,18000000.0,exact
+Yankuba Minteh|2004|Brighton,Yankuba Minteh,Brighton,1012534,Yankuba Minteh,Brighton & Hove Albion,Right Winger,2029-06-30 00:00:00,left,180.0,45000000.0,exact
 Juan Miranda|2000|Bologna,Juan Miranda,Bologna,341227,Juan Miranda,Bologna Football Club 1909,Left-Back,2028-06-30 00:00:00,left,185.0,15000000.0,exact
 Mario Mitaj|2003|Genoa,Mario Mitaj,Genoa,726114,Mario Mitaj,Al-Ittihad Football Club,Left-Back,2028-06-30 00:00:00,left,180.0,6000000.0,exact
 Jeyland Mitchell|2004|Strasbourg,Jeyland Mitchell,Strasbourg,856068,Jeyland Mitchell,Sportklub Puntigamer Sturm Graz,Centre-Back,,right,187.0,3000000.0,exact
@@ -1324,11 +1334,13 @@ Mason Mount|1999|Manchester Utd,Mason Mount,Manchester Utd,346483,Mason Mount,Ma
 Samir El Mourabet|2005|Strasbourg,Samir El Mourabet,Strasbourg,1130514,Samir El Mourabet,RC Strasbourg Alsace,Central Midfield,2030-06-30 00:00:00,left,187.0,22000000.0,exact
 Santiago Mouriño|2002|Villarreal,Santiago Mouriño,Villarreal,953901,Santiago Mouriño,Villarreal CF,Right-Back,2030-06-30 00:00:00,right,186.0,20000000.0,exact
 Louis Mouton|2002|Angers,Louis Mouton,Angers,904662,Louis Mouton,Angers SCO,Attacking Midfield,2028-06-30 00:00:00,right,180.0,4000000.0,exact
+Christos Mouzakitis|2006|Hull City,Christos Mouzakitis,Hull City,964426,Christos Mouzakitis,Olympiakos Syndesmos Filathlon Peiraios,Central Midfield,2029-06-30 00:00:00,left,180.0,25000000.0,exact
 Lionel Mpasi|1994|Le Havre,Lionel Mpasi,Le Havre,164915,Lionel Mpasi-Nzau,Le Havre AC,Goalkeeper,2027-06-30 00:00:00,right,182.0,400000.0,tokens
 Tarik Muharemovic|2003|Leeds United,Tarik Muharemovic,Leeds United,679423,Tarik Muharemović,US Sassuolo,Centre-Back,2031-06-30 00:00:00,left,192.0,25000000.0,exact
 Miro Muheim|1998|Hamburger SV,Miro Muheim,Hamburger SV,298603,Miro Muheim,Hamburger SV,Left-Back,2027-06-30 00:00:00,left,182.0,5000000.0,exact
 Ngal'Ayel Mukau|2004|Lille,Ngal'Ayel Mukau,Lille,1016015,Ngal'ayel Mukau,LOSC Lille,Defensive Midfield,2028-06-30 00:00:00,left,186.0,15000000.0,exact
 Nordi Mukiele|1997|Sunderland,Nordi Mukiele,Sunderland,348026,Nordi Mukiele,Sunderland AFC,Right-Back,2029-06-30 00:00:00,right,187.0,16000000.0,exact
+Kevin Müller|1991|Schalke 04,Kevin Müller,Schalke 04,43824,Kevin Müller,1. Fußballclub Heidenheim 1846,Goalkeeper,,right,190.0,300000.0,exact
 Romaine Mundle|2003|Sunderland,Romaine Mundle,Sunderland,696181,Romaine Mundle,Sunderland AFC,Left Winger,2028-06-30 00:00:00,right,172.0,7000000.0,exact
 Rodrigo Muniz|2001|Fulham,Rodrigo Muniz,Fulham,735571,Rodrigo Muniz,Fulham FC,Centre-Forward,2030-06-30 00:00:00,right,186.0,20000000.0,exact
 Aihen Muñoz|1997|Real Sociedad,Aihen Muñoz,Real Sociedad,517842,Aihen Muñoz,Real Sociedad,Left-Back,2027-06-30 00:00:00,left,175.0,2500000.0,exact
@@ -1393,6 +1405,7 @@ Moussa Niakhaté|1996|Lyon,Moussa Niakhaté,Lyon,291200,Moussa Niakhaté,Olympiq
 Tanguy Nianzou|2002|Lille,Tanguy Nianzou,Lille,538996,Tanguy Nianzou,Sevilla FC,Centre-Back,2027-06-30 00:00:00,right,191.0,1200000.0,exact
 Rasmus Nicolaisen|1997|Toulouse,Rasmus Nicolaisen,Toulouse,283227,Rasmus Nicolaisen,FC Toulouse,Centre-Back,2029-06-30 00:00:00,left,191.0,5000000.0,exact
 Moritz Nicolas|1997|Gladbach,Moritz Nicolas,Gladbach,284270,Moritz Nicolas,Borussia Mönchengladbach,Goalkeeper,2029-06-30 00:00:00,right,193.0,8000000.0,exact
+Hans Nicolussi Caviglia|2000|Parma,Hans Nicolussi Caviglia,Parma,430280,Hans Nicolussi Caviglia,ACF Fiorentina,Defensive Midfield,2030-06-30 00:00:00,right,184.0,6000000.0,exact
 Mathys Niflore|2007|Toulouse,Mathys Niflore,Toulouse,1075580,Mathys Niflore,FC Toulouse,Goalkeeper,2026-06-30 00:00:00,right,192.0,1000000.0,exact
 Adrian Niño|2004|Málaga,Adrian Niño,Málaga,926849,Adrián Niño,Atlético de Madrid,Centre-Forward,2029-06-30 00:00:00,right,184.0,500000.0,exact
 Alieu Njie|2005|Torino,Alieu Njie,Torino,934527,Alieu Njie,Torino FC,Left Winger,2029-06-30 00:00:00,right,185.0,3000000.0,exact
@@ -1443,6 +1456,7 @@ Paul Okon-Engstler|2005|Köln,Paul Okon-Engstler,Köln,1064377,Paul Okon-Engstle
 Maduka Okoye|1999|Udinese,Maduka Okoye,Udinese,340353,Maduka Okoye,Udinese Calcio,Goalkeeper,2028-06-30 00:00:00,right,198.0,10000000.0,exact
 Olasagasti|2000|Levante,Olasagasti,Levante,625660,Jon Ander Olasagasti,Levante UD,Central Midfield,2028-06-30 00:00:00,left,176.0,2500000.0,tokens
 Michael Olise|2001|Bayern Munich,Michael Olise,Bayern Munich,566723,Michael Olise,Bayern Munich,Right Winger,2029-06-30 00:00:00,left,180.0,150000000.0,exact
+Gonçalo Oliveira|2006|Rennes,Gonçalo Oliveira,Rennes,1078918,Gonçalo Oliveira,SL Benfica,Centre-Back,2031-06-30 00:00:00,left,183.0,2000000.0,exact
 Mathías Olivera|1997|Napoli,Mathías Olivera,Napoli,376514,Mathías Olivera,SSC Napoli,Left-Back,2030-06-30 00:00:00,left,185.0,15000000.0,exact
 Dani Olmo|1998|Barcelona,Dani Olmo,Barcelona,293385,Dani Olmo,FC Barcelona,Attacking Midfield,2030-06-30 00:00:00,right,179.0,60000000.0,exact
 Tani Oluwaseyi|2000|Villarreal,Tani Oluwaseyi,Villarreal,972465,Tani Oluwaseyi,Villarreal CF,Centre-Forward,2030-06-30 00:00:00,left,187.0,7000000.0,exact
@@ -1495,6 +1509,7 @@ Lorenzo Palmisani|2004|Frosinone,Lorenzo Palmisani,Frosinone,705355,Lorenzo Palm
 Aitor Paredes|2000|Athletic Club,Aitor Paredes,Athletic Club,591916,Aitor Paredes,Athletic Bilbao,Centre-Back,2029-06-30 00:00:00,right,185.0,7500000.0,exact
 Troy Parrott|2002|Real Betis,Troy Parrott,Real Betis,552655,Troy Parrott,AZ Alkmaar,Centre-Forward,2029-06-30 00:00:00,right,185.0,25000000.0,exact
 Mario Pašalić|1995|Atalanta,Mario Pašalić,Atalanta,205938,Mario Pašalić,Atalanta BC,Central Midfield,2028-06-30 00:00:00,right,188.0,6000000.0,exact
+Alex Pastor|1999|Málaga,Alex Pastor,Málaga,398056,Álex Pastor,UC Sampdoria,Centre-Back,,right,185.0,,exact_position_only
 Nathan Patterson|2001|Torino,Nathan Patterson,Torino,424015,Nathan Patterson,Everton FC,Right-Back,2027-06-30 00:00:00,right,183.0,10000000.0,exact
 Benjamin Pavard|1996|Inter,Benjamin Pavard,Inter,353366,Benjamin Pavard,Olympique Marseille,Centre-Back,2028-06-30 00:00:00,right,186.0,12000000.0,exact
 Aleksandar Pavlovic|2004|Bayern Munich,Aleksandar Pavlovic,Bayern Munich,792380,Aleksandar Pavlovic,Bayern Munich,Defensive Midfield,2029-06-30 00:00:00,both,188.0,90000000.0,exact
@@ -1628,6 +1643,7 @@ Jay Robinson|2007|Monza,Jay Robinson,Monza,1045124,Jay Robinson,Southampton FC,L
 Marc Roca|1996|Real Betis,Marc Roca,Real Betis,336869,Marc Roca,Real Betis Balompié,Defensive Midfield,2029-06-30 00:00:00,left,184.0,4000000.0,exact
 Joe Rodon|1997|Leeds United,Joe Rodon,Leeds United,297212,Joe Rodon,Leeds United,Centre-Back,2028-06-30 00:00:00,right,193.0,18000000.0,exact
 Rodri|1996|Barcelona,Rodri,Barcelona,357565,Rodri,Manchester City,Defensive Midfield,2027-06-30 00:00:00,right,190.0,50000000.0,exact
+Alejandro Rodriguez|2008|Lyon,Alejandro Rodriguez,Lyon,1108478,Alejandro Gomes Rodríguez,Olympique Lyon,Centre-Forward,2028-06-30 00:00:00,right,180.0,150000.0,tokens
 Álvaro Rodríguez|2004|Bournemouth,Álvaro Rodríguez,Bournemouth,948275,Álvaro Rodríguez,Elche CF,Centre-Forward,2029-06-30 00:00:00,left,193.0,10000000.0,exact
 Guido Rodríguez|1994|Valencia,Guido Rodríguez,Valencia,342385,Guido Rodríguez,West Ham United,Defensive Midfield,2028-06-30 00:00:00,right,185.0,4000000.0,exact
 Javi Rodríguez|2003|Celta Vigo,Javi Rodríguez,Celta Vigo,1076815,Javi Rodríguez,Celta de Vigo,Centre-Back,2028-06-30 00:00:00,right,183.0,18000000.0,exact
@@ -1737,6 +1753,7 @@ Mick Schmetgens|2007|Werder Bremen,Mick Schmetgens,Werder Bremen,1045986,Mick Sc
 Romano Schmid|2000|Frosinone,Romano Schmid,Frosinone,346853,Romano Schmid,SV Werder Bremen,Attacking Midfield,2027-06-30 00:00:00,right,168.0,15000000.0,exact
 Niklas Schmidt|1998|Toulouse,Niklas Schmidt,Toulouse,275249,Niklas Schmidt,FC Toulouse,Central Midfield,2027-06-30 00:00:00,both,184.0,1500000.0,exact
 Joël Schmied|1998|Köln,Joël Schmied,Köln,322517,Joël Schmied,1.FC Köln,Centre-Back,2029-06-30 00:00:00,right,188.0,3000000.0,exact
+Tim Schnitzer|2008|Augsburg,Tim Schnitzer,Augsburg,1162968,Tim Schnitzer,FC Augsburg,Defensive Midfield,,,,,exact_position_only
 Jannik Schuster|2006|Brentford,Jannik Schuster,Brentford,915418,Jannik Schuster,Fußballclub Red Bull Salzburg,Centre-Back,2031-06-30 00:00:00,right,190.0,18000000.0,exact
 Marvin Schwäbe|1995|Köln,Marvin Schwäbe,Köln,160929,Marvin Schwäbe,1.FC Köln,Goalkeeper,2027-06-30 00:00:00,right,190.0,3000000.0,exact
 Alexander Schwolow|1992|Mainz 05,Alexander Schwolow,Mainz 05,93763,Alexander Schwolow,Heart of Midlothian FC,Goalkeeper,2027-05-31 00:00:00,right,190.0,450000.0,exact
@@ -1774,6 +1791,7 @@ Unai Simón|1997|Athletic Club,Unai Simón,Athletic Club,262396,Unai Simón,Athl
 Jahmai Simpson-Pusey|2005|Köln,Jahmai Simpson-Pusey,Köln,942497,Jahmai Simpson-Pusey,1.FC Köln,Centre-Back,2030-06-30 00:00:00,right,187.0,9000000.0,exact
 Lassine Sinayoko|1999|Paris FC,Lassine Sinayoko,Paris FC,569140,Lassine Sinayoko,AJ Auxerre,Centre-Forward,2027-06-30 00:00:00,right,186.0,10000000.0,exact
 Antonio Sivera|1996|Alavés,Antonio Sivera,Alavés,298197,Antonio Sivera,Deportivo Alavés,Goalkeeper,2027-06-30 00:00:00,right,185.0,6000000.0,exact
+Telli Siwe|2004|Auxerre,Telli Siwe,Auxerre,1091353,Telli Siwe,AJ Auxerre,Centre-Back,2029-06-30 00:00:00,right,185.0,1000000.0,exact
 Tim Skarke|1996|Union Berlin,Tim Skarke,Union Berlin,287920,Tim Skarke,1.FC Union Berlin,Centre-Forward,,right,181.0,1500000.0,exact
 Ellyes Skhiri|1995|Köln,Ellyes Skhiri,Köln,290587,Ellyes Skhiri,Eintracht Frankfurt,Defensive Midfield,2027-06-30 00:00:00,right,185.0,5000000.0,exact
 Laurs Skjellerup|2002|Sassuolo,Laurs Skjellerup,Sassuolo,655207,Laurs Skjellerup,US Sassuolo,Centre-Forward,2029-06-30 00:00:00,right,195.0,150000.0,exact
@@ -1950,6 +1968,7 @@ Vanderson|2001|Monaco,Vanderson,Monaco,789082,Vanderson,AS Monaco,Right-Back,202
 Maarten Vandevoordt|2002|RB Leipzig,Maarten Vandevoordt,RB Leipzig,486046,Maarten Vandevoordt,RB Leipzig,Goalkeeper,2030-06-30 00:00:00,right,192.0,15000000.0,exact
 Gustavo Varela|2005|Monza,Gustavo Varela,Monza,931900,Gustavo Varela,Gil Vicente FC,Centre-Forward,2028-06-30 00:00:00,right,184.0,3000000.0,exact
 Ruben Vargas|1998|Sevilla,Ruben Vargas,Sevilla,345886,Rubén Vargas,Sevilla FC,Left Winger,2029-06-30 00:00:00,right,179.0,12000000.0,exact
+Devis Vásquez|1998|Roma,Devis Vásquez,Roma,495722,Devis Vásquez,Associazione Sportiva Roma,Goalkeeper,2027-06-30 00:00:00,right,195.0,1500000.0,exact
 Johan Vásquez|1998|Genoa,Johan Vásquez,Genoa,532937,Johan Vásquez,Genoa CFC,Centre-Back,2028-06-30 00:00:00,left,182.0,12000000.0,exact
 Robinio Vaz|2007|Hull City,Robinio Vaz,Hull City,1131161,Robinio Vaz,Olympique Marseille,Centre-Forward,2030-06-30 00:00:00,right,185.0,18000000.0,exact
 Jesus Vazquez|2003|Valencia,Jesus Vazquez,Valencia,623024,Jesús Vázquez,Valencia CF,Left-Back,2028-06-30 00:00:00,left,182.0,4000000.0,exact
@@ -2047,6 +2066,7 @@ Davide Zappacosta|1992|Atalanta,Davide Zappacosta,Atalanta,173859,Davide Zappaco
 Bryan Zaragoza|2001|Espanyol,Bryan Zaragoza,Espanyol,713644,Bryan Zaragoza,Associazione Sportiva Roma,Left Winger,2029-06-30 00:00:00,right,164.0,8000000.0,exact
 Oier Zarraga|1999|Udinese,Oier Zarraga,Udinese,524010,Oier Zarraga,Udinese Calcio,Central Midfield,2027-06-30 00:00:00,right,175.0,1500000.0,exact
 Exequiel Zeballos|2002|Monza,Exequiel Zeballos,Monza,661132,Exequiel Zeballos,Club Atlético Boca Juniors,Right Winger,2026-12-31 00:00:00,right,175.0,7000000.0,exact
+Deniz Zeitler|2006|Paderborn 07,Deniz Zeitler,Paderborn 07,1108022,Deniz Zeitler,TSG 1899 Hoffenheim,Left Winger,,both,181.0,4000000.0,exact
 Robin Zentner|1994|Mainz 05,Robin Zentner,Mainz 05,160963,Robin Zentner,1.FSV Mainz 05,Goalkeeper,2028-06-30 00:00:00,right,194.0,2500000.0,exact
 Alessio Zerbin|1999|Frosinone,Alessio Zerbin,Frosinone,433584,Alessio Zerbin,US Cremonese,Right Midfield,2028-06-30 00:00:00,right,182.0,2000000.0,exact
 Edon Zhegrova|1999|Juventus,Edon Zhegrova,Juventus,496857,Edon Zhegrova,Juventus FC,Right Winger,2030-06-30 00:00:00,left,180.0,10000000.0,exact
@@ -3016,7 +3036,7 @@ Landerson|2006|Moreirense,Landerson,Moreirense,1219689,Landerson,Moreirense FC,L
 Orest Lebedenko|1998|Arouca,Orest Lebedenko,Arouca,524964,Orest Lebedenko,Vitória Guimarães SC,Left-Back,2028-06-30 00:00:00,left,176.0,500000.0,exact
 Stefan Lekovic|2004|Estrela,Stefan Lekovic,Estrela,797572,Stefan Lekovic,CF Estrela Amadora,Centre-Back,2029-06-30 00:00:00,right,192.0,2500000.0,exact
 Clément Lenglet|1995|Benfica,Clément Lenglet,Benfica,182904,Clément Lenglet,Atlético de Madrid,Centre-Back,2027-06-30 00:00:00,left,186.0,4000000.0,exact
-Adrian Leon Barišić|2001|Braga,Adrian Leon Barišić,Braga,625206,Adrian Leon Barisic,SC Braga,Centre-Back,2026-06-30 00:00:00,right,192.0,4000000.0,exact
+Adrian Leon Barišić|2001|Braga,Adrian Leon Barišić,Braga,625206,Adrian Barisic,FC Basel 1893,Centre-Back,2030-06-30 00:00:00,right,192.0,4000000.0,tokens
 Georgios Liavas|2001|Rio Ave,Georgios Liavas,Rio Ave,481676,Georgios Liavas,Rio Ave FC,Defensive Midfield,2029-06-30 00:00:00,both,181.0,700000.0,exact
 Guilherme Liberato|2001|Moreirense,Guilherme Liberato,Moreirense,739442,Guilherme Liberato,Moreirense FC,Defensive Midfield,2026-06-30 00:00:00,right,184.0,300000.0,exact
 Pedro Lima|2003|Sporting CP,Pedro Lima,Sporting CP,816135,Pedro Lima,Avs Futebol,Central Midfield,2031-06-30 00:00:00,left,184.0,3000000.0,exact
