@@ -548,6 +548,7 @@ class SquadOptimizer:
             "sale_revenue_eur": 0.0,
             "club_value_eur": self.club_value(club),
             "excluded_unrealistic": n_unrealistic,
+            "deltas": pd.DataFrame(),
         }
 
         if baseline["status"] == "Optimal":
@@ -580,6 +581,7 @@ class SquadOptimizer:
             plan_xi = plan["squad"]
             result["signings"] = plan_xi[plan_xi["New_Signing"]]
             if baseline["status"] == "Optimal":
+                result["deltas"] = self.position_deltas(baseline["squad"], plan_xi)
                 kept = set(plan_xi["Player_ID"])
                 result["dropped"] = baseline["squad"][~baseline["squad"]["Player_ID"].isin(kept)]
             result["spent_eur"] = float(result["signings"][cost_column].sum())
@@ -591,6 +593,49 @@ class SquadOptimizer:
                     ~result["dropped"]["Player_ID"].isin(result["sold"]["Player_ID"])]
 
         return result
+
+    @staticmethod
+    def position_deltas(base_xi: pd.DataFrame, plan_xi: pd.DataFrame) -> pd.DataFrame:
+        """
+        Mevcut 11 ile transfer sonrası 11'i mevki mevki eşleştirir.
+
+        Bir rolde iki 11'de de yer alan oyuncu kendisiyle eşlenir (değişim yok). O roldeki
+        kalan oyuncular (ör. iki stoperden yalnızca biri değiştiyse) rol uyumlu skora göre
+        sıralanıp sırayla eşlenir: "giden -> gelen". Her satır bir mevkideki
+        değişimdir; `Delta` toplamının 11'e bölümü, iki 11'in ortalama skor farkına TAM eşittir.
+        Böylece toplam iyileşme, yeni transferlerin ve kadro içi yer değişikliklerinin
+        katkılarına ayrıştırılır.
+        """
+        cols = ["Role", "Before_Player", "Before_Score", "After_Player", "After_Score", "Delta",
+                "New_Signing", "Changed"]
+        if base_xi is None or plan_xi is None or base_xi.empty or plan_xi.empty:
+            return pd.DataFrame(columns=cols)
+        rows = []
+        order = {r: i for i, r in enumerate(ROLE_ORDER)}
+        for role in sorted(set(base_xi["Assigned_Role"]) | set(plan_xi["Assigned_Role"]), key=lambda r: order.get(r, 99)):
+            b = base_xi[base_xi["Assigned_Role"] == role].sort_values("Effective_Score", ascending=False)
+            a = plan_xi[plan_xi["Assigned_Role"] == role].sort_values("Effective_Score", ascending=False)
+            stayed = set(b["Player_ID"]) & set(a["Player_ID"])
+            pairs = [(b[b["Player_ID"] == pid].iloc[0], a[a["Player_ID"] == pid].iloc[0]) for pid in stayed]
+            b_rest = b[~b["Player_ID"].isin(stayed)]
+            a_rest = a[~a["Player_ID"].isin(stayed)]
+            for k in range(max(len(a_rest), len(b_rest))):
+                pairs.append((b_rest.iloc[k] if k < len(b_rest) else None,
+                              a_rest.iloc[k] if k < len(a_rest) else None))
+            for br, ar in pairs:
+                before = float(br["Effective_Score"]) if br is not None else 0.0
+                after = float(ar["Effective_Score"]) if ar is not None else 0.0
+                rows.append({
+                    "Role": role,
+                    "Before_Player": br["Player"] if br is not None else "—",
+                    "Before_Score": before,
+                    "After_Player": ar["Player"] if ar is not None else "—",
+                    "After_Score": after,
+                    "Delta": round(after - before, 1),
+                    "New_Signing": bool(ar.get("New_Signing", False)) if ar is not None else False,
+                    "Changed": (br is None or ar is None or br["Player_ID"] != ar["Player_ID"]),
+                })
+        return pd.DataFrame(rows, columns=cols)
 
     def budget_frontier(self, budgets_eur: list, **kwargs) -> pd.DataFrame:
         """

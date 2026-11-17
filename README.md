@@ -141,6 +141,8 @@ Satış geliri de gerçekçi bedelle hesaplanır (sözleşmesi biten oyuncu az, 
 
 **Örnek (Juventus, 4-3-3, €30M, en fazla 1 transfer, yalnızca form):** Kadroda doğal sol bek olmadığı için bir stoper (Lucumí) sol bekte oynar ve rol uyumlu skoru 26,1'e düşer. Model €7M'luk bir sol bek önerir ve takımın rol uyumlu ortalaması 52,0'den 56,4'e çıkar. Bütçe €50M ve 2 transfere çıkınca bir santrfor da eklenir.
 
+
+**İyileşme nereden geliyor? (delta grafiği)** Plan, mevcut 11 ile transfer sonrası 11'i mevki mevki eşleştirir. Aynı rolde kalan oyuncu kendisiyle eşlenir; değişen mevkilerde "giden → gelen" çifti oluşur. Her mevkideki farkın 11'e bölümü bir şelale (waterfall) grafiğinde gösterilir. Çubukların toplamı, iki 11'in ortalama skoru arasındaki farka tam olarak eşittir. Böylece "+8 puanın ne kadarı kaleciden, ne kadarı sol bekten geldi" sorusu yanıtlanır; ★ işaretsiz çubuklar kadro içi yer değişikliklerini gösterir.
 ---
 
 ### 🧩 Mevki verisi ve elle düzeltme
@@ -308,6 +310,10 @@ python scripts/build_market_values.py   # Transfermarkt eşleştirmesini tüm li
 
 Varsayılan katsayılarla en iyi 100 oyuncuda Süper Lig'den 5, Portekiz'den 5, Belçika'dan 2 oyuncu bulunur; Big-5 ortalamaları değişmez.
 
+
+**Big-5 içi farklar (yumuşak katsayı).** Big-5 ligleri de kendi aralarında küçük bir katsayı alır: Premier League 1.00, La Liga ve Bundesliga 0.98, Serie A ve Ligue 1 0.97. Farklar bilinçli olarak %2-3 ile sınırlıdır, çünkü lig katsayısı ligin *ortalama* rakip gücünü ölçer, takımın kendi gücünü değil: PSG ile Ligue 1'in son sırasındaki takım aynı indirimi alır ve kulüplerin Şampiyonlar Ligi performansı FBref verisinde yoktur. Daha sert bir katsayı (ör. Ligue 1 0.92) PSG'nin elit oyuncularını haksız biçimde aşağı çekerdi. Ek liglerin katsayıları Big-5 *ortalamasına* göre tanımlıdır ve uygulanırken Big-5 katsayılarının ortalamasıyla çarpılır; böylece anlamları değişmez.
+
+Varsayılan değerlerle Premier League oyuncularının skoru ortalama +1,2 artar (Haaland 73,4 → 74,4), Serie A ve Ligue 1 oyuncularınınki ortalama 0,6 düşer (Dembélé 61,7 → 61,0); La Liga, Bundesliga ve ek ligler ortalamada değişmez. Kenar çubuğundaki "Big-5 lig katsayıları" bölümünden ayarlanabilir; hepsi 1.00 yapılırsa Big-5 eşit sayılır.
 ---
 
 ## 🔄 Veri Güncelleme
@@ -343,7 +349,7 @@ Otomatik pencere doğrulamada takılırsa yedek yol: 20 sayfayı kendi tarayıc�
 * **Transfer planı varsayımları:** Maaşlar modele dahil değildir. Satış kararlarında model yalnızca ilk 11'in gücüne bakar; kadro derinliğini ve oyuncunun varlık değerini hesaba katmaz (ör. ilk 11'i çok az iyileştirmek için değerli bir oyuncuyu satabilir), bu yüzden satış sayısı sınırlı tutulmalıdır. Maliyet olarak piyasa değeri ya da sözleşme durumuna göre tahmini bedel kullanılır. Kulüp kadrosu yalnızca süre filtresini geçen oyunculardan oluşur; sakat veya az oynamış oyuncular için filtre düşürülmelidir.
 * **Penaltısız, dakika başına üretim:** Skorlar toplam gol sayısını değil penaltısız 90 dakika başına üretimi ödüllendirir. Bu yüzden örneğin penaltı golleri olan ve çok oynayan bir yıldız, daha az oynayıp yüksek oranla gol atan bir oyuncunun gerisinde kalabilir.
 * **Rol verisi:** Roller Transfermarkt'ın tek bir "ana" alt mevkisine dayanır; birden fazla rolde oynayan oyuncular yalnızca ana rolünde puanlanır (MILP'de diğer rollere uygunluk katsayısıyla yerleştirilebilir). Rol ağırlıkları uzman görüşüne dayalı varsayımlardır.
-* **Takım ve lig bağlamı:** Savunma aksiyonları topa sahip olma oranından, kaleci metrikleri takım savunmasından etkilenir. Big-5 ligleri birbirine eşit kabul edilir; her ek lig için tek bir lig katsayısı kullanılır ve bu katsayı her metrik ve her rol için aynıdır (gerçekte ligler arası fark mevkiye göre değişebilir).
+* **Takım ve lig bağlamı:** Savunma aksiyonları topa sahip olma oranından, kaleci metrikleri takım savunmasından etkilenir. Big-5 ligleri arasındaki farklar yalnızca yumuşak bir katsayıyla (%2-3) yansıtılır; her lig için tek bir lig katsayısı kullanılır ve bu katsayı her metrik ve her rol için aynıdır (gerçekte ligler arası fark mevkiye göre değişebilir).
 * **Piyasa değeri tarihi:** Transfermarkt verisi haftalık güncellenir, ancak Transfermarkt değerleri kendi içinde yılda birkaç kez revize edilir. Tarih kenar çubuğunda görünür. Piyasa değeri bir tahmindir, gerçek bonservis bedeli değildir.
 * **Oyuncu kimliği:** Veride benzersiz oyuncu ID'si yok; kimlik `isim + doğum yılı` ile kurulur. Aynı isim ve doğum yılına sahip iki farklı oyuncu (ör. iki "Vitinha") tek kişi sayılır. Yaşı ve doğum yılı boş olan oyuncular analizden çıkarılır.
 

@@ -4,7 +4,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from data_processor import (DEFAULT_LEAGUE_STRENGTH, ROLE_GROUP_LABELS, UNKNOWN_LEAGUE_STRENGTH,
+from data_processor import (BIG5_LEAGUE_STRENGTH, DEFAULT_LEAGUE_STRENGTH, ROLE_GROUP_LABELS,
+                            UNKNOWN_LEAGUE_STRENGTH,
                             FootballDataProcessor, load_data_versions,
                             add_decision_score, applicable_sub_scores)
 from similarity_engine import PlayerSimilarityEngine
@@ -26,7 +27,8 @@ def load_processed_data(data_key):
         data_key = (int(data_key), ())
     min_minutes, league_items = data_key
     processor = FootballDataProcessor()
-    strength = dict(DEFAULT_LEAGUE_STRENGTH)
+    strength = dict(BIG5_LEAGUE_STRENGTH)
+    strength.update(DEFAULT_LEAGUE_STRENGTH)
     strength.update(dict(league_items))
     df = processor.clean_and_engineer(min_minutes=min_minutes, league_strength=strength)
     return df, processor.source_file, processor.has_market_values
@@ -252,11 +254,20 @@ for _lg in _extra:
         f"🏟️ {_lg} lig katsayısı", 0.50, 1.00, float(DEFAULT_LEAGUE_STRENGTH.get(_lg, UNKNOWN_LEAGUE_STRENGTH)), 0.05,
         key=f"league_factor_{_lg}",
         help="Bu ligdeki üretim (gol, şut, top kapma, artı/eksi) Big-5 ile kıyaslanmadan önce "
-             "bu katsayıyla çarpılır. 1.00: Big-5 seviyesinde kabul et. Varsayılan bir varsayımdır: "
+             "bu katsayıyla çarpılır. 1.00: Big-5 ortalaması seviyesinde kabul et. Varsayılan bir varsayımdır: "
              "Opta güç sıralamasında kulüp ortalamaları: Big-5 ~85 ve üzeri, Portekiz ~80, Süper Lig ve Hollanda ~78-79. "
              "Big-5 oyuncularının skorları bu ayardan etkilenmez.",
     )
     league_items.append((_lg, round(_f, 2)))
+with st.sidebar.expander("🏟️ Big-5 lig katsayıları"):
+    st.caption(
+        "Premier League = 1.00. Lig katsayısı ligin ortalama rakip gücünü ölçer, takımın kendi gücünü "
+        "değil (PSG ile ligin son takımı aynı indirimi alır); bu yüzden farklar bilinçli olarak küçük "
+        "(%2-3) tutulur. Hepsini 1.00 yaparsan Big-5 ligleri eşit sayılır."
+    )
+    for _lg, _default in BIG5_LEAGUE_STRENGTH.items():
+        _f = st.slider(f"{_lg}", 0.85, 1.00, float(_default), 0.01, key=f"league_factor_{_lg}")
+        league_items.append((_lg, round(_f, 2)))
 data_key = (min_mins, tuple(league_items))
 df, source_file, has_values = load_processed_data(data_key)
 st.sidebar.caption(f"Veri kaynağı: `{source_file}`")
@@ -819,6 +830,48 @@ with tab4:
             with pc2:
                 if after["status"] == "Optimal":
                     st.plotly_chart(draw_tactical_pitch(after["squad"], True, "Transfer Sonrası 11 (★ = yeni)", home_club=club))
+
+            deltas = plan.get("deltas", pd.DataFrame())
+            if after["status"] == "Optimal" and not deltas.empty and deltas["Changed"].any():
+                st.markdown("**📊 İyileşme nereden geliyor?**")
+                changed = deltas[deltas["Changed"]]
+                step_labels = [
+                    f"{r.Role}: {'★ ' if r.New_Signing else ''}{r.After_Player}" for r in changed.itertuples()
+                ]
+                start = base["avg_effective_score"]
+                end = after["avg_effective_score"]
+                steps = (changed["Delta"] / 11.0).tolist()
+                fig_delta = go.Figure(go.Waterfall(
+                    x=["Mevcut 11"] + step_labels + ["Transfer Sonrası 11"],
+                    measure=["absolute"] + ["relative"] * len(steps) + ["total"],
+                    y=[start] + steps + [0],
+                    text=[f"{start:.1f}"] + [f"{v:+.1f}" for v in steps] + [f"{end:.1f}"],
+                    textposition="outside",
+                    customdata=[""] + [
+                        f"{r.Before_Player} ({r.Before_Score:.1f}) → {r.After_Player} ({r.After_Score:.1f})"
+                        f"<br>Mevkide {r.Delta:+.1f} puan → ortalamaya {r.Delta / 11:+.1f}"
+                        for r in changed.itertuples()
+                    ] + [""],
+                    hovertemplate="%{x}<br>%{customdata}<extra></extra>",
+                    increasing={"marker": {"color": "#22c55e"}},
+                    decreasing={"marker": {"color": "#ef4444"}},
+                    totals={"marker": {"color": "#3b82f6"}},
+                    connector={"line": {"color": "#64748b"}},
+                ))
+                lo = min(start, end, start + min(0.0, float(np.cumsum(steps).min())))
+                hi = max(start, end, start + float(np.cumsum(steps).max()))
+                fig_delta.update_layout(
+                    template="plotly_dark", height=380, showlegend=False,
+                    yaxis=dict(title="İlk 11 rol uyumlu ortalama skor", range=[lo - 4, hi + 4]),
+                    margin=dict(l=40, r=20, t=20, b=40),
+                )
+                st.plotly_chart(fig_delta)
+                st.caption(
+                    "Her çubuk bir mevkideki değişimin ilk 11 ortalamasına katkısıdır (mevkideki fark ÷ 11). "
+                    "★ yeni transfer; yıldızsız çubuklar kadro içi yer değişikliğidir (ör. bir oyuncunun "
+                    "başka bir role kayması). Kırmızı çubuk, o mevkide oyuncunun başka bir role "
+                    "kaydırılması nedeniyle yaşanan küçük kayıptır; toplamda plan yine daha iyidir."
+                )
 
             if base["squad"]["Role_Fit"].le(0.5).any():
                 st.caption(

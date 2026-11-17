@@ -9,7 +9,7 @@ import pytest
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from data_processor import FootballDataProcessor, add_decision_score  # noqa: E402
+from data_processor import BIG5_LEAGUE_STRENGTH, FootballDataProcessor, add_decision_score  # noqa: E402
 from scripts.add_league import (ID_COL, OUTPUT_COLUMNS, build_league,  # noqa: E402
                                 read_fbref_table, split_positions)
 
@@ -123,9 +123,12 @@ def test_league_factor_lowers_weaker_league_scores_only():
     big_full = full[full["Is_Reference"]].set_index("Row_Key")["OptiScout_Score"]
     big_weak = weak[weak["Is_Reference"]].set_index("Row_Key")["OptiScout_Score"]
     assert np.allclose(big_full.sort_index(), big_weak.sort_index())
-    assert (weak.loc[weak["League"] == "Süper Lig", "League_Factor"] == 0.75).all()
-    # Big-5 her zaman 1.0
-    assert (weak.loc[weak["Is_Reference"], "League_Factor"] == 1.0).all()
+    # Ek lig katsayisi Big-5 ortalamasina goredir: 0.75 x Big-5 katsayilarinin ortalamasi
+    big5_mean = np.mean(list(BIG5_LEAGUE_STRENGTH.values()))
+    assert np.allclose(weak.loc[weak["League"] == "Süper Lig", "League_Factor"], 0.75 * big5_mean)
+    # Big-5 kendi (varsayilan) katsayisini alir; Süper Lig ayari bunu degistirmez
+    ref = weak[weak["Is_Reference"]]
+    assert np.allclose(ref["League_Factor"], ref["League"].map(BIG5_LEAGUE_STRENGTH))
 
 
 def test_league_factor_scales_goals_and_goals_conceded_in_right_direction():
@@ -154,3 +157,18 @@ def test_every_extra_league_gets_a_factor_below_one():
         pytest.skip("ek lig dosyasi yok")
     assert (extra["League_Factor"] < 1.0).all()
     assert set(extra["League"]) == set(proc.extra_league_names())
+
+
+def test_big5_factors_are_soft_and_neutral_when_all_one():
+    proc = FootballDataProcessor()
+    equal = proc.clean_and_engineer(270, {**{lg: 1.0 for lg in BIG5_LEAGUE_STRENGTH}, "Süper Lig": 0.75})
+    soft = proc.clean_and_engineer(270, {"Süper Lig": 0.75})
+    e = equal.set_index("Row_Key")["OptiScout_Score"]
+    f = soft.set_index("Row_Key")["OptiScout_Score"].reindex(e.index)
+    lg = equal.set_index("Row_Key")["League"]
+    shift = (f - e).groupby(lg).mean()
+    # Premier League yukari, Ligue 1 asagi; ama yumusak: lig ortalamalari en fazla ~2 puan oynar
+    assert shift["Premier League"] > 0 > shift["Ligue 1"]
+    assert shift.abs().max() < 2.5
+    # Butun Big-5 katsayilari 1.0 iken referans satirlarin faktoru tam 1
+    assert (equal.loc[equal["Is_Reference"], "League_Factor"] == 1.0).all()

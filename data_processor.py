@@ -87,6 +87,20 @@ DEFAULT_LEAGUE_STRENGTH = {
 }
 # Listede olmayan EK bir lig (Big-5 dışı) için temkinli varsayılan
 UNKNOWN_LEAGUE_STRENGTH = 0.75
+# Big-5 içi farklar (Premier League = 1.00). Bilinçli olarak YUMUŞAK tutulur: lig katsayısı
+# ligin ortalama rakip gücünü ölçer, takımın kendi gücünü değil (ör. PSG ile Ligue 1'in son
+# sırasındaki takım aynı indirimi alır); kulüplerin Avrupa kupası başarısı ise veride yoktur.
+# Bu yüzden fark %2-3 ile sınırlı tutulur; piyasa değerine dayanan "kalıcı kalite" bileşeni
+# elit oyuncuları zaten ayrıca yansıtır. Hepsi 1.00 yapılırsa Big-5 eşit kabul edilir.
+# Ek liglerin katsayıları (DEFAULT_LEAGUE_STRENGTH) "Big-5 ortalamasına göre" tanımlıdır;
+# uygulanırken Big-5 katsayılarının ortalamasıyla çarpılır, böylece anlamları değişmez.
+BIG5_LEAGUE_STRENGTH = {
+    "Premier League": 1.00,
+    "La Liga": 0.98,
+    "Bundesliga": 0.98,
+    "Serie A": 0.97,
+    "Ligue 1": 0.97,
+}
 # Katsayının uygulandığı "yüksek olması iyi" metrikler
 LEAGUE_SCALED_METRICS = [
     "Gls_adj", "Ast_adj", "GA_non_pk_adj", "Sh_adj", "SoT_adj", "Crs_adj", "TklW_adj",
@@ -212,9 +226,12 @@ class FootballDataProcessor:
         return pd.concat(frames, ignore_index=True, sort=False)
 
     def clean_and_engineer(self, min_minutes: int = 180, league_strength: dict = None) -> pd.DataFrame:
-        """`league_strength`: {lig adı: katsayı}. None ise DEFAULT_LEAGUE_STRENGTH kullanılır;
-        listede olmayan ligler 1.0 (Big-5 seviyesi) kabul edilir."""
-        self.league_strength = dict(DEFAULT_LEAGUE_STRENGTH if league_strength is None else league_strength)
+        """`league_strength`: {lig adı: katsayı}. None ise DEFAULT_LEAGUE_STRENGTH kullanılır.
+        Verilmeyen Big-5 ligleri BIG5_LEAGUE_STRENGTH değerini, verilmeyen ek ligler
+        UNKNOWN_LEAGUE_STRENGTH değerini alır."""
+        strength = dict(BIG5_LEAGUE_STRENGTH)
+        strength.update(DEFAULT_LEAGUE_STRENGTH if league_strength is None else league_strength)
+        self.league_strength = strength
         df = self.load_raw_data().copy()
         if "Is_Reference" not in df.columns:
             df["Is_Reference"] = True
@@ -467,11 +484,17 @@ class FootballDataProcessor:
 
         Yüksek olması iyi metrik: pozitifse x*f, negatifse x/f (eksi artı/eksi daha da kötüleşir).
         Düşük olması iyi metrik (yenilen gol): x/f.
+
+        Big-5 (referans) ligleri kendi katsayısını alır (verilmemişse 1.0). Ek liglerin katsayısı
+        Big-5 ortalamasına göre tanımlı olduğundan, Big-5 katsayılarının ortalamasıyla çarpılır.
         """
+        big5 = {lg: float(league_strength.get(lg, 1.0)) for lg in BIG5_LEAGUE_STRENGTH}
+        big5_mean = float(np.mean(list(big5.values())))
         factor = df["League"].map(league_strength)
         if "Is_Reference" in df.columns:
-            # Big-5 (referans) her zaman 1.0; tanımsız ek lig temkinli varsayılanı alır
-            factor = factor.where(~df["Is_Reference"], 1.0).fillna(UNKNOWN_LEAGUE_STRENGTH)
+            ref_factor = df["League"].map(big5).fillna(1.0)
+            extra_factor = factor.fillna(UNKNOWN_LEAGUE_STRENGTH) * big5_mean
+            factor = ref_factor.where(df["Is_Reference"], extra_factor)
         factor = factor.fillna(1.0).clip(lower=0.1, upper=1.5)
         df["League_Factor"] = factor
         if (factor == 1.0).all():

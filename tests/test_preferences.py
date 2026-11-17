@@ -81,3 +81,20 @@ def test_impossible_locks_explain_why(opt):
     assert res["lock_issue"]
     with pytest.raises(ValueError):
         opt.optimize_starting_xi(locked_ids=[gks[0]], banned_ids=[gks[0]])
+
+
+def test_position_deltas_decompose_improvement_exactly(opt):
+    for club in ["Galatasaray", "Fenerbahçe"]:
+        plan = opt.plan_transfers(club, budget_eur=40e6, max_signings=3)
+        if plan["baseline"]["status"] != "Optimal" or plan["plan"]["status"] != "Optimal":
+            continue
+        d = plan["deltas"]
+        base = plan["baseline"]["squad"]["Effective_Score"].mean()
+        after = plan["plan"]["squad"]["Effective_Score"].mean()
+        assert len(d) == 11
+        assert abs(d["Delta"].sum() / 11 - (after - base)) < 0.02
+        # Ayni rolde kalan oyuncu kendisiyle eslenir: degismeyen satirlarda fark 0
+        assert (d.loc[~d["Changed"], "Delta"] == 0).all()
+        # Her yeni transfer tam olarak bir degisen satirda "gelen" oyuncudur
+        assert d["New_Signing"].sum() == len(plan["signings"])
+        assert d.loc[d["New_Signing"], "Changed"].all()
