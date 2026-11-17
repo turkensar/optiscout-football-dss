@@ -3,7 +3,7 @@
 
 # ⚽ OptiScout: Data-Driven Football Scouting & Squad Optimization DSS
 
-Avrupa'nın 5 büyük ligi (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) ile **Süper Lig, Primeira Liga, Eredivisie ve Belçika Pro League**'in **2026-2027 sezonu FBref** verileri üzerine inşa edilmiş; **Veri Mühendisliği**, **İstatistiksel Benzerlik Analizi (Cosine Similarity)**, **Makine Öğrenmesi (piyasa değeri regresyonu)** ve **Yöneylem Araştırması (Mixed-Integer Linear Programming - MILP)** yöntemlerini birleştiren interaktif bir **Karar Destek Sistemi (Decision Support System - DSS)**.
+Avrupa'nın 5 büyük ligi (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) ile **Süper Lig, Primeira Liga, Eredivisie ve Belçika Pro League**'in **2026-2027 sezonu FBref** verileri üzerine inşa edilmiş; **Veri Mühendisliği**, **İstatistiksel Benzerlik Analizi (stil + seviye hibrit benzerliği)**, **Makine Öğrenmesi (piyasa değeri regresyonu)** ve **Yöneylem Araştırması (Mixed-Integer Linear Programming - MILP)** yöntemlerini birleştiren interaktif bir **Karar Destek Sistemi (Decision Support System - DSS)**.
 
 ![OptiScout demo](images/demo.gif)
 
@@ -25,7 +25,7 @@ Modern futbol analitiğinde oyuncu izleme (scouting) ve kadro planlama süreçle
 | Modül | Dosya | Kullanılan Yöntem & Algoritma | Açıklama |
 | :--- | :--- | :--- | :--- |
 | **1. Veri Mühendisliği & Skorlama** | `data_processor.py` | Per-90 Normalizasyon & Rol Bazlı Yüzdelik Dilim (`Percentile Rank`) | Ham FBref verilerini temizler, oyuncuları Transfermarkt alt mevkilerine göre rol gruplarına ayırır, savunma metriklerini topa sahip olmaya göre düzeltir, oyuncunun takıma etkisini (sahadayken gol farkı) ölçer, az dakika alan oyuncuların şişmiş oranlarını **Bayesian shrinkage** ile rol ortalamasına çeker ve Hücum, Yaratıcılık, Savunma, Disiplin alt kırılımlarıyla `0-100` arası **OptiScout_Score** üretir. |
-| **2. İkame Oyuncu Motoru** | `similarity_engine.py` | `StandardScaler` (Z-Score) + `Cosine Similarity` (`scikit-learn`) | Oyuncuların rol bazlı Per-90 vektörlerini standartlaştırır ve seçilen referans oyuncuya en yüksek kosinüs benzerliği gösteren alternatifleri listeler. Model eğitimi gerektirmeyen, açıklanabilir bir mesafe ölçüsüdür. |
+| **2. İkame Oyuncu Motoru** | `similarity_engine.py` | `StandardScaler` (Z-Score) + ağırlıklı `Cosine Similarity` + RBF mesafe çekirdeği | Oyuncuların rol bazlı Per-90 vektörlerini standartlaştırır. **Stil** (kosinüs: profilin yönü) ile **Seviye**yi (z-mesafesi: üretim hacminin yakınlığı) birleştirir: Benzerlik = Stil × (0,65 + 0,35 × Seviye). Böylece aynı profildeki ama çok daha üretken bir yıldız, %100 yerine ~%78 benzer çıkar. Birbirini tekrar eden metrikler (ör. Savunma Aksiyonu = Top Kapma + Pas Arası) yarım ağırlık alır. Model eğitimi gerektirmez, açıklanabilirdir. |
 | **3. Optimum İlk 11 Çözücü** | `squad_optimizer.py` | Karışık Tamsayılı Doğrusal Programlama (`scipy.optimize.milp` - HiGHS Solver) | Seçilen formasyon (`4-3-3`, `4-2-3-1`, `3-5-2` vb.), **transfer bütçesi**, maksimum yaş ortalaması ve kulüp sınırı kısıtları altında toplam kadro skorunu maksimize eder; bütçe-performans eğrisini çizer ve **kulüp bazlı transfer planı** üretir. Formasyonlar Transfermarkt alt mevkilerine dayalı **taktik rollerle** (LB, CB, DM, AM, RW, ST...) tanımlanır. |
 | **4. Piyasa Değeri Modeli** | `value_model.py` | Ridge regresyon, 5 katlı çapraz doğrulama (out-of-fold tahmin) | Performans, yaş, lig ve rolden beklenen piyasa değerini tahmin eder; gerçek değeri tahminin çok altında kalan üst dilim oyuncuları fırsat olarak listeler. |
 | **5. Piyasa Değeri Eşleştirme** | `scripts/build_market_values.py` | İsim normalizasyonu + doğum yılı + kulüp benzerliği ile kademeli eşleştirme | FBref oyuncularını Transfermarkt piyasa değerleri, alt mevkileri ve sözleşme bitiş tarihleriyle eşleştirir ve `data/market_values.csv` dosyasını üretir. |
@@ -43,7 +43,7 @@ Skorlar rol içinde hesaplanır: kanatlar kanatlarla, bekler beklerle kıyaslan�
 ### 2. Dört Kadran Performans Haritası (Outlier Tespiti)
 ![Dört kadran haritası](images/quadrant.png)
 
-### 3. Kosinüs Benzerliği ile İkame Oyuncu & Wonderkid Keşfi
+### 3. Stil + Seviye Benzerliği ile İkame Oyuncu & Wonderkid Keşfi
 ![Benzerlik motoru](images/similarity.png)
 
 ### 4. Bütçe Kısıtlı Optimum İlk 11 (MILP) ve Taktik Tahtası

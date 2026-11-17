@@ -87,7 +87,7 @@ COLUMN_LABELS = {
     "Gls": "Gol", "Ast": "Asist", "Gls_p90": "Gol/90", "Ast_p90": "Asist/90",
     "Def_Actions_p90": "Savunma Aks./90", "GA_non_pk_p90": "PS'siz G+A/90",
     "OptiScout_Score": "OptiScout", "Effective_Score": "Rol Skoru",
-    "Similarity_Score": "Benzerlik", "Market_Value_M": "Piyasa Değeri",
+    "Similarity_Score": "Benzerlik", "Style_Score": "Stil", "Level_Score": "Seviye", "Market_Value_M": "Piyasa Değeri",
     "Role_Fit": "Rol Uyumu", "Improvement": "Kazanç",
     "Pred_Value_M": "Tahmini Değer", "Value_Ratio": "Fırsat Katsayısı",
     "Contract_Label": "Sözleşme", "Sale_Value_M": "Satış Geliri", "Importance_Label": "Takımdaki Rolü",
@@ -441,12 +441,14 @@ with tab2:
     col_table, col_radar = st.columns([3, 2])
     with col_table:
         sim_cols = [
-            "Player", "Squad", "Age", "Similarity_Score", "OptiScout_Score", "Gls_p90", "Ast_p90",
+            "Player", "Squad", "Age", "Similarity_Score", "Style_Score", "Level_Score", "OptiScout_Score",
+            "Gls_p90", "Ast_p90",
         ] + (["Market_Value_M"] if has_values else [])
         show_table(similar_df[sim_cols], hide_index=True)
         st.caption(
-            "Benzerlik Skoru = kosinüs benzerliği × 100. 100: aynı profil, "
-            "0: ilişkisiz, negatif: zıt profil."
+            "**Stil:** profilin yönü (kosinüs benzerliği; 100 aynı profil, 0 ilişkisiz, negatif zıt). "
+            "**Seviye:** üretim hacminin yakınlığı (aynı yönde ama çok daha üretken bir yıldız düşük alır). "
+            "**Benzerlik** = Stil × (0,65 + 0,35 × Seviye)."
         )
 
     with col_radar:

@@ -1,6 +1,7 @@
 import os
 import sys
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -206,3 +207,34 @@ def test_shrinkage_prior_uses_role_group_not_fbref_label(df):
     k90 = 450 / 90
     implied_prior = (w["Gls_adj"] * (w["90s_safe"] + k90) - w["Gls"]) / k90
     assert implied_prior.round(6).nunique() == 1
+
+
+def _synthetic_forwards(rows):
+    """Elle kurulan forvet havuzu: rows = [(isim, [9 metrik])]."""
+    feats = PlayerSimilarityEngine.POSITION_FEATURES["FW"]
+    recs = []
+    for i, (name, vals) in enumerate(rows):
+        rec = dict(zip(feats, vals))
+        rec.update(Row_Key=name, Player=name, Player_ID=name, Score_Group="ST", Primary_Pos="FW",
+                   Age=25, League="L", Squad=f"S{i}", OptiScout_Score=50.0)
+        recs.append(rec)
+    return pd.DataFrame(recs)
+
+
+def test_hybrid_similarity_penalises_level_gap_and_has_no_jump_at_zero():
+    rng = np.random.default_rng(0)
+    base = [(f"p{i}", list(rng.normal(0, 1, 9))) for i in range(40)]
+    profile = np.array([1.0, 0.5, 1.0, 1.2, 0.8, 0.3, -0.2, 0.4, -0.5])
+    rows = base + [("hedef", list(profile)), ("ayni_seviye", list(profile * 1.05)),
+                   ("yildiz", list(profile * 3.0))]
+    res = PlayerSimilarityEngine(_synthetic_forwards(rows)).find_similar_players(
+        "hedef", top_n=100, max_age=99, exclude_same_squad=False).set_index("Row_Key")
+
+    # Ayni yondeki iki oyuncunun stili ~100; ama 3 kat ureten yildizin seviyesi ve benzerligi daha dusuk
+    assert res.loc["ayni_seviye", "Style_Score"] > 99 and res.loc["yildiz", "Style_Score"] > 99
+    assert res.loc["yildiz", "Level_Score"] < res.loc["ayni_seviye", "Level_Score"]
+    assert res.loc["yildiz", "Similarity_Score"] < res.loc["ayni_seviye", "Similarity_Score"]
+    # Seviye bir carpan: benzerlik hicbir zaman stilin ustune cikmaz, isareti stille ayni
+    assert (res["Similarity_Score"] <= res["Style_Score"] + 0.11).all()
+    assert (np.sign(res["Similarity_Score"]) == np.sign(res["Style_Score"])).all()
+    assert res["Similarity_Score"].between(-100, 100).all()
