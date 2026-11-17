@@ -615,14 +615,23 @@ class FootballDataProcessor:
         df.loc[idx, not_applicable] = np.nan
 
 
-def add_decision_score(df: pd.DataFrame, form_weight: float = 1.0) -> pd.DataFrame:
+def add_decision_score(df: pd.DataFrame, form_weight: float = 1.0, coach_weight: float = 0.0) -> pd.DataFrame:
     """
-    Karar skoru = form_weight x OptiScout (bu sezonun formu)
-                + (1 - form_weight) x Kalıcı Kalite (piyasa değerinin rol içindeki yüzdelik sırası).
+    Karar skoru iki adımda kurulur:
+
+    1) Kalite = form_weight x OptiScout (bu sezonun formu)
+              + (1 - form_weight) x Kalıcı Kalite (piyasa değerinin rol içindeki yüzdelik sırası)
+    2) Karar  = (1 - coach_weight) x Kalite + coach_weight x Hoca Tercihi
+
+    Hoca Tercihi (`Coach_Score`), oyuncunun kulübünde oynanabilecek dakikaların yüzde kaçını
+    aldığıdır (FBref Min%). İstatistiklerin göremediği bilgiyi (antrenman, taktik uyum,
+    sakatlık sonrası form) teknik direktörün tercihi üzerinden dolaylı olarak taşır: ör. bir
+    yıldız kenarda kalıyorsa ilk 11'de onun yerine düzenli oynayan oyuncu öne çıkar.
 
     Sezonun ilk haftalarındaki veri gürültülüdür; piyasa değeri ise oyuncunun yıllara yayılan
-    performansını ve itibarını yansıtır. Karar verici iki kaynağa ne kadar güveneceğini seçer.
-    Piyasa değeri bilinmeyen oyuncuda karar skoru yalnızca formdur.
+    performansını ve itibarını yansıtır. Karar verici kaynaklara ne kadar güveneceğini seçer.
+    Piyasa değeri bilinmeyen oyuncuda kalite yalnızca formdur; dakika payı bilinmeyende
+    karar skoru yalnızca kalitedir.
     """
     d = df.copy()
     log_value = np.log(d["Market_Value_EUR"].where(d["Market_Value_EUR"] > 0))
@@ -645,7 +654,11 @@ def add_decision_score(df: pd.DataFrame, form_weight: float = 1.0) -> pd.DataFra
         rep.loc[idx] = np.where(vals.notna(), np.clip(pct, 0, 100), np.nan)
     d["Reputation_Score"] = rep.round(1)
     w = float(np.clip(form_weight, 0.0, 1.0))
-    blended = w * d["OptiScout_Score"] + (1 - w) * d["Reputation_Score"]
-    d["Decision_Score"] = blended.fillna(d["OptiScout_Score"]).round(1)
+    quality = (w * d["OptiScout_Score"] + (1 - w) * d["Reputation_Score"]).fillna(d["OptiScout_Score"])
+    share = d["Min%"] if "Min%" in d.columns else pd.Series(np.nan, index=d.index)
+    d["Coach_Score"] = pd.to_numeric(share, errors="coerce").clip(0, 100).round(1)
+    c = float(np.clip(coach_weight, 0.0, 1.0))
+    decision = ((1 - c) * quality + c * d["Coach_Score"]).fillna(quality)
+    d["Decision_Score"] = decision.round(1)
     return d
 

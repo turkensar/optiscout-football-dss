@@ -85,6 +85,7 @@ Burada $\alpha_{i,r}$ **rol uygunluk katsayısıdır**. Oyuncunun Transfermarkt 
 * **Kulüp Kotası Kısıtı:** Her kulüp $c$ için $\sum_{i \in C_c} \sum_{r} x_{i,r} \le K_{\max}$
 * **Maksimum Yaş Ortalaması Kısıtı:** $\sum_{i,r} \text{Age}_i \cdot x_{i,r} \le 11 \cdot \text{Age}_{\max}$
 * **Bütçe Kısıtı:** $\sum_{i,r} \text{Value}_i \cdot x_{i,r} \le B$ (Value: Transfermarkt piyasa değeri, € cinsinden)
+* **Kullanıcı Kilidi:** "Kesin oynasın" seçilen her oyuncu $i \in L$ için $\sum_{r} x_{i,r} = 1$; "Kullanma" seçilenler havuzdan çıkarılır. Kilitli oyuncular lig, kulüp ve yaş filtrelerinden etkilenmez; model kalan yerleri ve rolleri onlara göre en iyi şekilde doldurur. Kilitler diğer kısıtlarla çelişirse (ör. 4-3-3'e iki santrfor) model nedenini açıklar.
 
 Bütçe kısıtı açıkken piyasa değeri bilinmeyen oyuncular havuzdan çıkarılır; aksi halde model maliyeti bilinmeyen oyuncuları "bedava" sanıp kadroya doldururdu.
 
@@ -260,6 +261,12 @@ Bu sezonun ilk 10 maçı gürültülüdür: elit bir stoper birkaç kötü maçl
 $$\text{Karar Skoru} = w \cdot \text{OptiScout (form)} + (1 - w) \cdot \text{Kalıcı Kalite}$$
 
 Kalıcı kalite, oyuncunun piyasa değerinin kendi rolü içindeki yüzdelik sırasıdır. Ağırlık $w$ kenar çubuğundan seçilir (varsayılan %70): %100 yalnızca bu sezonun verisine güvenir, daha düşük değerler sezon başı gürültüsüne karşı oyuncunun itibarını da hesaba katar. Oyuncu sıralaması ve fırsat modeli yalnızca formu kullanır; karar skoru kadro ve transfer kararlarında devreye girer.
+
+**Hoca tercihi.** İstatistikler antrenmanı, taktik uyumu ya da sakatlık sonrası formu göremez; teknik direktör görür ve bunu kime süre verdiğiyle gösterir. Bu yüzden karar skoruna oyuncunun kulübünde oynanabilecek dakikalardan aldığı pay (FBref Min%) de eklenir:
+
+$$\text{Karar Skoru} = (1 - h) \cdot \big[w \cdot \text{Form} + (1 - w) \cdot \text{Kalıcı Kalite}\big] + h \cdot \text{Dakika Payı}$$
+
+$h$ kenar çubuğundan seçilir (varsayılan %20, en fazla %50). Örneğin Galatasaray'da dakikaların %83'ünü alan Yunus Akgün ile %46'sını alan Leroy Sané arasındaki fark büyür; ilk 11 ve transfer planı teknik direktörün gerçek tercihlerine yaklaşır.
 
 ---
 

@@ -140,6 +140,8 @@ class SquadOptimizer:
         allow_out_of_position: bool = True,
         budget_eur: float = None,
         cost_column: str = "Market_Value_EUR",
+        locked_ids: list = None,
+        banned_ids: list = None,
     ) -> dict:
         """
         Karar değişkeni x[i, r] = 1 -> i. oyuncu r rolünde (ör. LB, DM, RW) oynar.
@@ -151,9 +153,23 @@ class SquadOptimizer:
         sözleşme durumuna göre tahmini transfer bedeli `Est_Fee_EUR`) bütçeyi
         aşamaz. Maliyeti bilinmeyen oyuncular bu durumda havuzdan çıkarılır
         (bütçeye "bedava" girmesinler diye).
+
+        Kullanıcı tercihleri (`Player_ID` listeleri):
+        - `locked_ids`: bu oyuncular ilk 11'de MUTLAKA yer alır (Σ x[i, r] = 1). Lig, kulüp
+          ve yaş filtrelerinden etkilenmezler; model kalan yerleri onlara göre doldurur.
+        - `banned_ids`: bu oyuncular havuzdan çıkarılır.
+        Kilitli bir oyuncu dizilişte oynayabileceği bir role sahip değilse ya da kilitler
+        diğer kısıtlarla (bütçe, yaş ortalaması, kulüp kotası) çelişiyorsa sonuç
+        "Infeasible" olur ve `lock_issue` nedeni açıklar.
         """
         if formation not in self.FORMATIONS:
             raise ValueError(f"Gecersiz formasyon: {formation}")
+        locked = list(dict.fromkeys(locked_ids or []))
+        banned = set(banned_ids or [])
+        if set(locked) & banned:
+            raise ValueError("Ayni oyuncu hem kilitli hem yasakli olamaz")
+        if len(locked) > 11:
+            raise ValueError("En fazla 11 oyuncu kilitlenebilir")
 
         pool = self.df.copy()
         pool = pool[pool["Age"] <= max_individual_age]
@@ -164,6 +180,13 @@ class SquadOptimizer:
         if excluded_squads:
             pool = pool[~pool["Squad"].isin(excluded_squads)]
 
+        if banned:
+            pool = pool[~pool["Player_ID"].isin(banned)]
+        if locked:
+            # Kilitli oyuncular filtrelerden bagimsiz olarak havuza geri eklenir
+            extra = self.df[self.df["Player_ID"].isin(locked) & ~self.df.index.isin(pool.index)]
+            pool = pd.concat([pool, extra])
+
         excluded_no_value = 0
         cost = None
         if budget_eur is not None:
@@ -172,16 +195,43 @@ class SquadOptimizer:
             pool = pool[has_value]
             cost = pool[cost_column].to_numpy(dtype=float)
 
+        pool = pool.reset_index(drop=True)
+        lock_issue = None
+        if locked:
+            names = self.df.drop_duplicates("Player_ID").set_index("Player_ID")["Player"]
+            missing = [pid for pid in locked if pid not in set(pool["Player_ID"])]
+            if missing:
+                lock_issue = ("Kilitli oyuncunun maliyeti bilinmiyor (bütçeli çözümde kullanılamaz): "
+                              + ", ".join(str(names.get(m, m)) for m in missing))
+            else:
+                req = self.FORMATIONS[formation]
+                for pid in locked:
+                    rows = pool[pool["Player_ID"] == pid].to_dict("records")
+                    ok = any(r in req and (allow_out_of_position or f >= 1.0)
+                             for row in rows for r, f in self.eligible_roles(row).items())
+                    if not ok:
+                        lock_issue = f"{names.get(pid, pid)} bu dizilişte oynayabileceği bir role sahip değil"
+                        break
+        if lock_issue:
+            return {"status": "Infeasible", "squad": pd.DataFrame(), "lock_issue": lock_issue,
+                    "excluded_no_value": excluded_no_value}
+
         res = self._solve(
-            pool.reset_index(drop=True),
+            pool,
             formation,
             allow_out_of_position=allow_out_of_position,
             max_players_per_club=max_players_per_club,
             max_avg_age=max_avg_age,
             cost=cost,
             budget_eur=budget_eur,
+            required_mask=pool["Player_ID"].isin(locked).to_numpy() if locked else None,
         )
         res["excluded_no_value"] = excluded_no_value
+        if locked and res["status"] != "Optimal":
+            res["lock_issue"] = ("Kilitli oyuncular diğer kısıtlarla (bütçe, yaş ortalaması, kulüp başına "
+                                 "oyuncu sınırı, diziliş) birlikte sağlanamıyor")
+        if res["status"] == "Optimal":
+            res["squad"]["Locked"] = res["squad"]["Player_ID"].isin(locked)
         return res
 
     def _solve(
@@ -201,9 +251,12 @@ class SquadOptimizer:
         sale_mask: np.ndarray = None,
         sale_value: np.ndarray = None,
         max_sales: int = None,
+        required_mask: np.ndarray = None,
     ) -> dict:
         """
         Ortak MILP çekirdeği. `pool` indeksi 0..n-1 olmalıdır.
+
+        required_mask      : bu satırların kişileri ilk 11'de mutlaka yer alır (kilitli oyuncu)
 
         cost / budget_eur  : oyuncu başı maliyet ve toplam bütçe (cost None ise bütçe yok)
         club_cap_exempt    : kulüp kotasından muaf kulüp (transfer planında kendi kulübü)
@@ -264,6 +317,7 @@ class SquadOptimizer:
 
         # Kisit 2: Ayni kisi en fazla bir kez secilir (birden fazla rol degiskeni
         # veya sezon icinde transfer nedeniyle iki kulup satiri olsa bile)
+        # Kilitli kişide alt sınır 1: kişi (hangi kulüp satırıyla olursa olsun) mutlaka oynar
         person_rows = {}  # oyuncu satırı -> kişi kısıtı satır numarası (satış değişkeni için)
         for _, idx in pool.groupby("Player_ID").groups.items():
             mask = np.zeros(len(pool), dtype=bool)
@@ -271,7 +325,8 @@ class SquadOptimizer:
             for i in idx:
                 person_rows[int(i)] = len(A_rows)
             A_rows.append(player_row(mask))
-            lb_list.append(0.0)
+            required = required_mask is not None and bool(np.asarray(required_mask)[list(idx)].any())
+            lb_list.append(1.0 if required else 0.0)
             ub_list.append(1.0)
 
         # Kisit 3: Ayni Kulupten Maksimum Oyuncu Kisiti

@@ -49,33 +49,34 @@ def cached_similar_players(min_minutes: int, target_key: str, top_n: int, max_ag
     )
 
 
-def _optimizer(min_minutes: int, form_weight: float, leagues: tuple = None) -> SquadOptimizer:
-    """Karar skoru (form + kalıcı kalite) eklenmiş havuzla optimizer kurar."""
+def _optimizer(min_minutes: int, score_mix: tuple, leagues: tuple = None) -> SquadOptimizer:
+    """Karar skoru eklenmiş havuzla optimizer kurar. score_mix = (form ağırlığı, hoca tercihi ağırlığı)."""
     df, _, _ = load_processed_data(min_minutes)
     if leagues is not None:
         df = df[df["League"].isin(leagues)]
-    return SquadOptimizer(add_decision_score(df, form_weight), score_column="Decision_Score")
+    form_w, coach_w = score_mix
+    return SquadOptimizer(add_decision_score(df, form_w, coach_w), score_column="Decision_Score")
 
 
 @st.cache_data(max_entries=64, show_spinner="Optimum 11 hesaplanıyor...")
-def cached_optimize(min_minutes: int, form_weight: float, leagues: tuple, excluded_squads: tuple, **kwargs):
-    return _optimizer(min_minutes, form_weight, leagues).optimize_starting_xi(
+def cached_optimize(min_minutes: int, score_mix: tuple, leagues: tuple, excluded_squads: tuple, **kwargs):
+    return _optimizer(min_minutes, score_mix, leagues).optimize_starting_xi(
         selected_leagues=list(leagues), excluded_squads=list(excluded_squads), **kwargs
     )
 
 
 @st.cache_data(max_entries=16, show_spinner="Bütçe eğrisi hesaplanıyor...")
-def cached_frontier(min_minutes: int, form_weight: float, leagues: tuple, excluded_squads: tuple,
+def cached_frontier(min_minutes: int, score_mix: tuple, leagues: tuple, excluded_squads: tuple,
                     budgets: tuple, **kwargs):
-    return _optimizer(min_minutes, form_weight, leagues).budget_frontier(
+    return _optimizer(min_minutes, score_mix, leagues).budget_frontier(
         list(budgets), selected_leagues=list(leagues), excluded_squads=list(excluded_squads), **kwargs
     )
 
 
 @st.cache_data(max_entries=32, show_spinner="Transfer planı hesaplanıyor...")
-def cached_transfer_plan(min_minutes: int, form_weight: float, leagues: tuple, club: str,
+def cached_transfer_plan(min_minutes: int, score_mix: tuple, leagues: tuple, club: str,
                          protected_ids: tuple = None, **kwargs):
-    return _optimizer(min_minutes, form_weight).plan_transfers(
+    return _optimizer(min_minutes, score_mix).plan_transfers(
         club, target_leagues=list(leagues),
         protected_ids=list(protected_ids) if protected_ids is not None else None, **kwargs)
 
@@ -91,7 +92,7 @@ COLUMN_LABELS = {
     "Role_Fit": "Rol Uyumu", "Improvement": "Kazanç",
     "Pred_Value_M": "Tahmini Değer", "Value_Ratio": "Fırsat Katsayısı",
     "Contract_Label": "Sözleşme", "Sale_Value_M": "Satış Geliri", "Importance_Label": "Takımdaki Rolü",
-    "Decision_Score": "Karar Skoru", "Reputation_Score": "Kalıcı Kalite", "Impact_Score": "Takıma Etki", "Contract_Expiry": "Sözleşme Bitişi", "Est_Fee_M": "Tahmini Bedel",
+    "Decision_Score": "Karar Skoru", "Reputation_Score": "Kalıcı Kalite", "Coach_Score": "Hoca Tercihi", "Impact_Score": "Takıma Etki", "Contract_Expiry": "Sözleşme Bitişi", "Est_Fee_M": "Tahmini Bedel",
     "Attacking_Score": "Hücum", "Creativity_Score": "Yaratıcılık", "Defensive_Score": "Savunma",
     "Goalkeeping_Score": "Kalecilik", "Discipline_Score": "Disiplin", "Saves_p90": "Kurtarış/90",
 }
@@ -198,7 +199,8 @@ def draw_tactical_pitch(xi_df, has_values: bool = False,
                 natural = row.get("TM_Sub_Position")
                 natural_tr = SUB_POSITION_TR.get(natural, "mevki bilinmiyor") if isinstance(natural, str) else "mevki bilinmiyor"
                 labels.append(
-                    f"<b>{'★ ' if is_new else ''}{row['Player']}</b>{'*' if row['Out_Of_Position'] else ''}"
+                    f"<b>{'★ ' if is_new else ''}{'🔒 ' if row.get('Locked', False) else ''}{row['Player']}</b>"
+                    f"{'*' if row['Out_Of_Position'] else ''}"
                     f"{'<br><i>(asıl: ' + natural_tr + ')</i>' if row['Out_Of_Position'] else ''}"
                     f"<br>{role}{'' if row['Squad'] == home_club else ' · ' + row['Squad']} ("
                     f"{row['OptiScout_Score']}"
@@ -285,7 +287,15 @@ if has_values:
 else:
     use_contracts = False
     form_pct = 100
+coach_pct = st.sidebar.slider(
+    "🧑‍🏫 Hoca tercihi ağırlığı (%)", 0, 50, 20, 5,
+    help="Oyuncunun kulübünde oynanabilecek dakikaların yüzde kaçını aldığı (dakika payı). "
+         "İstatistiklerin göremediğini (antrenman, taktik uyum) teknik direktörün tercihi üzerinden "
+         "yansıtır: kenarda kalan bir yıldız yerine düzenli oynayan oyuncu öne çıkar. "
+         "Karar skoru = (1 − ağırlık) × kalite + ağırlık × dakika payı. 0: dakika payı dikkate alınmaz.",
+)
 form_weight = form_pct / 100.0
+score_mix = (form_weight, coach_pct / 100.0)
 cost_col = "Est_Fee_EUR" if use_contracts else "Market_Value_EUR"
 cost_label = "Tahmini Transfer Bedeli" if use_contracts else "Piyasa Değeri"
 cost_m_col = "Est_Fee_M" if use_contracts else "Market_Value_M"
@@ -547,9 +557,28 @@ with tab3:
         "Arsenal", "Liverpool", "Chelsea", "Paris SG", "Bayern Munich", "Inter", "Juventus"
     ] if exclude_giants else []
 
+    # Kullanıcı tercihleri: kesin oynasın / kullanma
+    pick_pool = df[df["League"].isin(selected_leagues)].sort_values("OptiScout_Score", ascending=False)
+    pick_pool = pick_pool.drop_duplicates("Player_ID")
+    pid_to_label = dict(zip(pick_pool["Player_ID"], pick_pool["Player"] + " (" + pick_pool["Squad"] + ")"))
+    l1, l2 = st.columns(2)
+    with l1:
+        locked_ids = st.multiselect(
+            "🔒 Kesin oynasın", options=list(pid_to_label), format_func=lambda p: pid_to_label[p],
+            max_selections=11, key="xi_locked",
+            help="Seçilen oyuncular ilk 11'de mutlaka yer alır (kulüp ve yaş filtrelerinden bağımsız). "
+                 "Model kalan yerleri ve rolleri bu oyunculara göre en iyi şekilde doldurur.",
+        )
+    with l2:
+        banned_ids = st.multiselect(
+            "🚫 Kullanma", options=[p for p in pid_to_label if p not in locked_ids],
+            format_func=lambda p: pid_to_label[p], key="xi_banned",
+            help="Seçilen oyuncular havuzdan çıkarılır (ör. sakat, cezalı ya da transferi gerçekçi değil).",
+        )
+
     result = cached_optimize(
         data_key,
-        form_weight,
+        score_mix,
         tuple(selected_leagues),
         tuple(giant_clubs),
         formation=formation,
@@ -558,6 +587,8 @@ with tab3:
         allow_out_of_position=allow_oop,
         budget_eur=budget_eur,
         cost_column=cost_col,
+        locked_ids=tuple(locked_ids),
+        banned_ids=tuple(banned_ids),
     )
 
     if result["status"] == "Optimal":
@@ -599,6 +630,8 @@ with tab3:
                 hide_index=True,
                 height=(len(xi_df) + 1) * 35 + 3,
             )
+    elif result.get("lock_issue"):
+        st.error(f"Uygun bir 11 bulunamadı: {result['lock_issue']}. Kilitleri azaltın ya da kısıtları esnetin.")
     else:
         st.error(
             "Seçilen kısıtlarla uygun bir 11 bulunamadı (Infeasible). "
@@ -615,13 +648,14 @@ with tab3:
         if st.button("Eğriyi hesapla"):
             budgets = [b * 1e6 for b in (10, 25, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1000, 1500)]
             common = dict(formation=formation, max_players_per_club=max_club,
-                          max_avg_age=max_avg_age, allow_out_of_position=allow_oop)
+                          max_avg_age=max_avg_age, allow_out_of_position=allow_oop,
+                          locked_ids=tuple(locked_ids), banned_ids=tuple(banned_ids))
             curves = [("Piyasa değeri ile", "Market_Value_EUR")]
             if use_contracts:
                 curves.append(("Sözleşme durumu dahil", "Est_Fee_EUR"))
             parts = []
             for name, col in curves:
-                fr = cached_frontier(data_key, form_weight, tuple(selected_leagues), tuple(giant_clubs), tuple(budgets),
+                fr = cached_frontier(data_key, score_mix, tuple(selected_leagues), tuple(giant_clubs), tuple(budgets),
                                      cost_column=col, **common)
                 parts.append(fr.assign(Maliyet=name))
             frontier = pd.concat(parts, ignore_index=True)
@@ -724,7 +758,7 @@ with tab4:
 
         plan = cached_transfer_plan(
             data_key,
-            form_weight,
+            score_mix,
             tuple(selected_leagues),
             club,
             protected_ids=tuple(protected_ids) if protected_ids is not None else None,
