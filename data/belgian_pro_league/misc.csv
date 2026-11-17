@@ -1,451 +1,451 @@
-Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,,-additional
+,,,,,,,,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,,-additional
 Rk,Player,Nation,Pos,Squad,Age,Born,90s,CrdY,CrdR,2CrdY,Fls,Fld,Off,Crs,Int,TklW,PKwon,PKcon,OG,Matches,-9999
-1,Thelo Aasgaard,no NOR,MF,Anderlecht,24-197,2002,2.9,0,0,0,4,1,0,2,3,2,,,0,Matches,c88a28b9
-2,Adnane Abid,be BEL,FWMF,Standard Liège,23-084,2003,11.0,2,0,0,7,14,3,15,4,12,,,0,Matches,aa861653
-3,Kurt Abrahams,za RSA,MFFW,Beveren,29-320,1996,2.4,0,0,0,1,2,0,1,2,4,,,0,Matches,ab130e74
-4,Tayo Adaramola,ie IRL,DF,Cercle Brugge,23-001,2003,0.7,0,0,0,3,0,0,0,0,0,,,0,Matches,c150b220
-5,Emmanuel Addai,gh GHA,MFFW,OH Leuven,25-106,2001,2.0,0,0,0,2,2,0,4,1,2,,,0,Matches,e0764d9d
-6,Noah Adedeji,be BEL,MF,Genk,21-149,2005,4.3,1,0,0,3,4,1,13,2,5,,,0,Matches,9962d6f7
-7,Farouck Adekami,ci CIV,MF,Antwerp,20-100,2006,0.3,0,0,0,1,1,0,6,0,1,,,0,Matches,66ff36d9
-8,Shawn Adewoye,be BEL,DF,Lommel,26-139,2000,9.1,3,0,0,11,10,0,3,22,12,,,0,Matches,be98fc34
-9,Bryan Adinany,mg MAD,FW,Kortrijk,26-247,2000,0.5,0,0,0,1,2,1,2,0,1,,,0,Matches,26bea588
-10,Jerry Afriyie,gh GHA,FW,Genk,19-340,2006,0.9,0,0,0,2,0,1,1,1,1,,,0,Matches,26375487
-11,Lawrence Agyekum,gh GHA,MF,Cercle Brugge,22-357,2003,0.4,0,0,0,2,2,0,0,3,2,,,0,Matches,414d77f9
-12,Jules Ahoka,cd COD,MF,Antwerp,20-191,2006,2.0,0,0,0,7,3,0,2,3,6,,,0,Matches,f470e8d1
-13,Marley Aké,fr FRA,MFFW,Zulte Waregem,25-314,2001,10.1,1,0,0,2,23,0,28,9,11,,,0,Matches,414e1f69
-14,Babatunde Akinsola,ng NGA,MF,Cercle Brugge,23-250,2003,4.2,0,0,0,4,10,0,15,3,2,,,0,Matches,733aab44
-15,Christian Akpan,ng NGA,DFMF,Genk,21-290,2005,0.2,1,0,0,0,0,0,0,2,0,,,0,Matches,1377ff7e
-16,Romeo Amane,ci CIV,MF,Anderlecht,23-268,2003,0.2,0,0,0,0,1,0,0,0,1,,,0,Matches,e134b9f9
-17,Kevin Amaro,uy URU,DFMF,Genk,22-257,2004,6.7,1,0,0,4,5,1,21,10,17,,,0,Matches,25b92652
-18,Lukáš Ambros,cz CZE,MFFW,Anderlecht,22-163,2004,7.2,1,0,0,8,8,0,36,3,4,,,0,Matches,cd682b6b
-19,Thierry Ambrose,gp GLP,FWMF,Kortrijk,29-232,1997,10.1,4,0,0,13,15,4,34,5,8,,,0,Matches,2945f4b7
-20,David Amegnaglo,de GER,FW,Westerlo,21-291,2005,0.9,1,0,0,1,1,1,2,0,0,,,0,Matches,4d5174a9
-21,Matthew Anderson,sct SCO,DFMF,Kortrijk,22-294,2004,5.9,3,0,0,9,0,1,23,8,15,,,0,Matches,07b9a2c8
-22,Oliver Antman,fi FIN,MFFW,Anderlecht,25-092,2001,4.3,2,0,0,4,3,0,22,0,2,,,0,Matches,c63d7d38
-23,Bill Antonio,zw ZIM,MF,Mechelen,24-073,2002,1.2,0,0,0,3,1,0,5,1,1,,,0,Matches,f00ea3e6
-24,Stredair Appuah,fr FRA,MF,Lommel,22-141,2004,8.6,1,0,0,3,10,1,37,3,6,,,0,Matches,42f0113f
-25,Dylan Aquino,ar ARG,MF,Union SG,21-164,2005,1.1,0,1,0,3,2,0,6,0,1,,,0,Matches,dababecf
-26,Ryotaro Araki,jp JPN,MF,Sint-Truiden,24-290,2002,4.1,0,0,0,4,5,0,34,4,5,,,0,Matches,9235708c
-27,Tiago Araújo,pt POR,MF,Gent,25-233,2001,10.7,2,0,0,7,9,4,48,14,7,,,0,Matches,1b54edb3
-28,Zalán Átrók,hu HUN,MFFW,Zulte Waregem,20-344,2005,6.4,1,0,0,5,4,1,9,4,4,,,0,Matches,49a4a67b
-29,Ludwig Augustinsson,se SWE,DF,Anderlecht,32-208,1994,8.9,0,0,0,10,3,1,23,8,5,,,0,Matches,9fec8860
-30,Rachid Ayindé,bf BFA,DF,Gent,21-121,2005,0.3,0,0,0,0,2,0,4,0,0,,,0,Matches,43a636a6
-31,Adeshina Ayodele,ng NGA,FW,Mechelen,20-146,2006,1.2,1,0,0,2,2,2,0,0,0,,,0,Matches,60275f8c
-32,Mouhamed El Bachir Ngom,sn SEN,DF,Gent,26-187,2000,6.3,0,0,0,13,4,0,11,12,9,,,0,Matches,a3d58caf
-33,Bilal Bafdili,be BEL,MF,Mechelen,22-104,2004,1.9,0,0,0,2,2,0,4,1,0,,,0,Matches,40c9f265
-34,Michel-Ange Balikwisha,cd COD,MF,Gent,25-189,2001,4.0,0,0,0,6,6,1,5,7,9,,,0,Matches,172bab0a
-35,William Balikwisha,cd COD,FWMF,OH Leuven,27-187,1999,8.5,1,0,0,11,9,6,15,8,12,,,0,Matches,4fae547c
-36,Botond Balogh,hu HUN,DF,Westerlo,24-162,2002,1.1,0,0,0,0,4,0,0,1,0,,,0,Matches,348bafd4
-37,Kaïs Barry,be BEL,DF,Anderlecht,20-280,2006,2.0,1,0,0,2,1,0,0,3,2,,,0,Matches,636686ac
-38,Norman Bassette,be BEL,FW,Westerlo,22-006,2004,9.1,1,0,0,21,16,3,6,1,2,,,0,Matches,9cd23b05
-39,Samed Baždar,ba BIH,FW,Sint-Truiden,22-288,2004,6.0,1,0,0,7,5,3,1,2,2,,,0,Matches,e59c9d0d
+1,Thelo Aasgaard,no NOR,MF,Anderlecht,24-199,2002,2.9,0,0,0,4,1,0,2,3,2,,,0,Matches,c88a28b9
+2,Adnane Abid,be BEL,"FW,MF",Standard Liège,23-086,2003,11.0,2,0,0,7,14,3,15,4,12,,,0,Matches,aa861653
+3,Kurt Abrahams,za RSA,"MF,FW",Beveren,29-322,1996,2.4,0,0,0,1,2,0,1,2,4,,,0,Matches,ab130e74
+4,Tayo Adaramola,ie IRL,DF,Cercle Brugge,23-003,2003,0.7,0,0,0,3,0,0,0,0,0,,,0,Matches,c150b220
+5,Emmanuel Addai,gh GHA,"MF,FW",OH Leuven,25-108,2001,2.0,0,0,0,2,2,0,4,1,2,,,0,Matches,e0764d9d
+6,Noah Adedeji,be BEL,MF,Genk,21-151,2005,4.3,1,0,0,3,4,1,13,2,5,,,0,Matches,9962d6f7
+7,Farouck Adekami,ci CIV,MF,Antwerp,20-102,2006,0.3,0,0,0,1,1,0,6,0,1,,,0,Matches,66ff36d9
+8,Shawn Adewoye,be BEL,DF,Lommel,26-141,2000,9.1,3,0,0,11,10,0,3,22,12,,,0,Matches,be98fc34
+9,Bryan Adinany,mg MAD,FW,Kortrijk,26-249,2000,0.5,0,0,0,1,2,1,2,0,1,,,0,Matches,26bea588
+10,Jerry Afriyie,gh GHA,FW,Genk,19-342,2006,0.9,0,0,0,2,0,1,1,1,1,,,0,Matches,26375487
+11,Lawrence Agyekum,gh GHA,MF,Cercle Brugge,22-359,2003,0.4,0,0,0,2,2,0,0,3,2,,,0,Matches,414d77f9
+12,Jules Ahoka,cd COD,MF,Antwerp,20-193,2006,2.0,0,0,0,7,3,0,2,3,6,,,0,Matches,f470e8d1
+13,Marley Aké,fr FRA,"MF,FW",Zulte Waregem,25-316,2001,10.1,1,0,0,2,23,0,28,9,11,,,0,Matches,414e1f69
+14,Babatunde Akinsola,ng NGA,MF,Cercle Brugge,23-252,2003,4.2,0,0,0,4,10,0,15,3,2,,,0,Matches,733aab44
+15,Christian Akpan,ng NGA,"DF,MF",Genk,21-292,2005,0.2,1,0,0,0,0,0,0,2,0,,,0,Matches,1377ff7e
+16,Romeo Amane,ci CIV,MF,Anderlecht,23-270,2003,0.2,0,0,0,0,1,0,0,0,1,,,0,Matches,e134b9f9
+17,Kevin Amaro,uy URU,"DF,MF",Genk,22-259,2004,6.7,1,0,0,4,5,1,21,10,17,,,0,Matches,25b92652
+18,Lukáš Ambros,cz CZE,"MF,FW",Anderlecht,22-165,2004,7.2,1,0,0,8,8,0,36,3,4,,,0,Matches,cd682b6b
+19,Thierry Ambrose,gp GLP,"FW,MF",Kortrijk,29-234,1997,10.1,4,0,0,13,15,4,34,5,8,,,0,Matches,2945f4b7
+20,David Amegnaglo,de GER,FW,Westerlo,21-293,2005,0.9,1,0,0,1,1,1,2,0,0,,,0,Matches,4d5174a9
+21,Matthew Anderson,sct SCO,"DF,MF",Kortrijk,22-296,2004,5.9,3,0,0,9,0,1,23,8,15,,,0,Matches,07b9a2c8
+22,Oliver Antman,fi FIN,"MF,FW",Anderlecht,25-094,2001,4.3,2,0,0,4,3,0,22,0,2,,,0,Matches,c63d7d38
+23,Bill Antonio,zw ZIM,MF,Mechelen,24-075,2002,1.2,0,0,0,3,1,0,5,1,1,,,0,Matches,f00ea3e6
+24,Stredair Appuah,fr FRA,MF,Lommel,22-143,2004,8.6,1,0,0,3,10,1,37,3,6,,,0,Matches,42f0113f
+25,Dylan Aquino,ar ARG,MF,Union SG,21-166,2005,1.1,0,1,0,3,2,0,6,0,1,,,0,Matches,dababecf
+26,Ryotaro Araki,jp JPN,MF,Sint-Truiden,24-292,2002,4.1,0,0,0,4,5,0,34,4,5,,,0,Matches,9235708c
+27,Tiago Araújo,pt POR,MF,Gent,25-235,2001,10.7,2,0,0,7,9,4,48,14,7,,,0,Matches,1b54edb3
+28,Zalán Átrók,hu HUN,"MF,FW",Zulte Waregem,20-346,2005,6.4,1,0,0,5,4,1,9,4,4,,,0,Matches,49a4a67b
+29,Ludwig Augustinsson,se SWE,DF,Anderlecht,32-210,1994,8.9,0,0,0,10,3,1,23,8,5,,,0,Matches,9fec8860
+30,Rachid Ayindé,bf BFA,DF,Gent,21-123,2005,0.3,0,0,0,0,2,0,4,0,0,,,0,Matches,43a636a6
+31,Adeshina Ayodele,ng NGA,FW,Mechelen,20-148,2006,1.2,1,0,0,2,2,2,0,0,0,,,0,Matches,60275f8c
+32,Mouhamed El Bachir Ngom,sn SEN,DF,Gent,26-189,2000,6.3,0,0,0,13,4,0,11,12,9,,,0,Matches,a3d58caf
+33,Bilal Bafdili,be BEL,MF,Mechelen,22-106,2004,1.9,0,0,0,2,2,0,4,1,0,,,0,Matches,40c9f265
+34,Michel-Ange Balikwisha,cd COD,MF,Gent,25-191,2001,4.0,0,0,0,6,6,1,5,7,9,,,0,Matches,172bab0a
+35,William Balikwisha,cd COD,"FW,MF",OH Leuven,27-189,1999,8.5,1,0,0,11,9,6,15,8,12,,,0,Matches,4fae547c
+36,Botond Balogh,hu HUN,DF,Westerlo,24-164,2002,1.1,0,0,0,0,4,0,0,1,0,,,0,Matches,348bafd4
+37,Kaïs Barry,be BEL,DF,Anderlecht,20-282,2006,2.0,1,0,0,2,1,0,0,3,2,,,0,Matches,636686ac
+38,Norman Bassette,be BEL,FW,Westerlo,22-008,2004,9.1,1,0,0,21,16,3,6,1,2,,,0,Matches,9cd23b05
+39,Samed Baždar,ba BIH,FW,Sint-Truiden,22-290,2004,6.0,1,0,0,7,5,3,1,2,2,,,0,Matches,e59c9d0d
 40,Lars Beirinckx,,,Lommel,,,0.2,0,0,0,0,0,0,0,0,0,,,0,Matches,e097adc1
-41,László Bénes,sk SVK,MF,Gent,29-067,1997,2.4,0,0,0,3,3,0,4,2,1,,,0,Matches,fe888e39
-42,Mauricio Benítez,ar ARG,MF,Antwerp,22-285,2004,2.0,0,1,0,1,3,0,5,6,5,,,0,Matches,51831761
-43,Tawfik Bentayeb,ma MAR,FW,Anderlecht,24-305,2002,3.8,0,0,0,4,4,1,0,2,2,,,0,Matches,9184e764
-44,Antoine Bernier,be BEL,MF,Charleroi,29-066,1997,3.5,1,0,0,2,5,1,11,2,1,,,0,Matches,cda90ea8
-45,Adriano Bertaccini,be BEL,FWMF,Anderlecht,26-094,2000,0.7,1,0,0,2,0,0,2,1,0,,,0,Matches,88d70d53
-46,Joshua Bethume,be BEL,MF,Anderlecht,17-155,2009,2.3,0,0,0,3,6,1,3,2,3,,,0,Matches,3d0017cd
-47,Giulian Biancone,fr FRA,DF,Anderlecht,26-229,2000,8.2,5,0,0,12,9,0,4,14,11,,,0,Matches,de40e38c
-48,Aaron Bibout,cm CMR,FW,Genk,22-073,2004,2.9,0,0,0,2,2,2,0,4,0,,,0,Matches,aab489b0
-49,Mateo Biondic,hr CRO,FW,Union SG,23-114,2003,5.7,0,0,0,10,9,3,4,1,5,,,0,Matches,a3fee532
-50,Bouke Boersma,nl NED,FW,Mechelen,21-145,2005,3.5,0,0,0,6,10,2,1,0,0,,,0,Matches,c57c5da4
-51,Naoufal Bohamdi-Kamoni,be BEL,MF,Westerlo,19-087,2007,1.1,0,0,0,2,1,0,7,3,0,,,0,Matches,379cb068
-52,Adama Bojang,gm GAM,FW,Charleroi,22-171,2004,2.0,1,0,0,6,2,2,1,0,4,,,0,Matches,e606b6c0
-53,Viktor Boone,be BEL,DF,Beveren,28-294,1998,3.0,1,0,0,3,0,0,0,3,2,,,0,Matches,63554582
-54,Karol Borys,pl POL,MF,Westerlo,20-048,2006,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,4bf85184
-55,Louis Bostyn,be BEL,GK,Zulte Waregem,33-042,1993,6.5,0,0,0,0,2,0,0,1,0,,,0,Matches,e66a1ad7
-56,Amine Boukamir,ma MAR,MF,Charleroi,20-023,2006,7.8,1,0,0,16,3,0,3,11,11,,,0,Matches,07caccd9
-57,Mehdi Boukamir,ma MAR,DF,La Louvière,22-293,2004,1.4,0,0,0,2,3,0,1,2,2,,,0,Matches,f949956e
-58,Myron van Brederode,nl NED,MF,Mechelen,23-132,2003,11.0,1,0,0,3,13,2,85,8,4,,,0,Matches,485fbd1a
-59,Lucca Brughmans,be BEL,GK,Genk,18-151,2008,11.0,0,0,0,0,0,0,0,0,0,,,0,Matches,b2e93cc1
-60,Christian Brüls,be BEL,MFFW,Beveren,38-046,1988,8.4,2,0,0,3,11,0,85,1,5,,,0,Matches,b59d84e9
-61,Christian Burgess,eng ENG,DF,Gent,35-039,1991,8.5,0,0,0,1,3,0,0,8,8,,,0,Matches,f8766ef9
-62,Maxime Busi,be BEL,DF,Antwerp,27-032,1999,3.5,2,0,0,5,1,0,7,4,7,,,0,Matches,7b082ec2
-63,Royer Caicedo,co COL,DF,Cercle Brugge,20-194,2006,5.1,0,0,0,4,3,0,0,6,5,,,0,Matches,b1077f24
-64,Shandre Campbell,za RSA,MFFW,Kortrijk,21-123,2005,6.4,2,1,1,7,6,0,16,4,8,,,0,Matches,79fc3546
-65,Yannick Cappelle,be BEL,DF,Zulte Waregem,23-131,2003,9.8,0,0,0,8,8,1,42,20,20,,,0,Matches,2c51a1b3
-66,Vic Chambaere,be BEL,GK,Union SG,23-309,2003,1.0,0,0,0,0,1,0,0,0,0,,,0,Matches,93fcad19
-67,Ismaila Cheick Coulibaly,ml MLI,MF,La Louvière,25-325,2000,8.9,2,0,0,9,3,0,4,13,11,,,0,Matches,d33e3242
-68,Nohim Chibani,fr FRA,DF,Union SG,23-040,2003,2.6,1,0,0,5,3,0,1,7,8,,,0,Matches,ac5ff3e6
-69,Akpa Chukwu Hemsley,be BEL,FW,Zulte Waregem,21-318,2005,0.5,0,0,0,0,0,1,0,0,1,,,0,Matches,1573bc4b
-70,Ibrahima Cissé,sn SEN,FW,Gent,19-052,2007,2.8,1,1,0,7,1,3,0,0,1,,,0,Matches,50ebf141
-71,Isaac Cissé,ci CIV,MF,Charleroi,20-036,2006,2.7,1,0,0,4,5,0,2,5,4,,,0,Matches,891cb392
-72,Thomas Claes,be BEL,MF,Zulte Waregem,22-234,2004,10.2,1,0,0,14,6,0,13,16,6,,,0,Matches,f8ee334c
-73,Antoine Colassin,be BEL,FWMF,Charleroi,25-262,2001,2.0,0,0,0,6,2,1,1,0,2,,,0,Matches,2dfd8f7b
-74,Cameron Congreve,wls WAL,MF,Westerlo,22-295,2004,7.0,1,0,0,6,8,0,44,4,7,,,0,Matches,1a58621c
-75,Colin Coosemans,be BEL,GK,Anderlecht,34-104,1992,11.0,0,0,0,0,3,0,0,1,0,,,0,Matches,cd7dade5
-76,Kobe Corbanie,be BEL,DF,Mechelen,21-189,2005,4.7,1,0,0,5,7,0,5,6,6,,,0,Matches,9b909569
-77,Alvaro Cortes,es ESP,DF,Antwerp,21-243,2005,7.0,2,0,0,14,4,0,0,15,11,,,0,Matches,493e1869
-78,Niek Corthouts,be BEL,DF,Lommel,20-197,2006,1.1,0,0,0,0,0,1,5,2,1,,,0,Matches,e6c75b20
-79,Gaëtan Coucke,be BEL,GK,Cercle Brugge,27-347,1998,11.0,0,0,0,0,1,0,0,1,0,,,0,Matches,c56ee8f7
-80,Marius Courcoul,fr FRA,MF,La Louvière,19-318,2007,6.3,3,0,0,9,8,0,5,10,7,,,0,Matches,28ab7aba
-81,Mihajlo Cvetković,rs SRB,FW,Anderlecht,19-309,2007,6.8,2,0,0,7,17,7,2,0,3,,,0,Matches,a9be55c1
-82,Isaiah Dada-Mascoll,eng ENG,MF,Lommel,20-175,2006,1.9,0,0,0,1,0,0,0,2,0,,,0,Matches,7edf54f7
-83,Matteo Dams,be BEL,DF,Club Brugge,22-251,2004,0.0,0,0,0,0,0,0,0,0,0,,,0,Matches,20002a46
-84,Pape Daouda Diongue,sn SEN,MF,Westerlo,20-153,2006,1.1,0,1,0,2,1,0,0,1,3,,,0,Matches,d4925a40
-85,Promise David,ca CAN,FW,Union SG,25-135,2001,0.7,0,0,0,1,0,2,1,0,0,,,0,Matches,dbe19468
-86,Sam De Grand,nl NED,DF,Lommel,22-041,2004,1.3,0,0,0,0,0,0,7,2,0,,,0,Matches,e9acb98d
-87,Benoit De Jaegere,be BEL,DF,Zulte Waregem,22-217,2004,2.2,0,0,0,4,0,0,2,4,5,,,0,Matches,3c35def9
-88,Gilles De Meyer,be BEL,DF,Gent,20-059,2006,0.3,0,0,0,0,0,0,1,0,1,,,0,Matches,8a700b32
-89,Kamiel Van De Perre,be BEL,MF,Union SG,22-276,2004,10.7,1,0,0,15,15,0,6,17,24,,,0,Matches,28702d71
-90,Denzel De Roeve,be BEL,DF,Union SG,22-097,2004,2.5,0,0,0,0,3,0,7,2,2,,,0,Matches,f5891ed1
-91,Guillaume De Schryver,be BEL,FWMF,Beveren,30-011,1996,0.6,0,0,0,2,1,0,6,2,1,,,0,Matches,4acdeee0
-92,Lenn De Smet,be BEL,MF,Kortrijk,22-217,2004,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,0e7b887d
-93,Liam De Smet,be BEL,MF,Kortrijk,22-217,2004,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,0a9fd118
-94,Tibe De Vlieger,be BEL,MF,Gent,21-010,2005,7.1,1,0,0,12,17,0,16,14,19,,,0,Matches,12d101ed
-95,August De Wannemacker,be BEL,MF,Genk,17-325,2008,0.2,0,0,0,1,0,0,1,2,2,,,0,Matches,31412ea5
-96,Ortwin De Wolf,be BEL,GK,Mechelen,29-206,1997,3.0,0,0,0,0,2,0,0,0,1,,,0,Matches,6ce46a59
-97,Max Dean,eng ENG,FW,Gent,22-267,2004,1.7,0,0,0,1,0,0,0,0,0,,,0,Matches,6d0ea6d9
-98,Marco Decherf,fr FRA,MF,Mechelen,20-023,2006,3.9,4,0,0,8,5,0,1,3,1,,,0,Matches,129debcc
-99,Massimo Decoene,be BEL,DF,Mechelen,22-277,2004,3.4,1,0,0,4,2,0,7,6,3,,,0,Matches,933bf933
-100,Tristan Degreef,be BEL,MF,Anderlecht,21-300,2005,2.6,0,0,0,4,3,0,6,0,1,,,0,Matches,d5e2d63a
-101,Brecht Dejaegere,be BEL,MF,Kortrijk,35-170,1991,8.3,2,0,0,19,23,0,28,11,16,,,0,Matches,4ca4f601
-102,Martin Delavallée,be BEL,GK,Charleroi,22-242,2004,1.0,0,0,0,0,0,0,0,0,0,,,0,Matches,6e9c13e6
-103,Mathias Delorge,be BEL,MF,Gent,22-107,2004,7.8,2,0,0,6,10,0,27,13,14,,,0,Matches,337b736a
-104,Shaquil Delos,fr FRA,MFDF,La Louvière,27-152,1999,8.3,2,0,0,10,7,1,43,4,11,,,0,Matches,96a7222e
-105,Boubakar Dembaga,fr FRA,DF,Charleroi,20-161,2006,0.1,0,0,0,0,1,0,0,0,0,,,0,Matches,5943b5fd
-106,Dani van den Heuvel,nl NED,GK,OH Leuven,23-171,2003,10.0,0,0,0,0,1,0,0,0,0,,,0,Matches,8952e826
-107,Bahmed Deuff,mr MTN,MF,Antwerp,20-247,2006,4.1,2,1,1,7,7,0,1,7,13,,,0,Matches,907d12b6
-108,Sieben Dewaele,be BEL,MF,Beveren,27-286,1999,10.9,3,0,0,10,12,0,7,18,15,,,0,Matches,f3a033bc
-109,Ibrahima Diaby,gn GUI,MF,Cercle Brugge,19-243,2007,3.9,1,0,0,9,4,0,1,5,8,,,0,Matches,b5097bf3
-110,Mamadou Diakhon,sn SEN,MFFW,Club Brugge,21-054,2005,4.7,0,0,0,2,17,2,34,5,4,,,0,Matches,331c5a98
-111,Ibrahim Diakité,gn GUI,DFMF,Cercle Brugge,23-015,2003,8.1,1,0,0,17,6,1,3,9,14,,,0,Matches,d8c19a60
-112,Salim Diakité,ml MLI,DF,Zulte Waregem,26-165,2000,2.0,0,0,0,4,4,0,4,3,2,,,0,Matches,e548cd88
-113,Daan Dierckx,be BEL,DF,Standard Liège,23-264,2003,0.4,0,0,0,0,0,0,0,1,0,,,0,Matches,3a35db3d
-114,Xander Dierckx,be BEL,MF,Antwerp,17-261,2009,6.4,0,0,0,8,5,0,4,7,7,,,0,Matches,6cc372f8
-115,Gora Diouf,sn SEN,DF,Mechelen,23-056,2003,0.3,0,0,0,1,0,0,0,2,2,,,0,Matches,1b7844a8
-116,Oumar Diouf,sn SEN,FW,Sint-Truiden,23-184,2003,2.0,0,0,0,2,4,1,0,2,2,,,0,Matches,1dbffebb
-117,Salieu Drammeh,gm GAM,FWMF,Standard Liège,23-232,2003,5.5,0,0,0,4,11,0,5,1,6,,,0,Matches,f195e2b9
-118,Axel Drouhin,fr FRA,DF,Kortrijk,26-241,2000,6.8,3,0,0,9,2,0,2,11,4,,,0,Matches,360c2156
-119,Rafiu Durosinmi,ng NGA,FW,Genk,23-318,2003,9.5,2,0,0,18,15,7,1,6,5,,,0,Matches,e7173214
-120,Noë Dussenne,be BEL,DF,OH Leuven,34-222,1992,7.7,0,0,0,11,5,0,0,14,13,,,0,Matches,8b9b8e43
-121,Dennis Eckert,ir IRN,FW,Standard Liège,29-310,1997,8.6,0,0,0,11,16,3,0,0,2,,,0,Matches,7f8fb807
-122,Mike Eerdhuijzen,nl NED,DF,Mechelen,26-125,2000,6.7,2,0,0,6,2,1,2,8,7,,,0,Matches,7c0ade01
-123,Dennis Egel,de GER,DF,Union SG,21-267,2005,0.0,0,0,0,0,0,0,0,0,0,,,0,Matches,e7a135ac
-124,Anosike Ementa,dk DEN,FW,Zulte Waregem,24-196,2002,10.5,3,0,0,29,35,2,2,5,5,,,0,Matches,fbe39f7e
-125,Matthieu Epolo,cd COD,GK,Standard Liège,21-304,2005,9.4,2,1,0,2,4,0,0,0,0,,,0,Matches,6ee69cca
-126,Jeppe Erenbjerg,dk DEN,MF,Genk,26-200,2000,7.3,1,0,0,2,1,3,25,5,5,,,0,Matches,896537e7
-127,Timothy Eyoma,eng ENG,DF,Lommel,26-290,2000,10.7,1,0,0,5,5,0,1,10,3,,,1,Matches,449949f4
-128,Wagane Faye,sn SEN,DF,La Louvière,32-360,1993,8.5,1,0,0,15,16,0,12,11,17,,,1,Matches,7ec3c92c
-129,Fabio Ferraro,be BEL,DF,Westerlo,24-073,2002,1.8,0,0,0,1,0,0,6,0,4,,,0,Matches,9818e273
-130,Elias Filet,fr FRA,FW,La Louvière,24-254,2002,5.5,0,0,0,5,10,4,2,3,2,,,0,Matches,aff8b392
-131,Lasse Flö,dk DEN,DFMF,Westerlo,21-031,2005,8.9,3,0,0,11,6,0,22,5,16,,,0,Matches,aabf2f1f
-132,Raul Florucz,at AUT,FWMF,Union SG,25-158,2001,5.7,1,0,0,10,6,3,9,1,5,,,0,Matches,cdb0e589
-133,Ibrahim Fofana,ci CIV,MF,Westerlo,23-044,2003,10.0,0,0,0,20,4,0,2,23,21,,,0,Matches,60758f27
-134,Modibo Fofana,ci CIV,MFFW,Antwerp,19-012,2007,6.1,0,0,0,8,17,5,19,9,8,,,0,Matches,37112f45
-135,Alessandro Fontanarosa,it ITA,DF,OH Leuven,23-281,2003,0.0,0,0,0,1,0,0,0,0,0,,,0,Matches,8961065a
-136,Carlos Forbs,pt POR,MFFW,Club Brugge,22-241,2004,9.2,1,1,0,6,12,4,35,4,7,,,0,Matches,8a310070
-137,Marlon Fossey,us USA,DFMF,Standard Liège,28-067,1998,8.7,0,0,0,4,5,4,27,18,12,,,0,Matches,c7b9e548
-138,Ryan Fosso,cm CMR,MF,Standard Liège,24-151,2002,2.5,1,0,0,5,4,0,0,4,7,,,0,Matches,85adeca6
-139,Daam Foulon,be BEL,DF,Antwerp,27-237,1999,3.7,0,0,0,6,5,0,10,7,6,,,0,Matches,658d44be
-140,Michael Frey,ch SUI,FW,Antwerp,32-119,1994,7.5,1,0,0,11,6,4,4,4,4,,,0,Matches,33182cb8
-141,Leo Fuhr Hjelde,no NOR,DF,Mechelen,23-081,2003,0.4,0,0,0,0,0,0,0,0,0,,,0,Matches,d102b8a2
-142,Mohammed Fuseini,gh GHA,FW,Union SG,24-183,2002,1.3,0,0,0,1,2,4,1,0,0,,,0,Matches,f360f047
-143,Brent Gabriël,be BEL,GK,Zulte Waregem,27-292,1999,4.5,0,0,0,0,0,0,0,0,0,,,0,Matches,4413097c
-144,Wouter George,be BEL,MF,OH Leuven,24-257,2002,10.3,2,0,0,17,5,0,26,10,19,,,0,Matches,605fe3e6
-145,Óscar Gil,es ESP,MF,OH Leuven,29-203,1997,8.3,3,0,0,12,22,0,20,15,16,,,0,Matches,6652cf96
-146,Nolan Gillot,fr FRA,DF,La Louvière,24-015,2002,4.7,0,0,0,6,4,2,30,7,4,,,0,Matches,05ab7931
-147,Bruno Godeau,be BEL,DF,Beveren,34-189,1992,9.9,3,0,0,5,1,0,0,11,11,,,0,Matches,e0551ca0
-148,Jeff Godelaine,be BEL,FW,Antwerp,19-203,2007,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,af1d1f89
-149,Yoni Gomis,fr FRA,DF,Beveren,21-053,2005,7.6,1,0,0,4,4,0,1,18,9,,,0,Matches,34d07afa
-150,Tristan Gooijer,nl NED,DF,Lommel,22-074,2004,2.1,0,0,0,2,2,0,1,3,4,,,0,Matches,13b736e9
-151,Hyllarion Goore,ci CIV,MF,Gent,21-083,2005,3.8,1,0,0,4,10,2,13,2,3,,,0,Matches,70627247
-152,Đorđe Gordić,rs SRB,FW,Lommel,22-010,2004,0.7,0,0,0,1,0,0,1,1,0,,,0,Matches,bbc82bcf
-153,Siad Gourville,dz ALG,DF,La Louvière,26-174,2000,2.8,2,0,0,5,1,0,0,5,4,,,0,Matches,1fe81cc7
-154,Zsombor Gruber,hu HUN,FW,La Louvière,22-069,2004,6.2,0,0,0,6,10,0,45,5,7,,,0,Matches,16adc81f
-155,Samuel Gueulette,rw RWA,MF,La Louvière,26-180,2000,0.0,0,0,0,0,0,0,1,0,0,,,0,Matches,dbcb288a
-156,Parfait Guiagon,ci CIV,MF,Charleroi,25-266,2001,0.8,0,0,0,0,2,0,4,0,0,,,0,Matches,5d8c77cf
-157,Patrik Gunnarsson,is ISL,GK,Kortrijk,26-000,2000,2.0,0,0,0,0,0,0,0,0,0,,,0,Matches,4d39152d
-158,Anouar Ait El Hadj,be BEL,FWMF,Union SG,24-209,2002,0.3,0,0,0,0,0,0,3,0,0,,,0,Matches,eb7f2e19
-159,El Hadji Seck,sn SEN,FW,Gent,19-305,2007,1.0,0,0,0,1,3,1,1,1,1,,,0,Matches,30bf6262
-160,Geoffry Hairemans,be BEL,FWMF,Antwerp,35-025,1991,0.3,0,0,0,1,0,0,5,0,1,,,0,Matches,64aaee47
-161,Youssef Hamdaoui,be BEL,FW,Antwerp,18-240,2008,0.7,0,0,0,1,2,0,4,0,0,,,0,Matches,b1f46941
-162,Fredrik Hammer,se SWE,MF,Mechelen,25-262,2001,10.4,5,0,0,24,13,0,2,17,29,,,0,Matches,78eac916
-163,Lee Han-beom,kr KOR,DF,Club Brugge,24-151,2002,7.1,1,0,0,11,3,0,0,5,6,,,0,Matches,071f2dd3
-164,Kenan Haroun,be BEL,MF,Genk,20-133,2006,0.2,1,0,0,2,1,0,0,0,3,,,0,Matches,d61bb6e7
-165,Taiga Hata,jp JPN,DF,Sint-Truiden,24-299,2002,9.1,0,0,0,7,4,0,34,3,10,,,0,Matches,3893611d
-166,Ibe Hautekiet,be BEL,DF,Standard Liège,24-216,2002,11.0,2,0,0,6,4,0,1,16,9,,,0,Matches,2ca07ad3
-167,Nikki Havenaar,jp JPN,DF,Union SG,31-272,1995,5.9,0,0,0,11,6,0,0,5,3,,,0,Matches,ebcd0318
-168,Tobias Hedl,at AUT,FWMF,Zulte Waregem,23-304,2003,7.3,0,0,0,6,7,4,14,3,7,,,0,Matches,d7b39331
-169,Charles Herrmann,de GER,MF,Cercle Brugge,20-298,2006,0.6,0,0,0,1,1,0,1,1,0,,,0,Matches,9ba728b8
-170,Daan Heymans,be BEL,MF,Genk,27-153,1999,4.9,2,1,0,10,6,1,4,3,2,,,0,Matches,6d70c771
-171,Bryan Heynen,be BEL,MF,Genk,29-282,1997,10.9,2,0,0,15,14,0,8,16,14,,,0,Matches,360e3062
-172,Ilan Hurtevent,be BEL,MF,Union SG,21-174,2005,0.5,0,0,0,1,0,0,2,1,0,,,0,Matches,c08dd420
-173,Chukwubuikem Ikwuemesi,ng NGA,FW,OH Leuven,25-102,2001,3.9,1,0,0,3,6,3,1,0,3,,,0,Matches,c6db4f29
-174,Marco Ilaimaharitra,mg MAD,MF,Standard Liège,31-112,1995,1.2,0,0,0,1,2,0,2,7,1,,,0,Matches,2ef25344
-175,Marko Ilić,rs SRB,GK,Kortrijk,28-285,1998,9.0,0,0,0,0,0,0,0,0,0,,,0,Matches,2010815f
-176,Mustapha Isah,ng NGA,FW,La Louvière,22-115,2004,9.9,2,0,0,7,13,15,5,0,4,,,0,Matches,bc55e9d8
-177,Nelson Ishiwatari,jp JPN,MF,Sint-Truiden,21-189,2005,6.4,4,0,0,14,8,0,2,8,21,,,0,Matches,ab2bc47e
-178,Joël Ito,be BEL,MF,La Louvière,28-233,1998,2.1,2,1,1,6,0,0,1,0,5,,,0,Matches,638cfe49
-179,Junya Itō,jp JPN,MF,Genk,33-251,1993,9.1,0,0,0,6,5,8,80,4,5,,,0,Matches,dbd3a428
-180,Laurent Jans,lu LUX,DF,Beveren,34-102,1992,9.4,0,0,0,2,7,4,30,9,5,,,0,Matches,0fbb73c2
-181,Christophe Janssens,be BEL,DF,Beveren,28-251,1998,10.6,5,0,0,12,4,0,32,22,17,,,0,Matches,63396eff
-182,Wolke Janssens,be BEL,DF,Sint-Truiden,31-308,1995,2.3,0,0,0,1,2,0,0,6,4,,,0,Matches,6fe7f397
-183,Sylvester Jasper,bg BUL,FWMF,Standard Liège,25-063,2001,0.4,0,0,0,0,0,0,2,1,1,,,0,Matches,a9f04944
-184,Andreas Jungdal,dk DEN,GK,Westerlo,24-266,2002,11.0,0,0,0,0,4,0,0,0,0,,,0,Matches,66c6680a
-185,Moïse Kaboré,bf BFA,FWMF,Beveren,19-330,2006,5.8,0,0,0,3,14,3,5,1,7,,,0,Matches,17515a97
-186,Abdelkahar Kadri,dz ALG,MF,Gent,26-144,2000,3.6,0,0,0,2,7,2,6,1,4,,,0,Matches,248e61fc
-187,Emmanuel Kakou,ci CIV,DF,Cercle Brugge,21-138,2005,6.5,1,0,0,4,4,0,0,14,10,,,2,Matches,bb558d94
-188,Noah Kalonji,be BEL,MF,Anderlecht,17-207,2009,0.1,0,0,0,0,0,0,0,1,0,,,0,Matches,a1d34274
-189,Marco Kana,be BEL,MF,Anderlecht,24-099,2002,6.8,4,0,0,11,2,0,2,8,2,,,0,Matches,adfdc73c
-190,Ibrahim Karamoko,fr FRA,DF,Standard Liège,25-115,2001,10.5,2,0,0,12,7,0,0,11,14,,,0,Matches,550985aa
-191,Abdoul Karim Traoré,gn GUI,FWMF,OH Leuven,19-307,2007,3.2,1,1,0,2,3,0,5,3,1,,,0,Matches,cad753bd
-192,Joris Kayembe,cd COD,DF,Genk,32-099,1994,10.1,1,0,0,11,12,0,30,23,15,,,0,Matches,4657faba
-193,Bryang Kayo,us USA,MF,OH Leuven,24-111,2002,0.2,0,0,0,2,0,0,1,1,0,,,0,Matches,84cc3a76
-194,Check Keita,ml MLI,DF,Charleroi,23-227,2003,9.0,2,1,1,8,12,2,0,7,10,,,0,Matches,c9f2f83a
-195,Sekou Keita,be BEL,FW,Union SG,20-197,2006,0.2,0,0,0,0,0,0,0,0,1,,,0,Matches,d6d5e7ef
-196,Stephane Keller,cm CMR,DF,Beveren,25-087,2001,1.3,1,0,0,2,1,0,0,1,1,,,0,Matches,89d1e9fa
-197,Mory Kera,be BEL,MF,Charleroi,18-142,2008,0.8,0,0,0,1,2,0,0,4,0,,,0,Matches,b66900ae
-198,Yassine Khalifi,ma MAR,MF,Charleroi,21-098,2005,10.4,1,0,0,4,21,0,2,14,9,,,0,Matches,092ff45c
-199,Jakob Kiilerich,dk DEN,DF,Zulte Waregem,26-189,2000,11.0,0,0,0,5,2,0,3,12,4,,,0,Matches,6962bd71
-200,Seiji Kimura,jp JPN,DF,Westerlo,25-083,2001,10.9,0,0,0,3,3,1,1,13,6,,,0,Matches,1a2063c6
-201,Maksim Kirejeŭ,by BLR,FW,Mechelen,22-129,2004,0.3,0,0,0,0,1,0,1,1,0,,,0,Matches,0b3a5f59
-202,Hervé Koffi,bf BFA,GK,Union SG,30-030,1996,10.0,1,0,0,0,3,0,0,0,0,,,0,Matches,faf873a7
-203,Rudy Kohon,fr FRA,DFMF,Kortrijk,22-176,2004,6.0,2,1,0,8,5,0,3,10,12,,,0,Matches,9cd28348
-204,Leo Kokubo,jp JPN,GK,Sint-Truiden,25-296,2001,11.0,1,0,0,0,3,0,0,0,0,,,0,Matches,ac83bce2
-205,Don-Angelo Konadu,nl NED,FW,Lommel,20-196,2006,8.2,0,0,0,6,13,5,2,2,1,,,0,Matches,205bd649
-206,Cheick Konaté,ml MLI,DF,Beveren,22-227,2004,1.0,0,0,0,1,1,0,5,0,3,,,0,Matches,6ce2cdf0
-207,Valy Konaté,ci CIV,MFDF,Cercle Brugge,20-001,2006,9.5,3,0,0,17,10,0,31,23,9,,,0,Matches,c49b70ed
-208,Geoffrey Kondo,fr FRA,DF,Cercle Brugge,24-197,2002,10.0,1,0,0,13,4,0,4,11,4,,,0,Matches,e3a5316a
-209,Mohamed Koné,ci CIV,GK,Charleroi,24-253,2002,10.0,0,0,0,0,3,0,0,1,1,,,1,Matches,24f1fe8c
-210,Josué Kongolo,be BEL,DF,Genk,20-216,2006,11.0,2,0,0,15,18,0,0,16,14,,,0,Matches,2230f979
-211,Tian Koren,si SVN,MF,Club Brugge,17-107,2009,0.4,0,0,0,0,0,0,2,0,1,,,0,Matches,be095bb9
-212,Krys Kouassi,fr FRA,FW,Cercle Brugge,19-252,2007,2.7,1,0,0,5,6,1,1,2,3,,,0,Matches,0f5e3c6b
-213,Therence Koudou,fr FRA,MF,Mechelen,21-337,2004,9.8,1,0,0,10,15,2,39,8,6,,,0,Matches,059a83b8
-214,Ilias Koutsoupias,gr GRE,MF,Anderlecht,25-189,2001,4.6,1,0,0,2,10,1,7,9,6,,,0,Matches,d19203f5
-215,Mátyás Kovács,hu HUN,MF,La Louvière,23-131,2003,2.5,1,0,0,4,3,0,6,0,9,,,0,Matches,c87076b1
-216,Goduine Koyalipou,cf CTA,FW,Kortrijk,26-273,2000,8.5,0,0,0,3,6,9,4,2,3,,,0,Matches,2659a508
-217,Ondřej Kričfaluši,cz CZE,DF,Union SG,22-251,2004,5.1,1,0,0,4,0,0,0,9,10,,,0,Matches,b68bcbda
-218,Reda Laalaoui,ma MAR,MF,Westerlo,21-188,2005,2.5,1,1,0,5,2,1,0,1,1,,,0,Matches,d63b5ff1
-219,Boris lambert,be BEL,MF,Kortrijk,26-219,2000,5.3,0,0,0,8,3,0,0,10,5,,,1,Matches,d81c072d
-220,Djibril Lamego,fr FRA,DF,La Louvière,23-263,2003,6.0,1,0,0,1,3,0,3,12,4,,,0,Matches,63ce2500
-221,Amando Lapage,be BEL,DF,Westerlo,22-007,2004,8.8,1,0,0,14,5,0,2,13,9,,,0,Matches,431274e6
-222,Dimitri Lavalée,be BEL,DF,Standard Liège,29-306,1997,1.0,0,0,0,1,0,0,0,0,1,,,0,Matches,50e73475
-223,Henry Lawrence,eng ENG,DF,Standard Liège,25-055,2001,3.2,0,0,0,3,12,0,4,1,1,,,0,Matches,4f1e22a0
-224,Jamie Lawrence,de GER,DF,OH Leuven,24-005,2002,8.0,4,0,0,17,5,0,3,15,6,,,0,Matches,ab892a73
-225,Luke Le Roux,za RSA,MF,Cercle Brugge,26-250,2000,3.6,1,0,0,8,0,0,0,7,9,,,0,Matches,e30117aa
-226,Mohamed Lei Fofana,ci CIV,DF,Kortrijk,20-321,2005,3.0,1,0,0,5,2,0,5,4,6,,,1,Matches,deda410d
-227,Félix Lemaréchal,fr FRA,MF,Club Brugge,23-100,2003,3.4,1,0,0,4,5,0,26,6,6,,,0,Matches,8ca9415f
-228,Laurent Lemoine,be BEL,DF,Zulte Waregem,28-205,1998,10.0,2,0,0,13,10,0,1,18,9,,,0,Matches,70f1801b
-229,Fedde Leysen,be BEL,DF,Union SG,23-129,2003,2.0,1,0,0,2,1,0,1,1,1,,,0,Matches,19b3caf7
-230,Enric Llansana,nl NED,MF,Anderlecht,25-217,2001,4.9,2,0,0,16,5,1,3,3,8,,,0,Matches,6f095aa4
-231,Enrique Lofolomo,de GER,MF,Zulte Waregem,26-215,2000,10.9,3,0,0,13,16,0,1,6,16,,,0,Matches,e20c42d6
-232,Malcolm Lohunanu-Mbasi,be BEL,FW,Mechelen,18-188,2008,5.4,0,0,0,9,20,3,3,1,2,,,0,Matches,03d8d834
-233,Chris Lokesa,be BEL,MFFW,Beveren,22-008,2004,8.2,1,0,0,7,10,6,20,7,8,,,0,Matches,f80083c8
-234,Thierry Lutonda,be BEL,DFMF,La Louvière,26-019,2000,7.6,0,0,0,10,2,0,29,9,6,,,0,Matches,22367f92
-235,Ali Maamar,ma MAR,DF,Anderlecht,21-237,2005,10.4,0,0,0,15,12,1,40,13,12,,,0,Matches,a5f5698d
-236,Kevin Mac Allister,ar ARG,DF,Union SG,29-008,1997,5.7,4,0,0,8,4,0,4,16,14,,,0,Matches,0cb35466
-237,Gary Magnée,be BEL,MFDF,Cercle Brugge,27-034,1999,9.6,0,0,0,8,8,1,97,20,10,,,0,Matches,8396933c
-238,Jordi Makiese,be BEL,MF,Standard Liège,17-185,2009,0.0,0,0,0,0,0,0,0,0,0,,,0,Matches,a8eb26ab
-239,Abdoulie Manneh,gm GAM,MF,Cercle Brugge,22-047,2004,2.2,0,0,0,1,0,0,1,1,2,,,0,Matches,0d8ca6b3
-240,Jearl Margaritha,cw CUW,MFFW,Beveren,26-219,2000,6.2,3,0,0,10,5,1,25,5,5,,,0,Matches,be915a68
-241,Luc Marijnissen,nl NED,DF,Mechelen,23-310,2003,6.9,0,0,0,8,3,0,3,4,6,,,0,Matches,f1a2ebc1
-242,José Marsà,es ESP,DF,Mechelen,24-256,2002,10.5,0,0,0,6,7,3,13,16,13,,,0,Matches,b4ecc6b6
-243,Viggo Martens,be BEL,MFFW,Cercle Brugge,19-315,2007,6.9,0,0,0,3,13,0,20,2,11,,,0,Matches,88795d07
-244,Ken Masui,jp JPN,MF,Kortrijk,25-225,2001,4.0,0,0,0,2,8,0,0,6,3,,,0,Matches,de5b8acf
-245,Kaito Matsuzawa,jp JPN,MF,Sint-Truiden,25-283,2001,4.6,2,0,0,7,8,1,13,3,2,,,0,Matches,65d74eaf
-246,Lucas Mbamba,be BEL,DF,Westerlo,20-095,2006,3.2,0,0,0,1,3,0,2,5,2,,,0,Matches,c9ff8f4c
-247,Malick Mbaye,sn SEN,MFFW,Zulte Waregem,22-223,2004,3.0,0,1,0,4,5,0,16,0,3,,,0,Matches,6d2b0ada
-248,Loïc Mbe Soh,fr FRA,DF,Sint-Truiden,25-155,2001,2.0,1,0,0,1,0,0,0,4,2,,,1,Matches,8f534f8e
-249,Freddy Mbemba,fr FRA,MF,Charleroi,23-334,2002,6.8,0,0,0,12,16,2,15,4,5,,,0,Matches,fbf4efc9
-250,Youssoupha Mbodji,sn SEN,DF,Zulte Waregem,22-310,2004,1.5,0,1,0,1,2,0,3,1,6,,,0,Matches,3434f4f6
-251,Nathanaël Mbuku,cd COD,MF,Sint-Truiden,24-244,2002,3.9,0,0,0,6,5,1,28,3,6,,,0,Matches,46750e9c
-252,Brandon Mechele,be BEL,DF,Club Brugge,33-291,1993,11.0,1,0,0,9,5,0,0,18,14,,,0,Matches,0a6dbbf7
-253,Yaimar Medina,ec ECU,DFMF,Genk,22-010,2004,0.8,4,0,0,2,1,0,3,0,3,,,0,Matches,1fe8ecf7
-254,Nayel Mehssatou,cl CHI,DFMF,Kortrijk,24-218,2002,3.9,0,0,0,4,3,1,8,2,3,,,0,Matches,3cc3732e
-255,Bjorn Meijer,nl NED,DF,Club Brugge,23-242,2003,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,95f5aae8
-256,Carlos Mejia,ec ECU,MF,Antwerp,19-114,2007,3.9,2,0,0,4,9,0,24,1,2,,,0,Matches,d8a150c3
-257,Ryan Merlen,fr FRA,MF,Sint-Truiden,24-188,2002,7.8,2,0,0,5,3,1,19,5,7,,,0,Matches,ef731212
-258,Lennart Mertens,be BEL,FW,Beveren,34-093,1992,4.8,0,0,0,7,10,3,0,0,0,,,0,Matches,465d2a8e
-259,Lucas Michal,fr FRA,MF,Cercle Brugge,21-147,2005,1.9,0,0,0,4,2,0,7,0,1,,,0,Matches,0c7b1c91
-260,Simion Michez,be BEL,MF,Mechelen,24-279,2002,5.7,1,0,0,9,12,1,20,12,8,,,0,Matches,f6a06050
-261,Yang Minhyeok,kr KOR,MF,Westerlo,20-213,2006,1.1,1,0,0,2,4,0,2,2,3,,,0,Matches,fe3db176
-262,Nacho Miras,es ESP,GK,Mechelen,29-119,1997,8.0,0,0,0,0,2,0,0,0,0,,,0,Matches,b0ba77a5
-263,Robin Mirisola,be BEL,FW,Genk,19-342,2006,0.0,0,0,0,0,1,0,0,0,0,,,0,Matches,dee3f1e1
-264,Robin Mirisola,be BEL,FW,OH Leuven,19-342,2006,5.9,2,0,0,11,10,1,3,0,2,,,0,Matches,dee3f1e1
-265,Nikola Mituljikić,rs SRB,MF,Zulte Waregem,23-299,2003,1.0,0,0,0,0,3,0,3,1,3,,,0,Matches,28e61ffe
-266,Relebohile Mofokeng,za RSA,FWMF,Union SG,22-023,2004,5.7,0,0,0,0,1,2,6,2,4,,,0,Matches,25c3fb97
-267,Tobias Mohr,de GER,MFDF,Standard Liège,31-083,1995,2.0,0,0,0,5,0,1,11,4,3,,,0,Matches,9ec9c8b6
-268,Lukas Mondele,be BEL,MF,Cercle Brugge,22-231,2004,7.3,1,0,0,2,5,0,5,4,5,,,0,Matches,2e6bd80e
-269,Gustav Mortensen,dk DEN,DF,Standard Liège,22-241,2004,8.2,1,1,0,6,2,3,27,4,10,,,0,Matches,9b73c630
-270,Arbnor Muja,al ALB,MF,Sint-Truiden,27-351,1998,2.2,1,0,0,0,4,0,11,2,4,,,0,Matches,7767cb03
-271,Reno Münz,de GER,DF,Westerlo,21-044,2005,0.9,0,0,0,0,1,0,0,2,1,,,0,Matches,2a231b6b
-272,Harrison Murray-Campbell,eng ENG,DFMF,Kortrijk,20-103,2006,8.2,1,0,0,18,5,0,1,12,9,,,1,Matches,1c70b3dd
-273,Visar Musliu,mk MKD,DF,Sint-Truiden,32-002,1994,9.0,1,0,0,9,11,0,0,18,10,,,0,Matches,9d1f0c99
-274,Moussa N'Diaye,sn SEN,DF,Anderlecht,24-150,2002,0.8,0,0,0,0,0,0,3,1,6,,,0,Matches,b28edf04
-275,Ilyes Najim,fr FRA,FW,Beveren,24-066,2002,0.2,0,0,0,0,0,0,1,0,0,,,0,Matches,46ae6590
-276,Luis Narh,gh GHA,FW,Antwerp,18-325,2007,1.8,0,0,0,4,3,1,0,1,0,,,0,Matches,a8b66bdb
-277,Gakū Nawata,jp JPN,FW,Charleroi,20-109,2006,1.6,1,0,0,4,2,1,1,1,3,,,0,Matches,aab9b7b4
-278,Joel Ndala,eng ENG,MF,Cercle Brugge,20-168,2006,0.3,0,0,0,0,0,0,0,0,0,,,0,Matches,e0767642
-279,Michée Ndembi,be BEL,DF,Westerlo,19-134,2007,1.0,0,0,0,0,0,0,0,1,0,,,0,Matches,20bad933
-280,James Ndjeungoue,cm CMR,DF,Kortrijk,23-225,2003,7.7,2,1,0,12,3,0,4,15,12,,,0,Matches,271be4a9
-281,Steve Ngoura,fr FRA,FW,Cercle Brugge,21-266,2005,8.6,2,0,0,16,14,7,6,3,3,,,0,Matches,731f1f5a
-282,Bernard Nguene,cm CMR,FWMF,Standard Liège,20-103,2006,5.4,0,0,0,6,5,1,0,3,1,,,0,Matches,95915bb5
-283,Ousseynou Niang,sn SEN,MF,Union SG,25-034,2001,1.0,0,0,0,0,4,0,5,0,0,,,0,Matches,29eeb7fa
-284,Ousseynou Niang,sn SEN,MFFW,Zulte Waregem,25-034,2001,2.7,1,0,0,4,5,7,8,2,0,,,0,Matches,29eeb7fa
-285,Casper Nielsen,dk DEN,MF,Standard Liège,32-200,1994,7.7,1,0,0,5,8,0,63,3,13,,,0,Matches,f6a90edd
-286,Timothée Nkada,fr FRA,FW,Standard Liège,27-118,1999,0.2,0,0,0,1,1,0,1,0,0,,,0,Matches,80d1adb3
-287,Patrick Nkoa,cm CMR,DF,La Louvière,27-127,1999,7.4,2,0,0,9,2,0,2,12,11,,,0,Matches,70b98101
-288,Taishi Nozawa,jp JPN,GK,Antwerp,23-325,2002,11.0,1,0,0,2,3,0,0,0,1,,,0,Matches,f7d2b7fe
-289,Bruny Nsimba,be BEL,FW,Standard Liège,26-224,2000,1.9,0,0,0,1,3,2,1,0,0,,,0,Matches,1a72c7ba
-290,Erick Nunes,br BRA,MFDF,Cercle Brugge,22-259,2004,2.9,0,0,0,1,3,2,7,2,3,,,0,Matches,5fdab099
-291,Roggerio Nyakossi,ch SUI,DF,OH Leuven,22-306,2004,8.7,2,0,0,9,6,0,0,32,5,,,0,Matches,2e64644b
-292,Sverre Nypan,no NOR,MF,Lommel,19-331,2006,3.8,0,0,0,2,5,0,19,4,2,,,0,Matches,3dde85f2
-293,Mardochee Nzita,be BEL,DF,Charleroi,26-264,2000,8.8,2,0,0,8,14,3,29,12,16,,,0,Matches,a037aeb5
-294,Sixtus Ogbuehi,ng NGA,FW,Kortrijk,23-245,2003,1.9,0,0,0,4,3,2,0,0,0,,,0,Matches,3d034807
-295,Takuya Ogiwara,jp JPN,MF,OH Leuven,26-357,1999,3.1,1,0,0,6,4,0,16,6,10,,,0,Matches,b9feac8a
-296,Noa Ojea Cobiella,be BEL,MF,Anderlecht,17-097,2009,1.3,0,0,0,0,3,0,6,0,2,,,0,Matches,06688c1a
-297,Yllan Okou,fr FRA,DF,La Louvière,23-327,2002,6.8,3,1,1,6,3,1,11,6,2,,,0,Matches,fa753b79
-298,Darius Olaru,ro ROU,MF,Union SG,28-257,1998,1.6,0,0,0,2,2,0,3,2,2,,,0,Matches,9a129e64
-299,Victor Olatunji,ng NGA,FW,Beveren,27-071,1999,2.6,1,0,0,8,2,3,1,0,2,,,0,Matches,743ffce1
-300,Aimé Omgba,nl NED,MF,Gent,24-024,2002,1.0,1,0,0,4,1,0,1,0,1,,,0,Matches,0a3fa0cd
-301,Andrew Omobamidele,ie IRL,DF,Anderlecht,24-145,2002,1.8,2,0,0,3,0,0,0,1,0,,,0,Matches,c393a6c4
-302,Jayden Onia Seke,be BEL,MFFW,Anderlecht,17-191,2009,1.9,2,0,0,4,5,0,6,2,2,,,0,Matches,93c5a3b9
-303,Davis Opoku,be BEL,MF,OH Leuven,19-017,2007,8.1,1,0,0,8,10,1,23,10,15,,,1,Matches,7d23db7d
-304,Zakaria El Ouahdi,ma MAR,DF,Genk,24-319,2001,3.7,0,0,0,1,5,0,6,4,5,,,0,Matches,a3d79d3c
-305,Kader Ouattara,bf BFA,FW,Cercle Brugge,21-173,2005,0.5,0,0,0,1,1,1,3,0,2,,,0,Matches,abe0019a
-306,Cheick Oumar Conde,gn GUI,MF,Beveren,26-112,2000,7.2,1,0,0,8,13,0,1,15,16,,,0,Matches,2f88752d
-307,Dago Ourega,fr FRA,DFMF,Westerlo,22-040,2004,8.3,0,0,0,9,17,0,22,6,9,,,0,Matches,8e2df240
-308,Aiham Ousou,sy SYR,DF,Charleroi,26-310,2000,10.0,4,0,0,11,9,0,0,15,17,,,0,Matches,2973a975
-309,Henry Oware,gh GHA,DF,Lommel,22-228,2004,1.4,0,0,0,0,0,0,3,2,1,,,0,Matches,70497a05
-310,Halil Özdemir,tr TUR,MF,Mechelen,21-089,2005,0.3,0,0,0,0,1,0,0,1,0,,,0,Matches,3034f6ad
-311,Tristan Panduro,dk DEN,MF,Zulte Waregem,18-309,2008,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,31b0e88a
-312,Maksim Paskotši,ee EST,DF,Gent,23-300,2003,5.2,1,0,0,5,2,0,3,8,6,,,0,Matches,8bde9ba6
-313,Louis Patris,be BEL,MF,Union SG,25-161,2001,10.0,2,1,0,16,8,3,27,17,19,,,0,Matches,9befa3cf
-314,Wilguens Paugain,ht HAI,DF,Zulte Waregem,25-083,2001,1.8,0,0,0,0,2,0,3,3,1,,,0,Matches,4385ee98
-315,Ivan Pavlic,be BEL,MF,Union SG,25-005,2001,0.0,0,0,0,0,0,0,0,0,0,,,0,Matches,810ac0e3
-316,Marcos Peano,ar ARG,GK,La Louvière,28-031,1998,10.9,0,1,0,1,3,0,0,0,0,,,0,Matches,e40f365c
-317,Joey Pelupessy,id IDN,MF,Lommel,33-184,1993,9.5,0,0,0,2,6,0,2,9,6,,,0,Matches,f9575abf
-318,Léo Pétrot,fr FRA,DF,Anderlecht,29-214,1997,10.5,2,0,0,9,5,0,2,11,7,,,0,Matches,00638016
-319,Patrick Pflücke,de GER,MF,Charleroi,29-350,1996,8.4,1,0,0,2,5,1,80,2,6,,,0,Matches,1baf075c
-320,Anthony Philips,be BEL,MF,Kortrijk,17-222,2009,3.8,1,0,0,8,4,0,0,3,3,,,0,Matches,81883c5e
-321,Matthias Pieklak,be BEL,GK,Lommel,20-062,2006,11.0,0,0,0,0,1,0,0,0,2,,,0,Matches,10f2ea83
-322,Lucas Pirard,be BEL,GK,Standard Liège,31-250,1995,1.6,0,0,0,0,0,0,0,0,0,,,0,Matches,85f61a89
-323,Ewoud Pletinckx,be BEL,DF,OH Leuven,26-036,2000,8.2,1,0,0,8,1,0,3,10,14,,,0,Matches,cdf68d61
-324,Suf Podgoreanu,il ISR,MF,Kortrijk,24-299,2002,2.1,0,0,0,3,3,0,10,0,3,,,0,Matches,d697a2d0
-325,Snayder Porozo,ec ECU,FW,Antwerp,19-187,2007,4.6,4,0,0,12,7,1,3,2,0,,,0,Matches,1fb22224
-326,Freddie Potts,eng ENG,MF,Club Brugge,23-064,2003,9.8,5,0,0,11,12,0,8,14,5,,,0,Matches,86bf27f0
-327,Dennis Praet,be BEL,MF,Mechelen,32-185,1994,7.8,1,0,0,10,14,0,12,10,15,,,0,Matches,86695068
-328,Joedrick Pupe,be BEL,DF,Sint-Truiden,29-164,1997,6.2,1,0,0,5,2,1,13,9,6,,,0,Matches,5b57b3c7
-329,Théo Radelet,be BEL,GK,La Louvière,19-000,2007,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,e0637b60
-330,Benito Raman,be BEL,FW,Mechelen,32-008,1994,5.1,0,0,0,6,6,5,10,1,2,,,0,Matches,867501bf
-331,Christiaan Ravych,be BEL,DF,Genk,24-108,2002,0.9,0,0,0,1,1,0,0,1,1,,,0,Matches,dd8c04a9
-332,Christiaan Ravych,be BEL,DF,Cercle Brugge,24-108,2002,3.0,0,0,0,3,1,0,0,4,1,,,0,Matches,dd8c04a9
-333,Oleg Reabciuk,md MDA,DF,Anderlecht,28-303,1998,1.0,0,0,0,0,1,1,5,3,0,,,0,Matches,6c249ea7
-334,Semm Renders,be BEL,DF,Antwerp,18-333,2007,5.9,2,0,0,3,2,0,25,6,7,,,0,Matches,42dacb37
-335,Alexander Reumers,be BEL,FW,Lommel,19-202,2007,0.3,0,0,0,0,0,1,0,0,0,,,0,Matches,26f1283a
-336,Tom Reyners,be BEL,MF,Lommel,26-209,2000,8.7,1,0,0,7,8,3,23,3,8,,,0,Matches,c4cafe32
-337,Dante Rigo,be BEL,MF,Beveren,27-339,1998,0.0,0,0,0,0,1,0,0,0,0,,,0,Matches,223158da
-338,Jannik Robatsch,at AUT,DF,Beveren,21-322,2004,0.5,0,0,0,1,0,0,0,0,0,,,0,Matches,65592e65
-339,Milan Robberechts,be BEL,MF,Club Brugge,22-256,2004,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,81e4f7ff
-340,Jamie Roche,se SWE,MF,Kortrijk,25-224,2001,3.2,1,0,0,9,3,0,0,5,4,,,0,Matches,dbdbddb0
-341,Kevin Rodríguez,ec ECU,FW,Union SG,26-256,2000,2.5,0,0,0,1,7,5,0,0,0,,,0,Matches,189fb038
-342,Davy Roef,be BEL,GK,Gent,32-282,1994,11.0,0,0,0,0,3,0,0,0,0,,,0,Matches,6fe2aba3
-343,Milan Roganović,me MNE,DF,Genk,21-018,2005,0.4,1,0,0,0,0,1,0,0,1,,,0,Matches,77489aa3
-344,Nicolas Rommens,be BEL,DF,Lommel,31-333,1994,2.6,0,0,0,1,1,0,14,3,0,,,0,Matches,f1afb849
-345,Jakob Romsaas,no NOR,MF,Charleroi,22-183,2004,9.5,0,0,0,10,9,1,24,12,10,,,0,Matches,eeb03fcd
-346,Léandro Rousseau,be BEL,FW,La Louvière,23-131,2003,2.4,0,0,0,2,4,0,4,0,1,,,0,Matches,c2159c0b
-347,Triston Rowe,eng ENG,DF,Charleroi,20-181,2006,3.2,1,0,0,7,0,0,9,6,6,,,0,Matches,3fcc22d5
-348,Gilles Ruyssen,be BEL,DF,Kortrijk,32-150,1994,6.0,1,0,0,5,3,0,0,9,7,,,0,Matches,87cc352c
-349,Kyriani Sabbe,be BEL,DF,Club Brugge,21-293,2005,8.7,0,0,0,2,3,1,26,7,11,,,0,Matches,585d0192
-350,Shunsuke Saito,jp JPN,MF,Westerlo,21-203,2005,9.2,0,0,0,7,10,1,31,3,11,,,0,Matches,feee999b
-351,Isa Sakamoto,jp JPN,MFFW,Westerlo,23-081,2003,8.8,2,0,0,9,8,1,4,2,7,,,0,Matches,1019bdce
-352,Ibrahim Salah,ma MAR,MFFW,Antwerp,25-077,2001,6.9,0,0,0,5,1,2,35,3,9,,,0,Matches,cad3fd4d
-353,Mo Salah,be BEL,MF,Lommel,22-172,2004,0.3,0,0,0,0,0,0,0,0,1,,,0,Matches,c1ff8108
-354,Nathan Saliba,ca CAN,MF,Anderlecht,22-281,2004,1.6,0,0,0,2,2,0,0,2,3,,,0,Matches,44cfc681
-355,Dikeni-Rafid Salifou,tg TOG,MF,Mechelen,23-160,2003,1.5,0,0,0,1,1,0,0,1,2,,,0,Matches,e1830c52
-356,Cisse Sandra,be BEL,MF,Westerlo,22-334,2003,11.0,2,0,0,10,6,2,4,16,5,,,0,Matches,2f33776f
-357,Nikolas Sattlberger,at AUT,DF,Genk,22-301,2004,1.1,0,0,0,1,1,0,0,1,1,,,0,Matches,6d4b43a6
-358,Aurélien Scheidler,fr FRA,FW,Charleroi,28-164,1998,8.7,0,0,0,11,17,5,1,1,0,,,0,Matches,bc9479b9
-359,Luca Schelfhout,be BEL,DF,Antwerp,19-057,2007,2.8,2,0,0,6,1,0,5,6,10,,,0,Matches,645680e3
-360,Johannes Schenk,de GER,GK,Beveren,23-306,2003,10.3,0,1,0,1,0,0,0,1,0,,,0,Matches,5b74bf2b
-361,Lucas Schoofs,be BEL,MF,Lommel,29-316,1997,11.0,1,0,0,16,6,0,4,12,17,,,0,Matches,2a4828b3
-362,Rob Schoofs,be BEL,MF,Union SG,32-237,1994,2.5,0,0,0,1,1,0,9,3,4,,,0,Matches,28871569
-363,Siebe Schrijvers,be BEL,MFFW,OH Leuven,30-120,1996,9.7,3,0,0,10,17,0,56,20,16,,,0,Matches,746fec7d
-364,Christopher Scott,de GER,MF,Antwerp,24-161,2002,5.1,2,0,0,9,6,0,8,5,5,,,0,Matches,2723ce5d
-365,Ilias Sebaoui,be BEL,MF,Sint-Truiden,25-042,2001,10.5,1,0,0,14,20,2,35,6,9,,,0,Matches,66b52562
-366,Ralf Seuntjens,nl NED,FW,Lommel,37-212,1989,2.3,0,0,0,4,2,3,0,1,1,,,0,Matches,214a520f
-367,Joaquin Seys,be BEL,DF,Club Brugge,21-232,2005,10.9,2,0,0,6,9,2,44,14,12,,,0,Matches,0beabf0a
-368,Shion Shinkawa,jp JPN,MF,Sint-Truiden,19-101,2007,2.3,0,0,0,5,2,1,1,0,1,,,0,Matches,b8026cb8
-369,Danylo Sikan,ua UKR,FWMF,Anderlecht,25-213,2001,7.0,1,0,0,9,12,1,2,1,3,,,0,Matches,03998238
-370,Leonardo da Silva Lopes,pt POR,MF,Gent,27-350,1998,6.9,2,0,0,10,10,0,3,5,8,,,0,Matches,7dfcfd17
-371,Hugo Siquet,be BEL,DF,Club Brugge,24-129,2002,1.5,0,0,0,2,2,0,17,1,1,,,0,Matches,c6cf860f
-372,Abdoulaye Sissako,fr FRA,MF,Sint-Truiden,28-173,1998,10.8,1,0,0,10,6,1,3,9,18,,,0,Matches,3b602b26
-373,Ferre Slegers,be BEL,MF,Beveren,22-307,2004,4.1,1,0,0,10,3,0,14,4,9,,,0,Matches,5ba5a4b0
-374,Matte Smets,be BEL,DF,Genk,22-315,2004,10.0,1,0,0,8,3,0,7,14,8,,,1,Matches,d5615a3a
-375,Guilherme Smith,br BRA,MF,Union SG,23-157,2003,9.0,0,0,0,8,12,1,48,8,9,,,0,Matches,3e5981f7
-376,Frederic Soelle Soelle,be BEL,FW,Sint-Truiden,20-326,2005,3.4,0,0,0,3,7,4,1,0,1,,,0,Matches,59a41525
-377,Noah Solheid,be BEL,DF,Charleroi,23-130,2003,1.3,0,0,0,2,0,0,0,0,1,,,0,Matches,361d0621
-378,Thibo Somers,be BEL,MFDF,Antwerp,27-244,1999,8.0,0,0,0,7,2,0,15,6,9,,,0,Matches,64238658
-379,Yann Sommer,ch SUI,GK,Club Brugge,37-333,1988,11.0,0,0,0,0,0,0,0,1,0,,,0,Matches,420c18a1
-380,Momodou Sonko,se SWE,MF,Gent,21-288,2005,9.8,1,0,0,3,3,5,21,6,7,,,0,Matches,fd0a98c8
-381,Ibrahima Sory Bangoura,gn GUI,MF,Genk,22-314,2004,5.2,1,0,0,13,8,0,0,7,4,,,0,Matches,da231120
-382,Massamba Sow,fr FRA,DF,Charleroi,22-155,2004,2.0,0,0,0,2,1,0,0,3,2,,,0,Matches,0378d78d
-383,Jorne Spileers,be BEL,DF,Club Brugge,21-298,2005,4.8,2,0,0,8,2,0,1,10,2,,,0,Matches,2d65a822
-384,Nikola Storm,be BEL,FWMF,Westerlo,32-046,1994,1.1,0,0,0,1,2,0,9,1,0,,,0,Matches,6460189b
-385,Rok Štorman,si SVN,MF,Kortrijk,22-072,2004,2.0,1,1,0,4,0,1,2,0,2,,,0,Matches,5a2d3986
-386,Mario Stroeykens,be BEL,MF,Anderlecht,22-047,2004,2.7,1,0,0,3,2,0,3,3,7,,,0,Matches,f4adf2cd
-387,Ian Struyf,be BEL,DF,Mechelen,19-085,2007,0.3,0,0,0,0,1,0,1,0,0,,,0,Matches,c54804c6
-388,Ross Sykes,eng ENG,DF,Union SG,27-234,1999,1.1,0,0,0,1,1,1,1,0,1,,,0,Matches,4d0be953
-389,Massire Sylla,sn SEN,DF,Union SG,21-312,2005,10.0,4,0,0,9,22,0,3,33,28,,,1,Matches,b4f52a27
-390,Benjamin Tahirovic,ba BIH,MF,Genk,23-257,2003,4.8,2,0,0,11,3,0,0,7,5,,,0,Matches,eb3022c3
-391,Anas Tajaouart,ma MAR,MFFW,La Louvière,21-069,2005,5.0,0,0,0,7,12,1,0,5,5,,,0,Matches,3d517fe3
-392,Kōta Takai,jp JPN,DF,Sint-Truiden,22-072,2004,2.5,1,0,0,7,1,0,0,5,2,,,1,Matches,9f59ff55
-393,Juho Talvitie,fi FIN,MF,Lommel,21-240,2005,7.7,1,0,0,7,17,0,22,7,5,,,0,Matches,d2e11276
-394,Franz Tangala,be BEL,DF,Zulte Waregem,21-214,2005,5.2,3,0,0,8,3,0,11,7,10,,,0,Matches,08e1d182
-395,Shogo Taniguchi,jp JPN,DF,Sint-Truiden,35-123,1991,6.0,1,0,0,6,2,0,0,9,4,,,1,Matches,828a9c47
-396,Henok Teklab,de GER,MF,OH Leuven,27-364,1998,0.9,0,0,0,0,2,0,4,0,1,,,0,Matches,640d17d5
-397,Jean Thierry Lazare,ci CIV,MF,Cercle Brugge,28-253,1998,1.9,1,0,0,4,7,0,0,0,2,,,0,Matches,1d2c3e5e
-398,Dominic Thompson,eng ENG,DFMF,Beveren,26-112,2000,0.6,0,0,0,0,0,0,2,4,2,,,0,Matches,235a62f8
-399,Jesper Tolinsson,se SWE,DF,Lommel,23-260,2003,0.8,0,0,0,2,1,0,0,1,0,,,0,Matches,1a5fa6a3
-400,Rayan Touzghar,fr FRA,MF,Standard Liège,23-019,2003,8.6,0,0,0,15,12,3,40,10,1,,,0,Matches,c3865081
-401,Nicolo Tresoldi,de GER,FW,Club Brugge,22-087,2004,9.5,1,0,0,10,19,2,0,2,4,,,0,Matches,3860ab13
-402,Alexis Trouillet,fr FRA,MF,Standard Liège,25-327,2000,9.9,3,0,0,5,13,0,4,19,14,,,0,Matches,0a8d6b91
-403,Cheveyo Tsawa,ch SUI,MF,Club Brugge,19-341,2006,1.5,0,0,0,1,1,0,2,3,3,,,0,Matches,7c5b59a7
-404,Josua Tshiolola,,GK,Beveren,21-337,2004,0.6,0,0,0,0,0,0,0,0,0,,,0,Matches,84184a91
-405,Emanuel Tsimba,ch SUI,FW,Westerlo,20-146,2006,1.4,0,0,0,3,1,1,0,0,0,,,0,Matches,888a17c0
-406,Yuto Tsunashima,jp JPN,DF,Antwerp,26-092,2000,6.9,2,0,0,12,2,0,3,12,6,,,0,Matches,4aa41d88
-407,Eran Tuypens,be BEL,DF,Antwerp,20-343,2005,3.4,0,0,0,2,2,0,16,10,5,,,0,Matches,d8318617
-408,Serxho Ujka,al ALB,MF,Zulte Waregem,28-080,1998,3.2,0,0,0,7,2,0,5,6,2,,,0,Matches,c4ed1306
-409,Kyan Vaesen,be BEL,FW,OH Leuven,25-216,2001,2.0,1,0,0,1,3,1,0,0,2,,,0,Matches,f95cbfbc
-410,Anthony Valencia,ec ECU,MF,Antwerp,23-117,2003,1.5,1,0,0,3,2,0,3,2,2,,,0,Matches,674dee62
-411,Kévin Van Den Kerkhof,dz ALG,DF,Charleroi,30-246,1996,10.7,2,0,0,4,9,1,57,12,20,,,0,Matches,f6a3c84d
-412,Thomas Van den Keybus,be BEL,MF,Westerlo,25-204,2001,0.7,1,0,0,2,3,0,2,1,1,,,0,Matches,21453b2e
-413,Hannes Van der Bruggen,be BEL,MF,Cercle Brugge,33-228,1993,3.9,2,0,0,7,7,0,1,9,5,,,0,Matches,411fb06f
-414,Siebe Van Der Heyden,be BEL,DF,Gent,28-169,1998,10.9,4,0,0,8,5,1,2,13,7,,,0,Matches,cf9bdd43
-415,Jason Van Duiven,nl NED,DF,Lommel,21-264,2005,11.0,2,0,0,12,17,1,44,27,19,,,0,Matches,9b23574b
-416,Louie Van Gelder,be BEL,MF,Antwerp,17-289,2009,0.1,0,0,0,0,1,0,0,0,0,,,0,Matches,d1bf1d25
-417,Rein Van Helden,be BEL,DF,Antwerp,24-114,2002,8.4,0,0,0,8,4,0,2,11,13,,,0,Matches,f6e214c4
-418,Jellert Van Landschoot,be BEL,MFFW,Kortrijk,29-080,1997,4.4,1,0,0,1,1,2,25,3,4,,,0,Matches,0bd7029a
-419,Cedric Van Meirvenne,be BEL,MF,Mechelen,21-211,2005,4.8,0,0,0,5,12,1,17,1,8,,,0,Matches,3b794ea1
-420,Hans Vanaken,be BEL,MF,Club Brugge,34-083,1992,9.9,1,0,0,6,6,0,2,8,8,,,0,Matches,392a7aea
-421,Zalán Vancsa,hu HUN,FWMF,Lommel,22-019,2004,1.4,0,0,0,0,2,0,5,2,3,,,0,Matches,9fd1e981
-422,Gerard Vandeplas,be BEL,FW,Antwerp,20-263,2006,0.3,0,0,0,0,0,0,1,0,0,,,0,Matches,143c462c
-423,Keano Vanrafelghem,be BEL,MF,Mechelen,23-105,2003,2.1,1,0,0,1,5,1,8,0,0,,,0,Matches,dc430f29
-424,Robert-Jan Vanwesemael,be BEL,DFMF,Sint-Truiden,24-234,2002,8.8,3,1,1,6,3,1,43,8,10,,,0,Matches,753b6dd7
-425,Dante Vanzeir,be BEL,MFFW,Cercle Brugge,28-213,1998,5.4,0,1,0,2,3,1,13,4,6,,,0,Matches,d682f554
-426,Andrej Vasovic,ch SUI,FW,Club Brugge,19-032,2007,0.1,0,0,0,0,0,2,0,1,0,,,0,Matches,aa1bd63d
-427,Kewan Vemba,be BEL,MF,Zulte Waregem,21-115,2005,0.0,0,0,0,1,0,0,0,0,0,,,0,Matches,5de3f5bc
-428,Josúe Vergara,pa PAN,FW,Gent,19-113,2007,7.0,1,0,0,7,19,3,1,0,2,,,0,Matches,5fb2035f
-429,Romeo Vermant,be BEL,MFFW,Club Brugge,22-295,2004,3.2,1,0,0,4,10,2,2,1,0,,,0,Matches,7db98639
-430,Arthur Vermeeren,be BEL,MF,Antwerp,21-281,2005,6.0,2,0,0,7,0,0,10,10,5,,,0,Matches,722494dc
-431,Arno Verschueren,be BEL,MF,Beveren,29-221,1997,4.1,0,0,0,11,1,2,23,0,5,,,0,Matches,0ae2b36f
-432,Birger Verstraete,be BEL,MF,OH Leuven,32-213,1994,5.2,3,0,0,5,6,0,3,8,7,,,0,Matches,28eaa0f3
-433,Hugo Vetlesen,no NOR,MF,Club Brugge,26-259,2000,8.8,2,0,0,10,11,1,20,1,9,,,0,Matches,aa982b0f
-434,Jan Virgili,es ESP,MF,Club Brugge,20-112,2006,5.1,0,0,0,0,8,2,12,3,2,,,0,Matches,fbde78a4
-435,Thibault Vlietinck,be BEL,DFMF,OH Leuven,29-088,1997,0.5,0,0,0,0,0,0,3,0,1,,,0,Matches,5064d4c1
-436,Matties Volckaert,be BEL,MFDF,Gent,24-034,2002,7.1,0,0,0,8,4,2,12,4,10,,,0,Matches,9e100763
-437,Kiany Vroman,be BEL,GK,OH Leuven,22-298,2004,1.0,0,0,0,0,0,0,0,0,0,,,0,Matches,4b1a3b4b
-438,Basile Vroninks,be BEL,MF,Kortrijk,19-360,2006,0.7,0,0,0,0,1,0,2,0,0,,,0,Matches,3dc477d6
-439,Mame Wade,sn SEN,MFFW,La Louvière,24-036,2002,7.3,4,0,0,20,5,1,6,6,15,,,0,Matches,ff999f33
-440,Kyrell Wilson,eng ENG,MF,Gent,21-349,2004,1.9,1,0,0,3,0,0,3,0,5,,,0,Matches,aa7cbca1
-441,Marten Winkler,de GER,MF,Anderlecht,24-015,2002,4.8,0,0,0,8,8,1,28,6,1,,,0,Matches,e0d515ef
-442,Dries Wouters,be BEL,DF,Lommel,29-291,1997,5.3,1,0,0,1,5,0,0,2,5,,,0,Matches,568de36f
-443,Shin Yamada,jp JPN,FW,OH Leuven,26-169,2000,2.2,0,0,0,3,4,1,2,0,1,,,0,Matches,8235bf45
-444,Ayumu Yokoyama,jp JPN,MF,Genk,23-256,2003,4.7,0,0,0,1,1,0,27,2,3,,,0,Matches,4ad6aa04
-445,Moncef Zekri,ma MAR,DF,Mechelen,18-056,2008,1.0,0,0,0,3,0,1,0,3,0,,,0,Matches,99f34773
-446,Besfort Zeneli,se SWE,MFFW,Union SG,23-359,2002,9.7,0,0,0,8,11,3,69,3,4,,,0,Matches,6be253bf
-447,Andi Zeqiri,ch SUI,FW,Standard Liège,27-146,1999,1.3,0,0,0,2,3,0,0,1,1,,,0,Matches,d01231f0
-448,Adem Zorgane,dz ALG,MF,Union SG,26-313,2000,6.4,1,0,0,4,6,1,9,5,11,,,0,Matches,392b5133
-449,Łukasz Łakomy,pl POL,FW,OH Leuven,25-301,2001,2.6,0,0,0,2,3,0,3,1,3,,,0,Matches,543b9811
+41,László Bénes,sk SVK,MF,Gent,29-069,1997,2.4,0,0,0,3,3,0,4,2,1,,,0,Matches,fe888e39
+42,Mauricio Benítez,ar ARG,MF,Antwerp,22-287,2004,2.0,0,1,0,1,3,0,5,6,5,,,0,Matches,51831761
+43,Tawfik Bentayeb,ma MAR,FW,Anderlecht,24-307,2002,3.8,0,0,0,4,4,1,0,2,2,,,0,Matches,9184e764
+44,Antoine Bernier,be BEL,MF,Charleroi,29-068,1997,3.5,1,0,0,2,5,1,11,2,1,,,0,Matches,cda90ea8
+45,Adriano Bertaccini,be BEL,"FW,MF",Anderlecht,26-096,2000,0.7,1,0,0,2,0,0,2,1,0,,,0,Matches,88d70d53
+46,Joshua Bethume,be BEL,MF,Anderlecht,17-157,2009,2.3,0,0,0,3,6,1,3,2,3,,,0,Matches,3d0017cd
+47,Giulian Biancone,fr FRA,DF,Anderlecht,26-231,2000,8.2,5,0,0,12,9,0,4,14,11,,,0,Matches,de40e38c
+48,Aaron Bibout,cm CMR,FW,Genk,22-075,2004,2.9,0,0,0,2,2,2,0,4,0,,,0,Matches,aab489b0
+49,Mateo Biondic,hr CRO,FW,Union SG,23-116,2003,5.7,0,0,0,10,9,3,4,1,5,,,0,Matches,a3fee532
+50,Bouke Boersma,nl NED,FW,Mechelen,21-147,2005,3.5,0,0,0,6,10,2,1,0,0,,,0,Matches,c57c5da4
+51,Naoufal Bohamdi-Kamoni,be BEL,MF,Westerlo,19-089,2007,1.1,0,0,0,2,1,0,7,3,0,,,0,Matches,379cb068
+52,Adama Bojang,gm GAM,FW,Charleroi,22-173,2004,2.0,1,0,0,6,2,2,1,0,4,,,0,Matches,e606b6c0
+53,Viktor Boone,be BEL,DF,Beveren,28-296,1998,3.0,1,0,0,3,0,0,0,3,2,,,0,Matches,63554582
+54,Karol Borys,pl POL,MF,Westerlo,20-050,2006,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,4bf85184
+55,Louis Bostyn,be BEL,GK,Zulte Waregem,33-044,1993,6.5,0,0,0,0,2,0,0,1,0,,,0,Matches,e66a1ad7
+56,Amine Boukamir,ma MAR,MF,Charleroi,20-025,2006,7.8,1,0,0,16,3,0,3,11,11,,,0,Matches,07caccd9
+57,Mehdi Boukamir,ma MAR,DF,La Louvière,22-295,2004,1.4,0,0,0,2,3,0,1,2,2,,,0,Matches,f949956e
+58,Myron van Brederode,nl NED,MF,Mechelen,23-134,2003,11.0,1,0,0,3,13,2,85,8,4,,,0,Matches,485fbd1a
+59,Lucca Brughmans,be BEL,GK,Genk,18-153,2008,11.0,0,0,0,0,0,0,0,0,0,,,0,Matches,b2e93cc1
+60,Christian Brüls,be BEL,"MF,FW",Beveren,38-048,1988,8.4,2,0,0,3,11,0,85,1,5,,,0,Matches,b59d84e9
+61,Christian Burgess,eng ENG,DF,Gent,35-041,1991,8.5,0,0,0,1,3,0,0,8,8,,,0,Matches,f8766ef9
+62,Maxime Busi,be BEL,DF,Antwerp,27-034,1999,3.5,2,0,0,5,1,0,7,4,7,,,0,Matches,7b082ec2
+63,Royer Caicedo,co COL,DF,Cercle Brugge,20-196,2006,5.1,0,0,0,4,3,0,0,6,5,,,0,Matches,b1077f24
+64,Shandre Campbell,za RSA,"MF,FW",Kortrijk,21-125,2005,6.4,2,1,1,7,6,0,16,4,8,,,0,Matches,79fc3546
+65,Yannick Cappelle,be BEL,DF,Zulte Waregem,23-133,2003,9.8,0,0,0,8,8,1,42,20,20,,,0,Matches,2c51a1b3
+66,Vic Chambaere,be BEL,GK,Union SG,23-311,2003,1.0,0,0,0,0,1,0,0,0,0,,,0,Matches,93fcad19
+67,Ismaila Cheick Coulibaly,ml MLI,MF,La Louvière,25-327,2000,8.9,2,0,0,9,3,0,4,13,11,,,0,Matches,d33e3242
+68,Nohim Chibani,fr FRA,DF,Union SG,23-042,2003,2.6,1,0,0,5,3,0,1,7,8,,,0,Matches,ac5ff3e6
+69,Akpa Chukwu Hemsley,be BEL,FW,Zulte Waregem,21-320,2005,0.5,0,0,0,0,0,1,0,0,1,,,0,Matches,1573bc4b
+70,Ibrahima Cissé,sn SEN,FW,Gent,19-054,2007,2.8,1,1,0,7,1,3,0,0,1,,,0,Matches,50ebf141
+71,Isaac Cissé,ci CIV,MF,Charleroi,20-038,2006,2.7,1,0,0,4,5,0,2,5,4,,,0,Matches,891cb392
+72,Thomas Claes,be BEL,MF,Zulte Waregem,22-236,2004,10.2,1,0,0,14,6,0,13,16,6,,,0,Matches,f8ee334c
+73,Antoine Colassin,be BEL,"FW,MF",Charleroi,25-264,2001,2.0,0,0,0,6,2,1,1,0,2,,,0,Matches,2dfd8f7b
+74,Cameron Congreve,wls WAL,MF,Westerlo,22-297,2004,7.0,1,0,0,6,8,0,44,4,7,,,0,Matches,1a58621c
+75,Colin Coosemans,be BEL,GK,Anderlecht,34-106,1992,11.0,0,0,0,0,3,0,0,1,0,,,0,Matches,cd7dade5
+76,Kobe Corbanie,be BEL,DF,Mechelen,21-191,2005,4.7,1,0,0,5,7,0,5,6,6,,,0,Matches,9b909569
+77,Alvaro Cortes,es ESP,DF,Antwerp,21-245,2005,7.0,2,0,0,14,4,0,0,15,11,,,0,Matches,493e1869
+78,Niek Corthouts,be BEL,DF,Lommel,20-199,2006,1.1,0,0,0,0,0,1,5,2,1,,,0,Matches,e6c75b20
+79,Gaëtan Coucke,be BEL,GK,Cercle Brugge,27-349,1998,11.0,0,0,0,0,1,0,0,1,0,,,0,Matches,c56ee8f7
+80,Marius Courcoul,fr FRA,MF,La Louvière,19-320,2007,6.3,3,0,0,9,8,0,5,10,7,,,0,Matches,28ab7aba
+81,Mihajlo Cvetković,rs SRB,FW,Anderlecht,19-311,2007,6.8,2,0,0,7,17,7,2,0,3,,,0,Matches,a9be55c1
+82,Isaiah Dada-Mascoll,eng ENG,MF,Lommel,20-177,2006,1.9,0,0,0,1,0,0,0,2,0,,,0,Matches,7edf54f7
+83,Matteo Dams,be BEL,DF,Club Brugge,22-253,2004,0.0,0,0,0,0,0,0,0,0,0,,,0,Matches,20002a46
+84,Pape Daouda Diongue,sn SEN,MF,Westerlo,20-155,2006,1.1,0,1,0,2,1,0,0,1,3,,,0,Matches,d4925a40
+85,Promise David,ca CAN,FW,Union SG,25-137,2001,0.7,0,0,0,1,0,2,1,0,0,,,0,Matches,dbe19468
+86,Sam De Grand,nl NED,DF,Lommel,22-043,2004,1.3,0,0,0,0,0,0,7,2,0,,,0,Matches,e9acb98d
+87,Benoit De Jaegere,be BEL,DF,Zulte Waregem,22-219,2004,2.2,0,0,0,4,0,0,2,4,5,,,0,Matches,3c35def9
+88,Gilles De Meyer,be BEL,DF,Gent,20-061,2006,0.3,0,0,0,0,0,0,1,0,1,,,0,Matches,8a700b32
+89,Kamiel Van De Perre,be BEL,MF,Union SG,22-278,2004,10.7,1,0,0,15,15,0,6,17,24,,,0,Matches,28702d71
+90,Denzel De Roeve,be BEL,DF,Union SG,22-099,2004,2.5,0,0,0,0,3,0,7,2,2,,,0,Matches,f5891ed1
+91,Guillaume De Schryver,be BEL,"FW,MF",Beveren,30-013,1996,0.6,0,0,0,2,1,0,6,2,1,,,0,Matches,4acdeee0
+92,Lenn De Smet,be BEL,MF,Kortrijk,22-219,2004,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,0e7b887d
+93,Liam De Smet,be BEL,MF,Kortrijk,22-219,2004,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,0a9fd118
+94,Tibe De Vlieger,be BEL,MF,Gent,21-012,2005,7.1,1,0,0,12,17,0,16,14,19,,,0,Matches,12d101ed
+95,August De Wannemacker,be BEL,MF,Genk,17-327,2008,0.2,0,0,0,1,0,0,1,2,2,,,0,Matches,31412ea5
+96,Ortwin De Wolf,be BEL,GK,Mechelen,29-208,1997,3.0,0,0,0,0,2,0,0,0,1,,,0,Matches,6ce46a59
+97,Max Dean,eng ENG,FW,Gent,22-269,2004,1.7,0,0,0,1,0,0,0,0,0,,,0,Matches,6d0ea6d9
+98,Marco Decherf,fr FRA,MF,Mechelen,20-025,2006,3.9,4,0,0,8,5,0,1,3,1,,,0,Matches,129debcc
+99,Massimo Decoene,be BEL,DF,Mechelen,22-279,2004,3.4,1,0,0,4,2,0,7,6,3,,,0,Matches,933bf933
+100,Tristan Degreef,be BEL,MF,Anderlecht,21-302,2005,2.6,0,0,0,4,3,0,6,0,1,,,0,Matches,d5e2d63a
+101,Brecht Dejaegere,be BEL,MF,Kortrijk,35-172,1991,8.3,2,0,0,19,23,0,28,11,16,,,0,Matches,4ca4f601
+102,Martin Delavallée,be BEL,GK,Charleroi,22-244,2004,1.0,0,0,0,0,0,0,0,0,0,,,0,Matches,6e9c13e6
+103,Mathias Delorge,be BEL,MF,Gent,22-109,2004,7.8,2,0,0,6,10,0,27,13,14,,,0,Matches,337b736a
+104,Shaquil Delos,fr FRA,"MF,DF",La Louvière,27-154,1999,8.3,2,0,0,10,7,1,43,4,11,,,0,Matches,96a7222e
+105,Boubakar Dembaga,fr FRA,DF,Charleroi,20-163,2006,0.1,0,0,0,0,1,0,0,0,0,,,0,Matches,5943b5fd
+106,Dani van den Heuvel,nl NED,GK,OH Leuven,23-173,2003,10.0,0,0,0,0,1,0,0,0,0,,,0,Matches,8952e826
+107,Bahmed Deuff,mr MTN,MF,Antwerp,20-249,2006,4.1,2,1,1,7,7,0,1,7,13,,,0,Matches,907d12b6
+108,Sieben Dewaele,be BEL,MF,Beveren,27-288,1999,10.9,3,0,0,10,12,0,7,18,15,,,0,Matches,f3a033bc
+109,Ibrahima Diaby,gn GUI,MF,Cercle Brugge,19-245,2007,3.9,1,0,0,9,4,0,1,5,8,,,0,Matches,b5097bf3
+110,Mamadou Diakhon,sn SEN,"MF,FW",Club Brugge,21-056,2005,4.7,0,0,0,2,17,2,34,5,4,,,0,Matches,331c5a98
+111,Ibrahim Diakité,gn GUI,"DF,MF",Cercle Brugge,23-017,2003,8.1,1,0,0,17,6,1,3,9,14,,,0,Matches,d8c19a60
+112,Salim Diakité,ml MLI,DF,Zulte Waregem,26-167,2000,2.0,0,0,0,4,4,0,4,3,2,,,0,Matches,e548cd88
+113,Daan Dierckx,be BEL,DF,Standard Liège,23-266,2003,0.4,0,0,0,0,0,0,0,1,0,,,0,Matches,3a35db3d
+114,Xander Dierckx,be BEL,MF,Antwerp,17-263,2009,6.4,0,0,0,8,5,0,4,7,7,,,0,Matches,6cc372f8
+115,Gora Diouf,sn SEN,DF,Mechelen,23-058,2003,0.3,0,0,0,1,0,0,0,2,2,,,0,Matches,1b7844a8
+116,Oumar Diouf,sn SEN,FW,Sint-Truiden,23-186,2003,2.0,0,0,0,2,4,1,0,2,2,,,0,Matches,1dbffebb
+117,Salieu Drammeh,gm GAM,"FW,MF",Standard Liège,23-234,2003,5.5,0,0,0,4,11,0,5,1,6,,,0,Matches,f195e2b9
+118,Axel Drouhin,fr FRA,DF,Kortrijk,26-243,2000,6.8,3,0,0,9,2,0,2,11,4,,,0,Matches,360c2156
+119,Rafiu Durosinmi,ng NGA,FW,Genk,23-320,2003,9.5,2,0,0,18,15,7,1,6,5,,,0,Matches,e7173214
+120,Noë Dussenne,be BEL,DF,OH Leuven,34-224,1992,7.7,0,0,0,11,5,0,0,14,13,,,0,Matches,8b9b8e43
+121,Dennis Eckert,ir IRN,FW,Standard Liège,29-312,1997,8.6,0,0,0,11,16,3,0,0,2,,,0,Matches,7f8fb807
+122,Mike Eerdhuijzen,nl NED,DF,Mechelen,26-127,2000,6.7,2,0,0,6,2,1,2,8,7,,,0,Matches,7c0ade01
+123,Dennis Egel,de GER,DF,Union SG,21-269,2005,0.0,0,0,0,0,0,0,0,0,0,,,0,Matches,e7a135ac
+124,Anosike Ementa,dk DEN,FW,Zulte Waregem,24-198,2002,10.5,3,0,0,29,35,2,2,5,5,,,0,Matches,fbe39f7e
+125,Matthieu Epolo,cd COD,GK,Standard Liège,21-306,2005,9.4,2,1,0,2,4,0,0,0,0,,,0,Matches,6ee69cca
+126,Jeppe Erenbjerg,dk DEN,MF,Genk,26-202,2000,7.3,1,0,0,2,1,3,25,5,5,,,0,Matches,896537e7
+127,Timothy Eyoma,eng ENG,DF,Lommel,26-292,2000,10.7,1,0,0,5,5,0,1,10,3,,,1,Matches,449949f4
+128,Wagane Faye,sn SEN,DF,La Louvière,32-362,1993,8.5,1,0,0,15,16,0,12,11,17,,,1,Matches,7ec3c92c
+129,Fabio Ferraro,be BEL,DF,Westerlo,24-075,2002,1.8,0,0,0,1,0,0,6,0,4,,,0,Matches,9818e273
+130,Elias Filet,fr FRA,FW,La Louvière,24-256,2002,5.5,0,0,0,5,10,4,2,3,2,,,0,Matches,aff8b392
+131,Lasse Flö,dk DEN,"DF,MF",Westerlo,21-033,2005,8.9,3,0,0,11,6,0,22,5,16,,,0,Matches,aabf2f1f
+132,Raul Florucz,at AUT,"FW,MF",Union SG,25-160,2001,5.7,1,0,0,10,6,3,9,1,5,,,0,Matches,cdb0e589
+133,Ibrahim Fofana,ci CIV,MF,Westerlo,23-046,2003,10.0,0,0,0,20,4,0,2,23,21,,,0,Matches,60758f27
+134,Modibo Fofana,ci CIV,"MF,FW",Antwerp,19-014,2007,6.1,0,0,0,8,17,5,19,9,8,,,0,Matches,37112f45
+135,Alessandro Fontanarosa,it ITA,DF,OH Leuven,23-283,2003,0.0,0,0,0,1,0,0,0,0,0,,,0,Matches,8961065a
+136,Carlos Forbs,pt POR,"MF,FW",Club Brugge,22-243,2004,9.2,1,1,0,6,12,4,35,4,7,,,0,Matches,8a310070
+137,Marlon Fossey,us USA,"DF,MF",Standard Liège,28-069,1998,8.7,0,0,0,4,5,4,27,18,12,,,0,Matches,c7b9e548
+138,Ryan Fosso,cm CMR,MF,Standard Liège,24-153,2002,2.5,1,0,0,5,4,0,0,4,7,,,0,Matches,85adeca6
+139,Daam Foulon,be BEL,DF,Antwerp,27-239,1999,3.7,0,0,0,6,5,0,10,7,6,,,0,Matches,658d44be
+140,Michael Frey,ch SUI,FW,Antwerp,32-121,1994,7.5,1,0,0,11,6,4,4,4,4,,,0,Matches,33182cb8
+141,Leo Fuhr Hjelde,no NOR,DF,Mechelen,23-083,2003,0.4,0,0,0,0,0,0,0,0,0,,,0,Matches,d102b8a2
+142,Mohammed Fuseini,gh GHA,FW,Union SG,24-185,2002,1.3,0,0,0,1,2,4,1,0,0,,,0,Matches,f360f047
+143,Brent Gabriël,be BEL,GK,Zulte Waregem,27-294,1999,4.5,0,0,0,0,0,0,0,0,0,,,0,Matches,4413097c
+144,Wouter George,be BEL,MF,OH Leuven,24-259,2002,10.3,2,0,0,17,5,0,26,10,19,,,0,Matches,605fe3e6
+145,Óscar Gil,es ESP,MF,OH Leuven,29-205,1997,8.3,3,0,0,12,22,0,20,15,16,,,0,Matches,6652cf96
+146,Nolan Gillot,fr FRA,DF,La Louvière,24-017,2002,4.7,0,0,0,6,4,2,30,7,4,,,0,Matches,05ab7931
+147,Bruno Godeau,be BEL,DF,Beveren,34-191,1992,9.9,3,0,0,5,1,0,0,11,11,,,0,Matches,e0551ca0
+148,Jeff Godelaine,be BEL,FW,Antwerp,19-205,2007,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,af1d1f89
+149,Yoni Gomis,fr FRA,DF,Beveren,21-055,2005,7.6,1,0,0,4,4,0,1,18,9,,,0,Matches,34d07afa
+150,Tristan Gooijer,nl NED,DF,Lommel,22-076,2004,2.1,0,0,0,2,2,0,1,3,4,,,0,Matches,13b736e9
+151,Hyllarion Goore,ci CIV,MF,Gent,21-085,2005,3.8,1,0,0,4,10,2,13,2,3,,,0,Matches,70627247
+152,Đorđe Gordić,rs SRB,FW,Lommel,22-012,2004,0.7,0,0,0,1,0,0,1,1,0,,,0,Matches,bbc82bcf
+153,Siad Gourville,dz ALG,DF,La Louvière,26-176,2000,2.8,2,0,0,5,1,0,0,5,4,,,0,Matches,1fe81cc7
+154,Zsombor Gruber,hu HUN,FW,La Louvière,22-071,2004,6.2,0,0,0,6,10,0,45,5,7,,,0,Matches,16adc81f
+155,Samuel Gueulette,rw RWA,MF,La Louvière,26-182,2000,0.0,0,0,0,0,0,0,1,0,0,,,0,Matches,dbcb288a
+156,Parfait Guiagon,ci CIV,MF,Charleroi,25-268,2001,0.8,0,0,0,0,2,0,4,0,0,,,0,Matches,5d8c77cf
+157,Patrik Gunnarsson,is ISL,GK,Kortrijk,26-002,2000,2.0,0,0,0,0,0,0,0,0,0,,,0,Matches,4d39152d
+158,Anouar Ait El Hadj,be BEL,"FW,MF",Union SG,24-211,2002,0.3,0,0,0,0,0,0,3,0,0,,,0,Matches,eb7f2e19
+159,El Hadji Seck,sn SEN,FW,Gent,19-307,2007,1.0,0,0,0,1,3,1,1,1,1,,,0,Matches,30bf6262
+160,Geoffry Hairemans,be BEL,"FW,MF",Antwerp,35-027,1991,0.3,0,0,0,1,0,0,5,0,1,,,0,Matches,64aaee47
+161,Youssef Hamdaoui,be BEL,FW,Antwerp,18-242,2008,0.7,0,0,0,1,2,0,4,0,0,,,0,Matches,b1f46941
+162,Fredrik Hammer,se SWE,MF,Mechelen,25-264,2001,10.4,5,0,0,24,13,0,2,17,29,,,0,Matches,78eac916
+163,Lee Han-beom,kr KOR,DF,Club Brugge,24-153,2002,7.1,1,0,0,11,3,0,0,5,6,,,0,Matches,071f2dd3
+164,Kenan Haroun,be BEL,MF,Genk,20-135,2006,0.2,1,0,0,2,1,0,0,0,3,,,0,Matches,d61bb6e7
+165,Taiga Hata,jp JPN,DF,Sint-Truiden,24-301,2002,9.1,0,0,0,7,4,0,34,3,10,,,0,Matches,3893611d
+166,Ibe Hautekiet,be BEL,DF,Standard Liège,24-218,2002,11.0,2,0,0,6,4,0,1,16,9,,,0,Matches,2ca07ad3
+167,Nikki Havenaar,jp JPN,DF,Union SG,31-274,1995,5.9,0,0,0,11,6,0,0,5,3,,,0,Matches,ebcd0318
+168,Tobias Hedl,at AUT,"FW,MF",Zulte Waregem,23-306,2003,7.3,0,0,0,6,7,4,14,3,7,,,0,Matches,d7b39331
+169,Charles Herrmann,de GER,MF,Cercle Brugge,20-300,2006,0.6,0,0,0,1,1,0,1,1,0,,,0,Matches,9ba728b8
+170,Daan Heymans,be BEL,MF,Genk,27-155,1999,4.9,2,1,0,10,6,1,4,3,2,,,0,Matches,6d70c771
+171,Bryan Heynen,be BEL,MF,Genk,29-284,1997,10.9,2,0,0,15,14,0,8,16,14,,,0,Matches,360e3062
+172,Ilan Hurtevent,be BEL,MF,Union SG,21-176,2005,0.5,0,0,0,1,0,0,2,1,0,,,0,Matches,c08dd420
+173,Chukwubuikem Ikwuemesi,ng NGA,FW,OH Leuven,25-104,2001,3.9,1,0,0,3,6,3,1,0,3,,,0,Matches,c6db4f29
+174,Marco Ilaimaharitra,mg MAD,MF,Standard Liège,31-114,1995,1.2,0,0,0,1,2,0,2,7,1,,,0,Matches,2ef25344
+175,Marko Ilić,rs SRB,GK,Kortrijk,28-287,1998,9.0,0,0,0,0,0,0,0,0,0,,,0,Matches,2010815f
+176,Mustapha Isah,ng NGA,FW,La Louvière,22-117,2004,9.9,2,0,0,7,13,15,5,0,4,,,0,Matches,bc55e9d8
+177,Nelson Ishiwatari,jp JPN,MF,Sint-Truiden,21-191,2005,6.4,4,0,0,14,8,0,2,8,21,,,0,Matches,ab2bc47e
+178,Joël Ito,be BEL,MF,La Louvière,28-235,1998,2.1,2,1,1,6,0,0,1,0,5,,,0,Matches,638cfe49
+179,Junya Itō,jp JPN,MF,Genk,33-253,1993,9.1,0,0,0,6,5,8,80,4,5,,,0,Matches,dbd3a428
+180,Laurent Jans,lu LUX,DF,Beveren,34-104,1992,9.4,0,0,0,2,7,4,30,9,5,,,0,Matches,0fbb73c2
+181,Christophe Janssens,be BEL,DF,Beveren,28-253,1998,10.6,5,0,0,12,4,0,32,22,17,,,0,Matches,63396eff
+182,Wolke Janssens,be BEL,DF,Sint-Truiden,31-310,1995,2.3,0,0,0,1,2,0,0,6,4,,,0,Matches,6fe7f397
+183,Sylvester Jasper,bg BUL,"FW,MF",Standard Liège,25-065,2001,0.4,0,0,0,0,0,0,2,1,1,,,0,Matches,a9f04944
+184,Andreas Jungdal,dk DEN,GK,Westerlo,24-268,2002,11.0,0,0,0,0,4,0,0,0,0,,,0,Matches,66c6680a
+185,Moïse Kaboré,bf BFA,"FW,MF",Beveren,19-332,2006,5.8,0,0,0,3,14,3,5,1,7,,,0,Matches,17515a97
+186,Abdelkahar Kadri,dz ALG,MF,Gent,26-146,2000,3.6,0,0,0,2,7,2,6,1,4,,,0,Matches,248e61fc
+187,Emmanuel Kakou,ci CIV,DF,Cercle Brugge,21-140,2005,6.5,1,0,0,4,4,0,0,14,10,,,2,Matches,bb558d94
+188,Noah Kalonji,be BEL,MF,Anderlecht,17-209,2009,0.1,0,0,0,0,0,0,0,1,0,,,0,Matches,a1d34274
+189,Marco Kana,be BEL,MF,Anderlecht,24-101,2002,6.8,4,0,0,11,2,0,2,8,2,,,0,Matches,adfdc73c
+190,Ibrahim Karamoko,fr FRA,DF,Standard Liège,25-117,2001,10.5,2,0,0,12,7,0,0,11,14,,,0,Matches,550985aa
+191,Abdoul Karim Traoré,gn GUI,"FW,MF",OH Leuven,19-309,2007,3.2,1,1,0,2,3,0,5,3,1,,,0,Matches,cad753bd
+192,Joris Kayembe,cd COD,DF,Genk,32-101,1994,10.1,1,0,0,11,12,0,30,23,15,,,0,Matches,4657faba
+193,Bryang Kayo,us USA,MF,OH Leuven,24-113,2002,0.2,0,0,0,2,0,0,1,1,0,,,0,Matches,84cc3a76
+194,Check Keita,ml MLI,DF,Charleroi,23-229,2003,9.0,2,1,1,8,12,2,0,7,10,,,0,Matches,c9f2f83a
+195,Sekou Keita,be BEL,FW,Union SG,20-199,2006,0.2,0,0,0,0,0,0,0,0,1,,,0,Matches,d6d5e7ef
+196,Stephane Keller,cm CMR,DF,Beveren,25-089,2001,1.3,1,0,0,2,1,0,0,1,1,,,0,Matches,89d1e9fa
+197,Mory Kera,be BEL,MF,Charleroi,18-144,2008,0.8,0,0,0,1,2,0,0,4,0,,,0,Matches,b66900ae
+198,Yassine Khalifi,ma MAR,MF,Charleroi,21-100,2005,10.4,1,0,0,4,21,0,2,14,9,,,0,Matches,092ff45c
+199,Jakob Kiilerich,dk DEN,DF,Zulte Waregem,26-191,2000,11.0,0,0,0,5,2,0,3,12,4,,,0,Matches,6962bd71
+200,Seiji Kimura,jp JPN,DF,Westerlo,25-085,2001,10.9,0,0,0,3,3,1,1,13,6,,,0,Matches,1a2063c6
+201,Maksim Kirejeŭ,by BLR,FW,Mechelen,22-131,2004,0.3,0,0,0,0,1,0,1,1,0,,,0,Matches,0b3a5f59
+202,Hervé Koffi,bf BFA,GK,Union SG,30-032,1996,10.0,1,0,0,0,3,0,0,0,0,,,0,Matches,faf873a7
+203,Rudy Kohon,fr FRA,"DF,MF",Kortrijk,22-178,2004,6.0,2,1,0,8,5,0,3,10,12,,,0,Matches,9cd28348
+204,Leo Kokubo,jp JPN,GK,Sint-Truiden,25-298,2001,11.0,1,0,0,0,3,0,0,0,0,,,0,Matches,ac83bce2
+205,Don-Angelo Konadu,nl NED,FW,Lommel,20-198,2006,8.2,0,0,0,6,13,5,2,2,1,,,0,Matches,205bd649
+206,Cheick Konaté,ml MLI,DF,Beveren,22-229,2004,1.0,0,0,0,1,1,0,5,0,3,,,0,Matches,6ce2cdf0
+207,Valy Konaté,ci CIV,"MF,DF",Cercle Brugge,20-003,2006,9.5,3,0,0,17,10,0,31,23,9,,,0,Matches,c49b70ed
+208,Geoffrey Kondo,fr FRA,DF,Cercle Brugge,24-199,2002,10.0,1,0,0,13,4,0,4,11,4,,,0,Matches,e3a5316a
+209,Mohamed Koné,ci CIV,GK,Charleroi,24-255,2002,10.0,0,0,0,0,3,0,0,1,1,,,1,Matches,24f1fe8c
+210,Josué Kongolo,be BEL,DF,Genk,20-218,2006,11.0,2,0,0,15,18,0,0,16,14,,,0,Matches,2230f979
+211,Tian Koren,si SVN,MF,Club Brugge,17-109,2009,0.4,0,0,0,0,0,0,2,0,1,,,0,Matches,be095bb9
+212,Krys Kouassi,fr FRA,FW,Cercle Brugge,19-254,2007,2.7,1,0,0,5,6,1,1,2,3,,,0,Matches,0f5e3c6b
+213,Therence Koudou,fr FRA,MF,Mechelen,21-339,2004,9.8,1,0,0,10,15,2,39,8,6,,,0,Matches,059a83b8
+214,Ilias Koutsoupias,gr GRE,MF,Anderlecht,25-191,2001,4.6,1,0,0,2,10,1,7,9,6,,,0,Matches,d19203f5
+215,Mátyás Kovács,hu HUN,MF,La Louvière,23-133,2003,2.5,1,0,0,4,3,0,6,0,9,,,0,Matches,c87076b1
+216,Goduine Koyalipou,cf CTA,FW,Kortrijk,26-275,2000,8.5,0,0,0,3,6,9,4,2,3,,,0,Matches,2659a508
+217,Ondřej Kričfaluši,cz CZE,DF,Union SG,22-253,2004,5.1,1,0,0,4,0,0,0,9,10,,,0,Matches,b68bcbda
+218,Reda Laalaoui,ma MAR,MF,Westerlo,21-190,2005,2.5,1,1,0,5,2,1,0,1,1,,,0,Matches,d63b5ff1
+219,Boris lambert,be BEL,MF,Kortrijk,26-221,2000,5.3,0,0,0,8,3,0,0,10,5,,,1,Matches,d81c072d
+220,Djibril Lamego,fr FRA,DF,La Louvière,23-265,2003,6.0,1,0,0,1,3,0,3,12,4,,,0,Matches,63ce2500
+221,Amando Lapage,be BEL,DF,Westerlo,22-009,2004,8.8,1,0,0,14,5,0,2,13,9,,,0,Matches,431274e6
+222,Dimitri Lavalée,be BEL,DF,Standard Liège,29-308,1997,1.0,0,0,0,1,0,0,0,0,1,,,0,Matches,50e73475
+223,Henry Lawrence,eng ENG,DF,Standard Liège,25-057,2001,3.2,0,0,0,3,12,0,4,1,1,,,0,Matches,4f1e22a0
+224,Jamie Lawrence,de GER,DF,OH Leuven,24-007,2002,8.0,4,0,0,17,5,0,3,15,6,,,0,Matches,ab892a73
+225,Luke Le Roux,za RSA,MF,Cercle Brugge,26-252,2000,3.6,1,0,0,8,0,0,0,7,9,,,0,Matches,e30117aa
+226,Mohamed Lei Fofana,ci CIV,DF,Kortrijk,20-323,2005,3.0,1,0,0,5,2,0,5,4,6,,,1,Matches,deda410d
+227,Félix Lemaréchal,fr FRA,MF,Club Brugge,23-102,2003,3.4,1,0,0,4,5,0,26,6,6,,,0,Matches,8ca9415f
+228,Laurent Lemoine,be BEL,DF,Zulte Waregem,28-207,1998,10.0,2,0,0,13,10,0,1,18,9,,,0,Matches,70f1801b
+229,Fedde Leysen,be BEL,DF,Union SG,23-131,2003,2.0,1,0,0,2,1,0,1,1,1,,,0,Matches,19b3caf7
+230,Enric Llansana,nl NED,MF,Anderlecht,25-219,2001,4.9,2,0,0,16,5,1,3,3,8,,,0,Matches,6f095aa4
+231,Enrique Lofolomo,de GER,MF,Zulte Waregem,26-217,2000,10.9,3,0,0,13,16,0,1,6,16,,,0,Matches,e20c42d6
+232,Malcolm Lohunanu-Mbasi,be BEL,FW,Mechelen,18-190,2008,5.4,0,0,0,9,20,3,3,1,2,,,0,Matches,03d8d834
+233,Chris Lokesa,be BEL,"MF,FW",Beveren,22-010,2004,8.2,1,0,0,7,10,6,20,7,8,,,0,Matches,f80083c8
+234,Thierry Lutonda,be BEL,"DF,MF",La Louvière,26-021,2000,7.6,0,0,0,10,2,0,29,9,6,,,0,Matches,22367f92
+235,Ali Maamar,ma MAR,DF,Anderlecht,21-239,2005,10.4,0,0,0,15,12,1,40,13,12,,,0,Matches,a5f5698d
+236,Kevin Mac Allister,ar ARG,DF,Union SG,29-010,1997,5.7,4,0,0,8,4,0,4,16,14,,,0,Matches,0cb35466
+237,Gary Magnée,be BEL,"MF,DF",Cercle Brugge,27-036,1999,9.6,0,0,0,8,8,1,97,20,10,,,0,Matches,8396933c
+238,Jordi Makiese,be BEL,MF,Standard Liège,17-187,2009,0.0,0,0,0,0,0,0,0,0,0,,,0,Matches,a8eb26ab
+239,Abdoulie Manneh,gm GAM,MF,Cercle Brugge,22-049,2004,2.2,0,0,0,1,0,0,1,1,2,,,0,Matches,0d8ca6b3
+240,Jearl Margaritha,cw CUW,"MF,FW",Beveren,26-221,2000,6.2,3,0,0,10,5,1,25,5,5,,,0,Matches,be915a68
+241,Luc Marijnissen,nl NED,DF,Mechelen,23-312,2003,6.9,0,0,0,8,3,0,3,4,6,,,0,Matches,f1a2ebc1
+242,José Marsà,es ESP,DF,Mechelen,24-258,2002,10.5,0,0,0,6,7,3,13,16,13,,,0,Matches,b4ecc6b6
+243,Viggo Martens,be BEL,"MF,FW",Cercle Brugge,19-317,2007,6.9,0,0,0,3,13,0,20,2,11,,,0,Matches,88795d07
+244,Ken Masui,jp JPN,MF,Kortrijk,25-227,2001,4.0,0,0,0,2,8,0,0,6,3,,,0,Matches,de5b8acf
+245,Kaito Matsuzawa,jp JPN,MF,Sint-Truiden,25-285,2001,4.6,2,0,0,7,8,1,13,3,2,,,0,Matches,65d74eaf
+246,Lucas Mbamba,be BEL,DF,Westerlo,20-097,2006,3.2,0,0,0,1,3,0,2,5,2,,,0,Matches,c9ff8f4c
+247,Malick Mbaye,sn SEN,"MF,FW",Zulte Waregem,22-225,2004,3.0,0,1,0,4,5,0,16,0,3,,,0,Matches,6d2b0ada
+248,Loïc Mbe Soh,fr FRA,DF,Sint-Truiden,25-157,2001,2.0,1,0,0,1,0,0,0,4,2,,,1,Matches,8f534f8e
+249,Freddy Mbemba,fr FRA,MF,Charleroi,23-336,2002,6.8,0,0,0,12,16,2,15,4,5,,,0,Matches,fbf4efc9
+250,Youssoupha Mbodji,sn SEN,DF,Zulte Waregem,22-312,2004,1.5,0,1,0,1,2,0,3,1,6,,,0,Matches,3434f4f6
+251,Nathanaël Mbuku,cd COD,MF,Sint-Truiden,24-246,2002,3.9,0,0,0,6,5,1,28,3,6,,,0,Matches,46750e9c
+252,Brandon Mechele,be BEL,DF,Club Brugge,33-293,1993,11.0,1,0,0,9,5,0,0,18,14,,,0,Matches,0a6dbbf7
+253,Yaimar Medina,ec ECU,"DF,MF",Genk,22-012,2004,0.8,4,0,0,2,1,0,3,0,3,,,0,Matches,1fe8ecf7
+254,Nayel Mehssatou,cl CHI,"DF,MF",Kortrijk,24-220,2002,3.9,0,0,0,4,3,1,8,2,3,,,0,Matches,3cc3732e
+255,Bjorn Meijer,nl NED,DF,Club Brugge,23-244,2003,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,95f5aae8
+256,Carlos Mejia,ec ECU,MF,Antwerp,19-116,2007,3.9,2,0,0,4,9,0,24,1,2,,,0,Matches,d8a150c3
+257,Ryan Merlen,fr FRA,MF,Sint-Truiden,24-190,2002,7.8,2,0,0,5,3,1,19,5,7,,,0,Matches,ef731212
+258,Lennart Mertens,be BEL,FW,Beveren,34-095,1992,4.8,0,0,0,7,10,3,0,0,0,,,0,Matches,465d2a8e
+259,Lucas Michal,fr FRA,MF,Cercle Brugge,21-149,2005,1.9,0,0,0,4,2,0,7,0,1,,,0,Matches,0c7b1c91
+260,Simion Michez,be BEL,MF,Mechelen,24-281,2002,5.7,1,0,0,9,12,1,20,12,8,,,0,Matches,f6a06050
+261,Yang Minhyeok,kr KOR,MF,Westerlo,20-215,2006,1.1,1,0,0,2,4,0,2,2,3,,,0,Matches,fe3db176
+262,Nacho Miras,es ESP,GK,Mechelen,29-121,1997,8.0,0,0,0,0,2,0,0,0,0,,,0,Matches,b0ba77a5
+263,Robin Mirisola,be BEL,FW,Genk,19-344,2006,0.0,0,0,0,0,1,0,0,0,0,,,0,Matches,dee3f1e1
+264,Robin Mirisola,be BEL,FW,OH Leuven,19-344,2006,5.9,2,0,0,11,10,1,3,0,2,,,0,Matches,dee3f1e1
+265,Nikola Mituljikić,rs SRB,MF,Zulte Waregem,23-301,2003,1.0,0,0,0,0,3,0,3,1,3,,,0,Matches,28e61ffe
+266,Relebohile Mofokeng,za RSA,"FW,MF",Union SG,22-025,2004,5.7,0,0,0,0,1,2,6,2,4,,,0,Matches,25c3fb97
+267,Tobias Mohr,de GER,"MF,DF",Standard Liège,31-085,1995,2.0,0,0,0,5,0,1,11,4,3,,,0,Matches,9ec9c8b6
+268,Lukas Mondele,be BEL,MF,Cercle Brugge,22-233,2004,7.3,1,0,0,2,5,0,5,4,5,,,0,Matches,2e6bd80e
+269,Gustav Mortensen,dk DEN,DF,Standard Liège,22-243,2004,8.2,1,1,0,6,2,3,27,4,10,,,0,Matches,9b73c630
+270,Arbnor Muja,al ALB,MF,Sint-Truiden,27-353,1998,2.2,1,0,0,0,4,0,11,2,4,,,0,Matches,7767cb03
+271,Reno Münz,de GER,DF,Westerlo,21-046,2005,0.9,0,0,0,0,1,0,0,2,1,,,0,Matches,2a231b6b
+272,Harrison Murray-Campbell,eng ENG,"DF,MF",Kortrijk,20-105,2006,8.2,1,0,0,18,5,0,1,12,9,,,1,Matches,1c70b3dd
+273,Visar Musliu,mk MKD,DF,Sint-Truiden,32-004,1994,9.0,1,0,0,9,11,0,0,18,10,,,0,Matches,9d1f0c99
+274,Moussa N'Diaye,sn SEN,DF,Anderlecht,24-152,2002,0.8,0,0,0,0,0,0,3,1,6,,,0,Matches,b28edf04
+275,Ilyes Najim,fr FRA,FW,Beveren,24-068,2002,0.2,0,0,0,0,0,0,1,0,0,,,0,Matches,46ae6590
+276,Luis Narh,gh GHA,FW,Antwerp,18-327,2007,1.8,0,0,0,4,3,1,0,1,0,,,0,Matches,a8b66bdb
+277,Gakū Nawata,jp JPN,FW,Charleroi,20-111,2006,1.6,1,0,0,4,2,1,1,1,3,,,0,Matches,aab9b7b4
+278,Joel Ndala,eng ENG,MF,Cercle Brugge,20-170,2006,0.3,0,0,0,0,0,0,0,0,0,,,0,Matches,e0767642
+279,Michée Ndembi,be BEL,DF,Westerlo,19-136,2007,1.0,0,0,0,0,0,0,0,1,0,,,0,Matches,20bad933
+280,James Ndjeungoue,cm CMR,DF,Kortrijk,23-227,2003,7.7,2,1,0,12,3,0,4,15,12,,,0,Matches,271be4a9
+281,Steve Ngoura,fr FRA,FW,Cercle Brugge,21-268,2005,8.6,2,0,0,16,14,7,6,3,3,,,0,Matches,731f1f5a
+282,Bernard Nguene,cm CMR,"FW,MF",Standard Liège,20-105,2006,5.4,0,0,0,6,5,1,0,3,1,,,0,Matches,95915bb5
+283,Ousseynou Niang,sn SEN,MF,Union SG,25-036,2001,1.0,0,0,0,0,4,0,5,0,0,,,0,Matches,29eeb7fa
+284,Ousseynou Niang,sn SEN,"MF,FW",Zulte Waregem,25-036,2001,2.7,1,0,0,4,5,7,8,2,0,,,0,Matches,29eeb7fa
+285,Casper Nielsen,dk DEN,MF,Standard Liège,32-202,1994,7.7,1,0,0,5,8,0,63,3,13,,,0,Matches,f6a90edd
+286,Timothée Nkada,fr FRA,FW,Standard Liège,27-120,1999,0.2,0,0,0,1,1,0,1,0,0,,,0,Matches,80d1adb3
+287,Patrick Nkoa,cm CMR,DF,La Louvière,27-129,1999,7.4,2,0,0,9,2,0,2,12,11,,,0,Matches,70b98101
+288,Taishi Nozawa,jp JPN,GK,Antwerp,23-327,2002,11.0,1,0,0,2,3,0,0,0,1,,,0,Matches,f7d2b7fe
+289,Bruny Nsimba,be BEL,FW,Standard Liège,26-226,2000,1.9,0,0,0,1,3,2,1,0,0,,,0,Matches,1a72c7ba
+290,Erick Nunes,br BRA,"MF,DF",Cercle Brugge,22-261,2004,2.9,0,0,0,1,3,2,7,2,3,,,0,Matches,5fdab099
+291,Roggerio Nyakossi,ch SUI,DF,OH Leuven,22-308,2004,8.7,2,0,0,9,6,0,0,32,5,,,0,Matches,2e64644b
+292,Sverre Nypan,no NOR,MF,Lommel,19-333,2006,3.8,0,0,0,2,5,0,19,4,2,,,0,Matches,3dde85f2
+293,Mardochee Nzita,be BEL,DF,Charleroi,26-266,2000,8.8,2,0,0,8,14,3,29,12,16,,,0,Matches,a037aeb5
+294,Sixtus Ogbuehi,ng NGA,FW,Kortrijk,23-247,2003,1.9,0,0,0,4,3,2,0,0,0,,,0,Matches,3d034807
+295,Takuya Ogiwara,jp JPN,MF,OH Leuven,26-359,1999,3.1,1,0,0,6,4,0,16,6,10,,,0,Matches,b9feac8a
+296,Noa Ojea Cobiella,be BEL,MF,Anderlecht,17-099,2009,1.3,0,0,0,0,3,0,6,0,2,,,0,Matches,06688c1a
+297,Yllan Okou,fr FRA,DF,La Louvière,23-329,2002,6.8,3,1,1,6,3,1,11,6,2,,,0,Matches,fa753b79
+298,Darius Olaru,ro ROU,MF,Union SG,28-259,1998,1.6,0,0,0,2,2,0,3,2,2,,,0,Matches,9a129e64
+299,Victor Olatunji,ng NGA,FW,Beveren,27-073,1999,2.6,1,0,0,8,2,3,1,0,2,,,0,Matches,743ffce1
+300,Aimé Omgba,nl NED,MF,Gent,24-026,2002,1.0,1,0,0,4,1,0,1,0,1,,,0,Matches,0a3fa0cd
+301,Andrew Omobamidele,ie IRL,DF,Anderlecht,24-147,2002,1.8,2,0,0,3,0,0,0,1,0,,,0,Matches,c393a6c4
+302,Jayden Onia Seke,be BEL,"MF,FW",Anderlecht,17-193,2009,1.9,2,0,0,4,5,0,6,2,2,,,0,Matches,93c5a3b9
+303,Davis Opoku,be BEL,MF,OH Leuven,19-019,2007,8.1,1,0,0,8,10,1,23,10,15,,,1,Matches,7d23db7d
+304,Zakaria El Ouahdi,ma MAR,DF,Genk,24-321,2001,3.7,0,0,0,1,5,0,6,4,5,,,0,Matches,a3d79d3c
+305,Kader Ouattara,bf BFA,FW,Cercle Brugge,21-175,2005,0.5,0,0,0,1,1,1,3,0,2,,,0,Matches,abe0019a
+306,Cheick Oumar Conde,gn GUI,MF,Beveren,26-114,2000,7.2,1,0,0,8,13,0,1,15,16,,,0,Matches,2f88752d
+307,Dago Ourega,fr FRA,"DF,MF",Westerlo,22-042,2004,8.3,0,0,0,9,17,0,22,6,9,,,0,Matches,8e2df240
+308,Aiham Ousou,sy SYR,DF,Charleroi,26-312,2000,10.0,4,0,0,11,9,0,0,15,17,,,0,Matches,2973a975
+309,Henry Oware,gh GHA,DF,Lommel,22-230,2004,1.4,0,0,0,0,0,0,3,2,1,,,0,Matches,70497a05
+310,Halil Özdemir,tr TUR,MF,Mechelen,21-091,2005,0.3,0,0,0,0,1,0,0,1,0,,,0,Matches,3034f6ad
+311,Tristan Panduro,dk DEN,MF,Zulte Waregem,18-311,2008,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,31b0e88a
+312,Maksim Paskotši,ee EST,DF,Gent,23-302,2003,5.2,1,0,0,5,2,0,3,8,6,,,0,Matches,8bde9ba6
+313,Louis Patris,be BEL,MF,Union SG,25-163,2001,10.0,2,1,0,16,8,3,27,17,19,,,0,Matches,9befa3cf
+314,Wilguens Paugain,ht HAI,DF,Zulte Waregem,25-085,2001,1.8,0,0,0,0,2,0,3,3,1,,,0,Matches,4385ee98
+315,Ivan Pavlic,be BEL,MF,Union SG,25-007,2001,0.0,0,0,0,0,0,0,0,0,0,,,0,Matches,810ac0e3
+316,Marcos Peano,ar ARG,GK,La Louvière,28-033,1998,10.9,0,1,0,1,3,0,0,0,0,,,0,Matches,e40f365c
+317,Joey Pelupessy,id IDN,MF,Lommel,33-186,1993,9.5,0,0,0,2,6,0,2,9,6,,,0,Matches,f9575abf
+318,Léo Pétrot,fr FRA,DF,Anderlecht,29-216,1997,10.5,2,0,0,9,5,0,2,11,7,,,0,Matches,00638016
+319,Patrick Pflücke,de GER,MF,Charleroi,29-352,1996,8.4,1,0,0,2,5,1,80,2,6,,,0,Matches,1baf075c
+320,Anthony Philips,be BEL,MF,Kortrijk,17-224,2009,3.8,1,0,0,8,4,0,0,3,3,,,0,Matches,81883c5e
+321,Matthias Pieklak,be BEL,GK,Lommel,20-064,2006,11.0,0,0,0,0,1,0,0,0,2,,,0,Matches,10f2ea83
+322,Lucas Pirard,be BEL,GK,Standard Liège,31-252,1995,1.6,0,0,0,0,0,0,0,0,0,,,0,Matches,85f61a89
+323,Ewoud Pletinckx,be BEL,DF,OH Leuven,26-038,2000,8.2,1,0,0,8,1,0,3,10,14,,,0,Matches,cdf68d61
+324,Suf Podgoreanu,il ISR,MF,Kortrijk,24-301,2002,2.1,0,0,0,3,3,0,10,0,3,,,0,Matches,d697a2d0
+325,Snayder Porozo,ec ECU,FW,Antwerp,19-189,2007,4.6,4,0,0,12,7,1,3,2,0,,,0,Matches,1fb22224
+326,Freddie Potts,eng ENG,MF,Club Brugge,23-066,2003,9.8,5,0,0,11,12,0,8,14,5,,,0,Matches,86bf27f0
+327,Dennis Praet,be BEL,MF,Mechelen,32-187,1994,7.8,1,0,0,10,14,0,12,10,15,,,0,Matches,86695068
+328,Joedrick Pupe,be BEL,DF,Sint-Truiden,29-166,1997,6.2,1,0,0,5,2,1,13,9,6,,,0,Matches,5b57b3c7
+329,Théo Radelet,be BEL,GK,La Louvière,19-002,2007,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,e0637b60
+330,Benito Raman,be BEL,FW,Mechelen,32-010,1994,5.1,0,0,0,6,6,5,10,1,2,,,0,Matches,867501bf
+331,Christiaan Ravych,be BEL,DF,Genk,24-110,2002,0.9,0,0,0,1,1,0,0,1,1,,,0,Matches,dd8c04a9
+332,Christiaan Ravych,be BEL,DF,Cercle Brugge,24-110,2002,3.0,0,0,0,3,1,0,0,4,1,,,0,Matches,dd8c04a9
+333,Oleg Reabciuk,md MDA,DF,Anderlecht,28-305,1998,1.0,0,0,0,0,1,1,5,3,0,,,0,Matches,6c249ea7
+334,Semm Renders,be BEL,DF,Antwerp,18-335,2007,5.9,2,0,0,3,2,0,25,6,7,,,0,Matches,42dacb37
+335,Alexander Reumers,be BEL,FW,Lommel,19-204,2007,0.3,0,0,0,0,0,1,0,0,0,,,0,Matches,26f1283a
+336,Tom Reyners,be BEL,MF,Lommel,26-211,2000,8.7,1,0,0,7,8,3,23,3,8,,,0,Matches,c4cafe32
+337,Dante Rigo,be BEL,MF,Beveren,27-341,1998,0.0,0,0,0,0,1,0,0,0,0,,,0,Matches,223158da
+338,Jannik Robatsch,at AUT,DF,Beveren,21-324,2004,0.5,0,0,0,1,0,0,0,0,0,,,0,Matches,65592e65
+339,Milan Robberechts,be BEL,MF,Club Brugge,22-258,2004,0.1,0,0,0,0,0,0,0,0,0,,,0,Matches,81e4f7ff
+340,Jamie Roche,se SWE,MF,Kortrijk,25-226,2001,3.2,1,0,0,9,3,0,0,5,4,,,0,Matches,dbdbddb0
+341,Kevin Rodríguez,ec ECU,FW,Union SG,26-258,2000,2.5,0,0,0,1,7,5,0,0,0,,,0,Matches,189fb038
+342,Davy Roef,be BEL,GK,Gent,32-284,1994,11.0,0,0,0,0,3,0,0,0,0,,,0,Matches,6fe2aba3
+343,Milan Roganović,me MNE,DF,Genk,21-020,2005,0.4,1,0,0,0,0,1,0,0,1,,,0,Matches,77489aa3
+344,Nicolas Rommens,be BEL,DF,Lommel,31-335,1994,2.6,0,0,0,1,1,0,14,3,0,,,0,Matches,f1afb849
+345,Jakob Romsaas,no NOR,MF,Charleroi,22-185,2004,9.5,0,0,0,10,9,1,24,12,10,,,0,Matches,eeb03fcd
+346,Léandro Rousseau,be BEL,FW,La Louvière,23-133,2003,2.4,0,0,0,2,4,0,4,0,1,,,0,Matches,c2159c0b
+347,Triston Rowe,eng ENG,DF,Charleroi,20-183,2006,3.2,1,0,0,7,0,0,9,6,6,,,0,Matches,3fcc22d5
+348,Gilles Ruyssen,be BEL,DF,Kortrijk,32-152,1994,6.0,1,0,0,5,3,0,0,9,7,,,0,Matches,87cc352c
+349,Kyriani Sabbe,be BEL,DF,Club Brugge,21-295,2005,8.7,0,0,0,2,3,1,26,7,11,,,0,Matches,585d0192
+350,Shunsuke Saito,jp JPN,MF,Westerlo,21-205,2005,9.2,0,0,0,7,10,1,31,3,11,,,0,Matches,feee999b
+351,Isa Sakamoto,jp JPN,"MF,FW",Westerlo,23-083,2003,8.8,2,0,0,9,8,1,4,2,7,,,0,Matches,1019bdce
+352,Ibrahim Salah,ma MAR,"MF,FW",Antwerp,25-079,2001,6.9,0,0,0,5,1,2,35,3,9,,,0,Matches,cad3fd4d
+353,Mo Salah,be BEL,MF,Lommel,22-174,2004,0.3,0,0,0,0,0,0,0,0,1,,,0,Matches,c1ff8108
+354,Nathan Saliba,ca CAN,MF,Anderlecht,22-283,2004,1.6,0,0,0,2,2,0,0,2,3,,,0,Matches,44cfc681
+355,Dikeni-Rafid Salifou,tg TOG,MF,Mechelen,23-162,2003,1.5,0,0,0,1,1,0,0,1,2,,,0,Matches,e1830c52
+356,Cisse Sandra,be BEL,MF,Westerlo,22-336,2003,11.0,2,0,0,10,6,2,4,16,5,,,0,Matches,2f33776f
+357,Nikolas Sattlberger,at AUT,DF,Genk,22-303,2004,1.1,0,0,0,1,1,0,0,1,1,,,0,Matches,6d4b43a6
+358,Aurélien Scheidler,fr FRA,FW,Charleroi,28-166,1998,8.7,0,0,0,11,17,5,1,1,0,,,0,Matches,bc9479b9
+359,Luca Schelfhout,be BEL,DF,Antwerp,19-059,2007,2.8,2,0,0,6,1,0,5,6,10,,,0,Matches,645680e3
+360,Johannes Schenk,de GER,GK,Beveren,23-308,2003,10.3,0,1,0,1,0,0,0,1,0,,,0,Matches,5b74bf2b
+361,Lucas Schoofs,be BEL,MF,Lommel,29-318,1997,11.0,1,0,0,16,6,0,4,12,17,,,0,Matches,2a4828b3
+362,Rob Schoofs,be BEL,MF,Union SG,32-239,1994,2.5,0,0,0,1,1,0,9,3,4,,,0,Matches,28871569
+363,Siebe Schrijvers,be BEL,"MF,FW",OH Leuven,30-122,1996,9.7,3,0,0,10,17,0,56,20,16,,,0,Matches,746fec7d
+364,Christopher Scott,de GER,MF,Antwerp,24-163,2002,5.1,2,0,0,9,6,0,8,5,5,,,0,Matches,2723ce5d
+365,Ilias Sebaoui,be BEL,MF,Sint-Truiden,25-044,2001,10.5,1,0,0,14,20,2,35,6,9,,,0,Matches,66b52562
+366,Ralf Seuntjens,nl NED,FW,Lommel,37-214,1989,2.3,0,0,0,4,2,3,0,1,1,,,0,Matches,214a520f
+367,Joaquin Seys,be BEL,DF,Club Brugge,21-234,2005,10.9,2,0,0,6,9,2,44,14,12,,,0,Matches,0beabf0a
+368,Shion Shinkawa,jp JPN,MF,Sint-Truiden,19-103,2007,2.3,0,0,0,5,2,1,1,0,1,,,0,Matches,b8026cb8
+369,Danylo Sikan,ua UKR,"FW,MF",Anderlecht,25-215,2001,7.0,1,0,0,9,12,1,2,1,3,,,0,Matches,03998238
+370,Leonardo da Silva Lopes,pt POR,MF,Gent,27-352,1998,6.9,2,0,0,10,10,0,3,5,8,,,0,Matches,7dfcfd17
+371,Hugo Siquet,be BEL,DF,Club Brugge,24-131,2002,1.5,0,0,0,2,2,0,17,1,1,,,0,Matches,c6cf860f
+372,Abdoulaye Sissako,fr FRA,MF,Sint-Truiden,28-175,1998,10.8,1,0,0,10,6,1,3,9,18,,,0,Matches,3b602b26
+373,Ferre Slegers,be BEL,MF,Beveren,22-309,2004,4.1,1,0,0,10,3,0,14,4,9,,,0,Matches,5ba5a4b0
+374,Matte Smets,be BEL,DF,Genk,22-317,2004,10.0,1,0,0,8,3,0,7,14,8,,,1,Matches,d5615a3a
+375,Guilherme Smith,br BRA,MF,Union SG,23-159,2003,9.0,0,0,0,8,12,1,48,8,9,,,0,Matches,3e5981f7
+376,Frederic Soelle Soelle,be BEL,FW,Sint-Truiden,20-328,2005,3.4,0,0,0,3,7,4,1,0,1,,,0,Matches,59a41525
+377,Noah Solheid,be BEL,DF,Charleroi,23-132,2003,1.3,0,0,0,2,0,0,0,0,1,,,0,Matches,361d0621
+378,Thibo Somers,be BEL,"MF,DF",Antwerp,27-246,1999,8.0,0,0,0,7,2,0,15,6,9,,,0,Matches,64238658
+379,Yann Sommer,ch SUI,GK,Club Brugge,37-335,1988,11.0,0,0,0,0,0,0,0,1,0,,,0,Matches,420c18a1
+380,Momodou Sonko,se SWE,MF,Gent,21-290,2005,9.8,1,0,0,3,3,5,21,6,7,,,0,Matches,fd0a98c8
+381,Ibrahima Sory Bangoura,gn GUI,MF,Genk,22-316,2004,5.2,1,0,0,13,8,0,0,7,4,,,0,Matches,da231120
+382,Massamba Sow,fr FRA,DF,Charleroi,22-157,2004,2.0,0,0,0,2,1,0,0,3,2,,,0,Matches,0378d78d
+383,Jorne Spileers,be BEL,DF,Club Brugge,21-300,2005,4.8,2,0,0,8,2,0,1,10,2,,,0,Matches,2d65a822
+384,Nikola Storm,be BEL,"FW,MF",Westerlo,32-048,1994,1.1,0,0,0,1,2,0,9,1,0,,,0,Matches,6460189b
+385,Rok Štorman,si SVN,MF,Kortrijk,22-074,2004,2.0,1,1,0,4,0,1,2,0,2,,,0,Matches,5a2d3986
+386,Mario Stroeykens,be BEL,MF,Anderlecht,22-049,2004,2.7,1,0,0,3,2,0,3,3,7,,,0,Matches,f4adf2cd
+387,Ian Struyf,be BEL,DF,Mechelen,19-087,2007,0.3,0,0,0,0,1,0,1,0,0,,,0,Matches,c54804c6
+388,Ross Sykes,eng ENG,DF,Union SG,27-236,1999,1.1,0,0,0,1,1,1,1,0,1,,,0,Matches,4d0be953
+389,Massire Sylla,sn SEN,DF,Union SG,21-314,2005,10.0,4,0,0,9,22,0,3,33,28,,,1,Matches,b4f52a27
+390,Benjamin Tahirovic,ba BIH,MF,Genk,23-259,2003,4.8,2,0,0,11,3,0,0,7,5,,,0,Matches,eb3022c3
+391,Anas Tajaouart,ma MAR,"MF,FW",La Louvière,21-071,2005,5.0,0,0,0,7,12,1,0,5,5,,,0,Matches,3d517fe3
+392,Kōta Takai,jp JPN,DF,Sint-Truiden,22-074,2004,2.5,1,0,0,7,1,0,0,5,2,,,1,Matches,9f59ff55
+393,Juho Talvitie,fi FIN,MF,Lommel,21-242,2005,7.7,1,0,0,7,17,0,22,7,5,,,0,Matches,d2e11276
+394,Franz Tangala,be BEL,DF,Zulte Waregem,21-216,2005,5.2,3,0,0,8,3,0,11,7,10,,,0,Matches,08e1d182
+395,Shogo Taniguchi,jp JPN,DF,Sint-Truiden,35-125,1991,6.0,1,0,0,6,2,0,0,9,4,,,1,Matches,828a9c47
+396,Henok Teklab,de GER,MF,OH Leuven,28-001,1998,0.9,0,0,0,0,2,0,4,0,1,,,0,Matches,640d17d5
+397,Jean Thierry Lazare,ci CIV,MF,Cercle Brugge,28-255,1998,1.9,1,0,0,4,7,0,0,0,2,,,0,Matches,1d2c3e5e
+398,Dominic Thompson,eng ENG,"DF,MF",Beveren,26-114,2000,0.6,0,0,0,0,0,0,2,4,2,,,0,Matches,235a62f8
+399,Jesper Tolinsson,se SWE,DF,Lommel,23-262,2003,0.8,0,0,0,2,1,0,0,1,0,,,0,Matches,1a5fa6a3
+400,Rayan Touzghar,fr FRA,MF,Standard Liège,23-021,2003,8.6,0,0,0,15,12,3,40,10,1,,,0,Matches,c3865081
+401,Nicolo Tresoldi,de GER,FW,Club Brugge,22-089,2004,9.5,1,0,0,10,19,2,0,2,4,,,0,Matches,3860ab13
+402,Alexis Trouillet,fr FRA,MF,Standard Liège,25-329,2000,9.9,3,0,0,5,13,0,4,19,14,,,0,Matches,0a8d6b91
+403,Cheveyo Tsawa,ch SUI,MF,Club Brugge,19-343,2006,1.5,0,0,0,1,1,0,2,3,3,,,0,Matches,7c5b59a7
+404,Josua Tshiolola,,GK,Beveren,21-339,2004,0.6,0,0,0,0,0,0,0,0,0,,,0,Matches,84184a91
+405,Emanuel Tsimba,ch SUI,FW,Westerlo,20-148,2006,1.4,0,0,0,3,1,1,0,0,0,,,0,Matches,888a17c0
+406,Yuto Tsunashima,jp JPN,DF,Antwerp,26-094,2000,6.9,2,0,0,12,2,0,3,12,6,,,0,Matches,4aa41d88
+407,Eran Tuypens,be BEL,DF,Antwerp,20-345,2005,3.4,0,0,0,2,2,0,16,10,5,,,0,Matches,d8318617
+408,Serxho Ujka,al ALB,MF,Zulte Waregem,28-082,1998,3.2,0,0,0,7,2,0,5,6,2,,,0,Matches,c4ed1306
+409,Kyan Vaesen,be BEL,FW,OH Leuven,25-218,2001,2.0,1,0,0,1,3,1,0,0,2,,,0,Matches,f95cbfbc
+410,Anthony Valencia,ec ECU,MF,Antwerp,23-119,2003,1.5,1,0,0,3,2,0,3,2,2,,,0,Matches,674dee62
+411,Kévin Van Den Kerkhof,dz ALG,DF,Charleroi,30-248,1996,10.7,2,0,0,4,9,1,57,12,20,,,0,Matches,f6a3c84d
+412,Thomas Van den Keybus,be BEL,MF,Westerlo,25-206,2001,0.7,1,0,0,2,3,0,2,1,1,,,0,Matches,21453b2e
+413,Hannes Van der Bruggen,be BEL,MF,Cercle Brugge,33-230,1993,3.9,2,0,0,7,7,0,1,9,5,,,0,Matches,411fb06f
+414,Siebe Van Der Heyden,be BEL,DF,Gent,28-171,1998,10.9,4,0,0,8,5,1,2,13,7,,,0,Matches,cf9bdd43
+415,Jason Van Duiven,nl NED,DF,Lommel,21-266,2005,11.0,2,0,0,12,17,1,44,27,19,,,0,Matches,9b23574b
+416,Louie Van Gelder,be BEL,MF,Antwerp,17-291,2009,0.1,0,0,0,0,1,0,0,0,0,,,0,Matches,d1bf1d25
+417,Rein Van Helden,be BEL,DF,Antwerp,24-116,2002,8.4,0,0,0,8,4,0,2,11,13,,,0,Matches,f6e214c4
+418,Jellert Van Landschoot,be BEL,"MF,FW",Kortrijk,29-082,1997,4.4,1,0,0,1,1,2,25,3,4,,,0,Matches,0bd7029a
+419,Cedric Van Meirvenne,be BEL,MF,Mechelen,21-213,2005,4.8,0,0,0,5,12,1,17,1,8,,,0,Matches,3b794ea1
+420,Hans Vanaken,be BEL,MF,Club Brugge,34-085,1992,9.9,1,0,0,6,6,0,2,8,8,,,0,Matches,392a7aea
+421,Zalán Vancsa,hu HUN,"FW,MF",Lommel,22-021,2004,1.4,0,0,0,0,2,0,5,2,3,,,0,Matches,9fd1e981
+422,Gerard Vandeplas,be BEL,FW,Antwerp,20-265,2006,0.3,0,0,0,0,0,0,1,0,0,,,0,Matches,143c462c
+423,Keano Vanrafelghem,be BEL,MF,Mechelen,23-107,2003,2.1,1,0,0,1,5,1,8,0,0,,,0,Matches,dc430f29
+424,Robert-Jan Vanwesemael,be BEL,"DF,MF",Sint-Truiden,24-236,2002,8.8,3,1,1,6,3,1,43,8,10,,,0,Matches,753b6dd7
+425,Dante Vanzeir,be BEL,"MF,FW",Cercle Brugge,28-215,1998,5.4,0,1,0,2,3,1,13,4,6,,,0,Matches,d682f554
+426,Andrej Vasovic,ch SUI,FW,Club Brugge,19-034,2007,0.1,0,0,0,0,0,2,0,1,0,,,0,Matches,aa1bd63d
+427,Kewan Vemba,be BEL,MF,Zulte Waregem,21-117,2005,0.0,0,0,0,1,0,0,0,0,0,,,0,Matches,5de3f5bc
+428,Josúe Vergara,pa PAN,FW,Gent,19-115,2007,7.0,1,0,0,7,19,3,1,0,2,,,0,Matches,5fb2035f
+429,Romeo Vermant,be BEL,"MF,FW",Club Brugge,22-297,2004,3.2,1,0,0,4,10,2,2,1,0,,,0,Matches,7db98639
+430,Arthur Vermeeren,be BEL,MF,Antwerp,21-283,2005,6.0,2,0,0,7,0,0,10,10,5,,,0,Matches,722494dc
+431,Arno Verschueren,be BEL,MF,Beveren,29-223,1997,4.1,0,0,0,11,1,2,23,0,5,,,0,Matches,0ae2b36f
+432,Birger Verstraete,be BEL,MF,OH Leuven,32-215,1994,5.2,3,0,0,5,6,0,3,8,7,,,0,Matches,28eaa0f3
+433,Hugo Vetlesen,no NOR,MF,Club Brugge,26-261,2000,8.8,2,0,0,10,11,1,20,1,9,,,0,Matches,aa982b0f
+434,Jan Virgili,es ESP,MF,Club Brugge,20-114,2006,5.1,0,0,0,0,8,2,12,3,2,,,0,Matches,fbde78a4
+435,Thibault Vlietinck,be BEL,"DF,MF",OH Leuven,29-090,1997,0.5,0,0,0,0,0,0,3,0,1,,,0,Matches,5064d4c1
+436,Matties Volckaert,be BEL,"MF,DF",Gent,24-036,2002,7.1,0,0,0,8,4,2,12,4,10,,,0,Matches,9e100763
+437,Kiany Vroman,be BEL,GK,OH Leuven,22-300,2004,1.0,0,0,0,0,0,0,0,0,0,,,0,Matches,4b1a3b4b
+438,Basile Vroninks,be BEL,MF,Kortrijk,19-362,2006,0.7,0,0,0,0,1,0,2,0,0,,,0,Matches,3dc477d6
+439,Mame Wade,sn SEN,"MF,FW",La Louvière,24-038,2002,7.3,4,0,0,20,5,1,6,6,15,,,0,Matches,ff999f33
+440,Kyrell Wilson,eng ENG,MF,Gent,21-351,2004,1.9,1,0,0,3,0,0,3,0,5,,,0,Matches,aa7cbca1
+441,Marten Winkler,de GER,MF,Anderlecht,24-017,2002,4.8,0,0,0,8,8,1,28,6,1,,,0,Matches,e0d515ef
+442,Dries Wouters,be BEL,DF,Lommel,29-293,1997,5.3,1,0,0,1,5,0,0,2,5,,,0,Matches,568de36f
+443,Shin Yamada,jp JPN,FW,OH Leuven,26-171,2000,2.2,0,0,0,3,4,1,2,0,1,,,0,Matches,8235bf45
+444,Ayumu Yokoyama,jp JPN,MF,Genk,23-258,2003,4.7,0,0,0,1,1,0,27,2,3,,,0,Matches,4ad6aa04
+445,Moncef Zekri,ma MAR,DF,Mechelen,18-058,2008,1.0,0,0,0,3,0,1,0,3,0,,,0,Matches,99f34773
+446,Besfort Zeneli,se SWE,"MF,FW",Union SG,23-361,2002,9.7,0,0,0,8,11,3,69,3,4,,,0,Matches,6be253bf
+447,Andi Zeqiri,ch SUI,FW,Standard Liège,27-148,1999,1.3,0,0,0,2,3,0,0,1,1,,,0,Matches,d01231f0
+448,Adem Zorgane,dz ALG,MF,Union SG,26-315,2000,6.4,1,0,0,4,6,1,9,5,11,,,0,Matches,392b5133
+449,Łukasz Łakomy,pl POL,FW,OH Leuven,25-303,2001,2.6,0,0,0,2,3,0,3,1,3,,,0,Matches,543b9811

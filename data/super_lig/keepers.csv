@@ -1,30 +1,30 @@
-Playing Time,Playing Time,Playing Time,Playing Time,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Penalty Kicks,Penalty Kicks,Penalty Kicks,Penalty Kicks,Penalty Kicks,,-additional
+,,,,,,,Playing Time,Playing Time,Playing Time,Playing Time,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Penalty Kicks,Penalty Kicks,Penalty Kicks,Penalty Kicks,Penalty Kicks,,-additional
 Rk,Player,Nation,Pos,Squad,Age,Born,MP,Starts,Min,90s,GA,GA90,SoTA,Saves,Save%,W,D,L,CS,CS%,PKatt,PKA,PKsv,PKm,Save%,Matches,-9999
-1,Bilal Bayazit,nl NED,GK,Samsunspor,27-220,1999,3,3,270,3.0,7,2.33,16,9,56.3,1,0,2,1,33.3,1,1,0,0,0.0,Matches,f0a63d14
-2,Emre Bilgin,tr TUR,GK,Eyüpspor,22-261,2004,4,3,315,3.5,11,3.14,20,9,45.0,0,0,3,0,0.0,1,1,0,0,0.0,Matches,c93ca6cd
-3,Uğurcan Çakır,tr TUR,GK,Galatasaray,30-223,1996,10,10,900,10.0,13,1.30,34,20,61.8,8,1,1,4,40.0,1,1,0,0,0.0,Matches,f63a8347
-4,İrfan Can Eğribayat,tr TUR,GK,Gençlerbirliği,28-137,1998,11,11,990,11.0,21,1.91,75,54,72.0,3,2,6,2,18.2,4,3,1,0,25.0,Matches,b3c67ed0
-5,Tarık Çetin,tr TUR,GK,Fenerbahçe,29-310,1997,1,1,90,1.0,2,2.00,3,1,33.3,0,0,1,0,0.0,0,0,0,0,,Matches,452f6d51
-6,Mehmet Dadakdeniz,tr TUR,GK,Gaziantep,27-101,1999,2,2,180,2.0,4,2.00,11,7,63.6,0,0,2,0,0.0,1,1,0,0,0.0,Matches,0964e30c
-7,Deniz Dilmen,tr TUR,GK,Başakşehir,21-162,2005,3,3,270,3.0,9,3.00,17,8,47.1,1,0,2,0,0.0,0,0,0,0,,Matches,f4a8c4ea
-8,Deniz Ertaş,tr TUR,GK,Konyaspor,21-239,2005,4,2,254,2.8,9,3.19,23,14,60.9,0,0,2,0,0.0,3,2,1,0,33.3,Matches,a038e138
-9,Marcos Felipe,br BRA,GK,Yeni Çorumspor,30-215,1996,11,11,990,11.0,21,1.91,57,36,63.2,5,1,5,2,18.2,1,1,0,0,0.0,Matches,453bdfb9
-10,Yahia Fofana,ci CIV,GK,Rizespor,26-085,2000,9,9,810,9.0,15,1.67,44,29,65.9,3,1,5,2,22.2,1,1,0,0,0.0,Matches,9d420dad
-11,Andreas Gianniotis,gr GRE,GK,Kasımpaşa,33-337,1992,11,11,990,11.0,11,1.00,49,38,77.6,5,5,1,4,36.4,0,0,0,0,,Matches,8ae07c1c
-12,Zafer Görgen,,GK,Rizespor,26-146,2000,2,2,180,2.0,1,0.50,8,7,87.5,1,1,0,1,50.0,0,0,0,0,,Matches,87cf60fa
-13,Luka Gugeshashvili,ge GEO,GK,Göztepe,27-199,1999,4,4,315,3.5,11,3.14,20,9,45.0,0,1,3,0,0.0,3,2,0,1,0.0,Matches,f05b0000
-14,Bahadır Güngördü,,GK,Konyaspor,28-341,1997,9,9,736,8.2,5,0.61,25,20,80.0,2,2,5,4,44.4,1,0,1,0,100.0,Matches,485d9a8a
-15,Okan Kocuk,tr TUR,GK,Samsunspor,31-110,1995,8,8,720,8.0,19,2.37,52,33,63.5,1,1,6,1,12.5,0,0,0,0,,Matches,7e9fd9b9
-16,Alban Lafont,ci CIV,GK,Amedspor,27-295,1999,11,11,990,11.0,15,1.36,41,26,63.4,7,2,2,3,27.3,1,1,0,0,0.0,Matches,4e7db402
-17,Horaţiu Moldovan,ro ROU,GK,Eyüpspor,28-298,1998,8,8,675,7.5,19,2.53,43,24,55.8,1,0,7,0,0.0,3,3,0,0,0.0,Matches,771ded26
-18,Ederson Moraes,br BRA,GK,Fenerbahçe,33-089,1993,10,10,900,10.0,8,0.80,52,43,84.6,6,1,3,6,60.0,0,0,0,0,,Matches,3bb7b8b4
-19,Alexander Nübel,de GER,GK,Beşiktaş,30-045,1996,11,11,990,11.0,12,1.09,42,30,71.4,7,1,3,4,36.4,0,0,0,0,,Matches,afb0c500
-20,André Onana,cm CMR,GK,Trabzonspor,30-226,1996,11,11,990,11.0,8,0.73,54,46,85.2,8,1,2,6,54.5,3,2,1,0,33.3,Matches,e9c0c1b2
-21,Matija Orbanić,hr CRO,GK,Erzurum BB,26-169,2000,2,2,180,2.0,7,3.50,9,2,22.2,0,0,2,0,0.0,0,0,0,0,,Matches,f9d07a91
-22,Arda Özçimen,tr TUR,GK,Göztepe,24-310,2002,8,7,675,7.5,8,1.07,34,26,76.5,4,2,1,2,28.6,1,1,0,0,0.0,Matches,111e4cd3
-23,Serhat Öztaşdelen,tr TUR,GK,Kocaelispor,21-340,2004,11,11,990,11.0,9,0.82,44,35,79.5,6,1,4,5,45.5,1,1,0,0,0.0,Matches,bec58e8c
-24,Muhammed Şengezer,tr TUR,GK,Başakşehir,29-313,1997,8,8,720,8.0,8,1.00,33,25,75.8,4,2,2,3,37.5,0,0,0,0,,Matches,fa71b998
-25,Ertuğrul Taşkıran,tr TUR,GK,Erzurum BB,37-009,1989,9,9,810,9.0,10,1.11,40,30,75.0,4,2,3,4,44.4,1,1,0,0,0.0,Matches,cf8c553e
-26,Kacper Tobiasz,pl POL,GK,Gaziantep,24-010,2002,9,9,810,9.0,15,1.67,35,20,57.1,2,2,5,2,22.2,2,1,1,0,50.0,Matches,caeeffe7
-27,Paulo Victor Vidotti,br BRA,GK,Alanyaspor,39-306,1987,11,11,990,11.0,18,1.64,57,39,68.4,3,3,5,3,27.3,2,1,1,0,50.0,Matches,68a3e731
-28,Jankat Yilmaz,tr TUR,GK,Galatasaray,22-090,2004,1,1,90,1.0,2,2.00,4,2,50.0,1,0,0,0,0.0,0,0,0,0,,Matches,54c8d831
+1,Bilal Bayazit,nl NED,GK,Samsunspor,27-223,1999,3,3,270,3.0,7,2.33,16,9,56.3,1,0,2,1,33.3,1,1,0,0,0.0,Matches,f0a63d14
+2,Emre Bilgin,tr TUR,GK,Eyüpspor,22-264,2004,4,3,315,3.5,11,3.14,20,9,45.0,0,0,3,0,0.0,1,1,0,0,0.0,Matches,c93ca6cd
+3,Uğurcan Çakır,tr TUR,GK,Galatasaray,30-226,1996,10,10,900,10.0,13,1.30,34,20,61.8,8,1,1,4,40.0,1,1,0,0,0.0,Matches,f63a8347
+4,İrfan Can Eğribayat,tr TUR,GK,Gençlerbirliği,28-140,1998,11,11,990,11.0,21,1.91,75,54,72.0,3,2,6,2,18.2,4,3,1,0,25.0,Matches,b3c67ed0
+5,Tarık Çetin,tr TUR,GK,Fenerbahçe,29-313,1997,1,1,90,1.0,2,2.00,3,1,33.3,0,0,1,0,0.0,0,0,0,0,,Matches,452f6d51
+6,Mehmet Dadakdeniz,tr TUR,GK,Gaziantep,27-104,1999,2,2,180,2.0,4,2.00,11,7,63.6,0,0,2,0,0.0,1,1,0,0,0.0,Matches,0964e30c
+7,Deniz Dilmen,tr TUR,GK,Başakşehir,21-165,2005,3,3,270,3.0,9,3.00,17,8,47.1,1,0,2,0,0.0,0,0,0,0,,Matches,f4a8c4ea
+8,Deniz Ertaş,tr TUR,GK,Konyaspor,21-242,2005,4,2,254,2.8,9,3.19,23,14,60.9,0,0,2,0,0.0,3,2,1,0,33.3,Matches,a038e138
+9,Marcos Felipe,br BRA,GK,Yeni Çorumspor,30-218,1996,11,11,990,11.0,21,1.91,57,36,63.2,5,1,5,2,18.2,1,1,0,0,0.0,Matches,453bdfb9
+10,Yahia Fofana,ci CIV,GK,Rizespor,26-088,2000,9,9,810,9.0,15,1.67,44,29,65.9,3,1,5,2,22.2,1,1,0,0,0.0,Matches,9d420dad
+11,Andreas Gianniotis,gr GRE,GK,Kasımpaşa,33-340,1992,11,11,990,11.0,11,1.00,49,38,77.6,5,5,1,4,36.4,0,0,0,0,,Matches,8ae07c1c
+12,Zafer Görgen,,GK,Rizespor,26-149,2000,2,2,180,2.0,1,0.50,8,7,87.5,1,1,0,1,50.0,0,0,0,0,,Matches,87cf60fa
+13,Luka Gugeshashvili,ge GEO,GK,Göztepe,27-202,1999,4,4,315,3.5,11,3.14,20,9,45.0,0,1,3,0,0.0,3,2,0,1,0.0,Matches,f05b0000
+14,Bahadır Güngördü,,GK,Konyaspor,28-344,1997,9,9,736,8.2,5,0.61,25,20,80.0,2,2,5,4,44.4,1,0,1,0,100.0,Matches,485d9a8a
+15,Okan Kocuk,tr TUR,GK,Samsunspor,31-113,1995,8,8,720,8.0,19,2.37,52,33,63.5,1,1,6,1,12.5,0,0,0,0,,Matches,7e9fd9b9
+16,Alban Lafont,ci CIV,GK,Amedspor,27-298,1999,11,11,990,11.0,15,1.36,41,26,63.4,7,2,2,3,27.3,1,1,0,0,0.0,Matches,4e7db402
+17,Horaţiu Moldovan,ro ROU,GK,Eyüpspor,28-301,1998,8,8,675,7.5,19,2.53,43,24,55.8,1,0,7,0,0.0,3,3,0,0,0.0,Matches,771ded26
+18,Ederson Moraes,br BRA,GK,Fenerbahçe,33-092,1993,10,10,900,10.0,8,0.80,52,43,84.6,6,1,3,6,60.0,0,0,0,0,,Matches,3bb7b8b4
+19,Alexander Nübel,de GER,GK,Beşiktaş,30-048,1996,11,11,990,11.0,12,1.09,42,30,71.4,7,1,3,4,36.4,0,0,0,0,,Matches,afb0c500
+20,André Onana,cm CMR,GK,Trabzonspor,30-229,1996,11,11,990,11.0,8,0.73,54,46,85.2,8,1,2,6,54.5,3,2,1,0,33.3,Matches,e9c0c1b2
+21,Matija Orbanić,hr CRO,GK,Erzurum BB,26-172,2000,2,2,180,2.0,7,3.50,9,2,22.2,0,0,2,0,0.0,0,0,0,0,,Matches,f9d07a91
+22,Arda Özçimen,tr TUR,GK,Göztepe,24-313,2002,8,7,675,7.5,8,1.07,34,26,76.5,4,2,1,2,28.6,1,1,0,0,0.0,Matches,111e4cd3
+23,Serhat Öztaşdelen,tr TUR,GK,Kocaelispor,21-343,2004,11,11,990,11.0,9,0.82,44,35,79.5,6,1,4,5,45.5,1,1,0,0,0.0,Matches,bec58e8c
+24,Muhammed Şengezer,tr TUR,GK,Başakşehir,29-316,1997,8,8,720,8.0,8,1.00,33,25,75.8,4,2,2,3,37.5,0,0,0,0,,Matches,fa71b998
+25,Ertuğrul Taşkıran,tr TUR,GK,Erzurum BB,37-012,1989,9,9,810,9.0,10,1.11,40,30,75.0,4,2,3,4,44.4,1,1,0,0,0.0,Matches,cf8c553e
+26,Kacper Tobiasz,pl POL,GK,Gaziantep,24-013,2002,9,9,810,9.0,15,1.67,35,20,57.1,2,2,5,2,22.2,2,1,1,0,50.0,Matches,caeeffe7
+27,Paulo Victor Vidotti,br BRA,GK,Alanyaspor,39-309,1987,11,11,990,11.0,18,1.64,57,39,68.4,3,3,5,3,27.3,2,1,1,0,50.0,Matches,68a3e731
+28,Jankat Yilmaz,tr TUR,GK,Galatasaray,22-093,2004,1,1,90,1.0,2,2.00,4,2,50.0,1,0,0,0,0.0,0,0,0,0,,Matches,54c8d831

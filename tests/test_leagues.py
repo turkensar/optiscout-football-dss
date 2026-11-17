@@ -74,7 +74,7 @@ def test_build_league_matches_main_format(folder, comp):
     assert len(pos) >= 0.95 * len(out)
     assert pos.str.fullmatch(r"(GK|DF|MF|FW)(,(GK|DF|MF|FW))?").all()
     # Kalecilerin kaleci verisi, herkesin oynama suresi verisi var
-    gk = out["Pos"].str.startswith("GK")
+    gk = out["Pos"].str.startswith("GK", na=False)  # mevkisi bos oyuncular kaleci sayilmaz
     assert out.loc[gk, "Saves"].notna().all()
     assert out["Min%"].notna().all()
 

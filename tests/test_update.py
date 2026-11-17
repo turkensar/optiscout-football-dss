@@ -90,3 +90,12 @@ def test_committed_light_file_matches_versions_file():
         versions = json.load(fh)
     for key in ("big5_updated", "transfermarkt_snapshot", "leagues_updated"):
         pd.Timestamp(versions[key])  # gecerli tarih
+
+
+def test_saved_page_detection():
+    pytest.importorskip("bs4")
+    from scripts.update_leagues import detect_saved_page
+    html = ('<html><head><link rel="canonical" href="https://fbref.com/en/comps/26/stats/Super-Lig-Stats">'
+            '</head><body>' + FBREF_HTML + '</body></html>')
+    assert detect_saved_page(html) == ("super_lig", "stats")
+    assert detect_saved_page(FBREF_HTML) is None  # canonical yoksa taninmaz

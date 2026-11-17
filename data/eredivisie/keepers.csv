@@ -1,31 +1,31 @@
-,Playing Time,Playing Time,Playing Time,Playing Time,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Penalty Kicks,Penalty Kicks,Penalty Kicks,Penalty Kicks,Penalty Kicks,,-additional
+,,,,,,,Playing Time,Playing Time,Playing Time,Playing Time,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Performance,Penalty Kicks,Penalty Kicks,Penalty Kicks,Penalty Kicks,Penalty Kicks,,-additional
 Rk,Player,Nation,Pos,Squad,Age,Born,MP,Starts,Min,90s,GA,GA90,SoTA,Saves,Save%,W,D,L,CS,CS%,PKatt,PKA,PKsv,PKm,Save%,Matches,-9999
-1,Vasilios Barkas,gr GRE,GK,Utrecht,32-168,1994,8,8,720,8.0,26,3.25,59,33,55.9,2,2,4,0,0.0,2,1,0,1,0.0,Matches,c2e41cfb
-2,Filip Bednarek,pl POL,GK,Sparta R.,34-049,1992,5,4,373,4.1,8,1.93,19,11,57.9,1,1,2,0,0.0,0,0,0,0,,Matches,93b95f72
-3,Mattijs Branderhorst,nl NED,GK,Fortuna Sittard,32-318,1993,12,12,1080,12.0,20,1.67,72,52,72.2,5,5,2,2,16.7,1,0,1,0,100.0,Matches,b74a2c78
-4,Michael Brouwer,nl NED,GK,Sparta R.,33-297,1993,8,8,707,7.9,21,2.67,56,35,62.5,2,2,4,0,0.0,0,0,0,0,,Matches,4f521fcf
-5,Michael Brouwer,nl NED,GK,Utrecht,33-297,1993,1,1,90,1.0,2,2.00,5,3,60.0,0,0,1,0,0.0,0,0,0,0,,Matches,4f521fcf
-6,Jasper Cillessen,nl NED,GK,Go Ahead Eagles,37-206,1989,2,2,180,2.0,4,2.00,9,5,55.6,1,0,1,1,50.0,0,0,0,0,,Matches,04ac8285
-7,Gonzalo Crettaz,ar ARG,GK,NEC Nijmegen,26-259,2000,10,10,855,9.5,16,1.68,34,18,52.9,3,3,4,0,0.0,2,1,0,1,0.0,Matches,3adfa4a6
-8,Jari De Busser,be BEL,GK,AZ Alkmaar,27-024,1999,12,12,1080,12.0,16,1.33,38,22,57.9,7,2,3,3,25.0,0,0,0,0,,Matches,aaa13f87
-9,Maxime Delanghe,be BEL,GK,Willem II,25-175,2001,8,8,720,8.0,24,3.00,51,27,52.9,0,2,6,0,0.0,0,0,0,0,,Matches,e7403902
-10,Wouter van der Steen,nl NED,GK,Willem II,36-164,1990,1,0,23,0.3,1,3.91,4,3,75.0,0,0,0,0,,0,0,0,0,,Matches,53d40dd7
-11,Thomas Didillon,fr FRA,GK,Willem II,30-351,1995,2,2,157,1.7,9,5.16,17,8,47.1,0,0,2,0,0.0,0,0,0,0,,Matches,a3d524cb
-12,Joel Drommel,nl NED,GK,Twente,29-363,1996,6,6,540,6.0,6,1.00,19,13,68.4,3,2,1,2,33.3,0,0,0,0,,Matches,510c6a3f
-13,Tjark Ernst,de GER,GK,Feyenoord,23-244,2003,12,12,1080,12.0,17,1.42,51,33,66.7,7,4,1,4,33.3,0,0,0,0,,Matches,3f6c3ae0
-14,Stijn van Gassel,nl NED,GK,Excelsior,30-027,1996,12,12,1080,12.0,29,2.42,68,39,57.4,3,2,7,2,16.7,4,4,0,0,0.0,Matches,af72ff2d
-15,Kjetil Haug,no NOR,GK,Go Ahead Eagles,28-155,1998,10,10,900,10.0,23,2.30,50,27,54.0,3,5,2,0,0.0,1,1,0,0,0.0,Matches,d3ae48eb
-16,Thijs Jansen,nl NED,GK,Cambuur,24-350,2001,12,12,1080,12.0,27,2.25,62,35,56.5,4,3,5,3,25.0,4,4,0,0,0.0,Matches,faa1223d
-17,Bernt Klaverboer,nl NED,GK,Heerenveen,21-049,2005,12,12,1080,12.0,16,1.33,44,28,63.6,6,3,3,5,41.7,1,1,0,0,0.0,Matches,98eb5284
-18,Ronald Koeman Jr.,nl NED,GK,Telstar,31-175,1995,12,12,1080,12.0,25,2.08,74,49,66.2,2,4,6,1,8.3,3,2,1,0,33.3,Matches,2536dab8
-19,Matej Kovar,cz CZE,GK,PSV,26-181,2000,12,12,1080,12.0,15,1.25,49,34,69.4,8,2,2,2,16.7,0,0,0,0,,Matches,bc67a0e1
-20,Karst de Leeuw,nl NED,GK,Willem II,22-209,2004,2,2,180,2.0,6,3.00,15,9,60.0,0,1,1,0,0.0,0,0,0,0,,Matches,96ce4680
-21,Kilian Nikiema,bf BFA,GK,ADO Den Haag,23-145,2003,12,12,1080,12.0,25,2.08,80,55,68.8,2,3,7,0,0.0,1,1,0,0,0.0,Matches,8d147a40
-22,Sergio Padt,nl NED,GK,Utrecht,36-161,1990,3,3,270,3.0,6,2.00,17,11,64.7,1,1,1,0,0.0,0,0,0,0,,Matches,be855308
-23,Maarten Paes,id IDN,GK,Ajax,28-184,1998,1,1,90,1.0,1,1.00,4,3,75.0,1,0,0,0,0.0,0,0,0,0,,Matches,eb343262
-24,Nikolas Polster,at AUT,GK,NEC Nijmegen,24-130,2002,3,2,225,2.5,5,2.00,14,9,64.3,0,2,0,0,0.0,0,0,0,0,,Matches,c35e132a
-25,Jasper Schendelaar,nl NED,GK,Zwolle,26-073,2000,12,12,1080,12.0,24,2.00,74,50,67.6,3,3,6,2,16.7,2,2,0,0,0.0,Matches,0c43c76c
-26,Lovro Štubljar,si SVN,GK,Groningen,22-097,2004,1,0,1,0.0,1,90.00,1,0,0.0,0,0,0,0,,1,1,0,0,0.0,Matches,4c909198
-27,Marc-André ter Stegen,de GER,GK,Ajax,34-198,1992,11,11,990,11.0,14,1.27,47,32,70.2,6,4,1,3,27.3,3,2,1,0,33.3,Matches,6f51e382
-28,Lars Unnerstall,de GER,GK,Twente,36-117,1990,6,6,540,6.0,6,1.00,22,16,72.7,4,1,1,2,33.3,0,0,0,0,,Matches,4b1793b0
-29,Etienne Vaessen,sr SUR,GK,Groningen,31-111,1995,12,12,1077,12.0,27,2.26,66,39,59.1,4,3,5,1,8.3,4,2,1,1,33.3,Matches,5622d68b
+1,Vasilios Barkas,gr GRE,GK,Utrecht,32-171,1994,8,8,720,8.0,26,3.25,59,33,55.9,2,2,4,0,0.0,2,1,0,1,0.0,Matches,c2e41cfb
+2,Filip Bednarek,pl POL,GK,Sparta R.,34-052,1992,5,4,373,4.1,8,1.93,19,11,57.9,1,1,2,0,0.0,0,0,0,0,,Matches,93b95f72
+3,Mattijs Branderhorst,nl NED,GK,Fortuna Sittard,32-321,1993,12,12,1080,12.0,20,1.67,72,52,72.2,5,5,2,2,16.7,1,0,1,0,100.0,Matches,b74a2c78
+4,Michael Brouwer,nl NED,GK,Sparta R.,33-300,1993,8,8,707,7.9,21,2.67,56,35,62.5,2,2,4,0,0.0,0,0,0,0,,Matches,4f521fcf
+5,Michael Brouwer,nl NED,GK,Utrecht,33-300,1993,1,1,90,1.0,2,2.00,5,3,60.0,0,0,1,0,0.0,0,0,0,0,,Matches,4f521fcf
+6,Jasper Cillessen,nl NED,GK,Go Ahead Eagles,37-209,1989,2,2,180,2.0,4,2.00,9,5,55.6,1,0,1,1,50.0,0,0,0,0,,Matches,04ac8285
+7,Gonzalo Crettaz,ar ARG,GK,NEC Nijmegen,26-262,2000,10,10,855,9.5,16,1.68,34,18,52.9,3,3,4,0,0.0,2,1,0,1,0.0,Matches,3adfa4a6
+8,Jari De Busser,be BEL,GK,AZ Alkmaar,27-027,1999,12,12,1080,12.0,16,1.33,38,22,57.9,7,2,3,3,25.0,0,0,0,0,,Matches,aaa13f87
+9,Maxime Delanghe,be BEL,GK,Willem II,25-178,2001,8,8,720,8.0,24,3.00,51,27,52.9,0,2,6,0,0.0,0,0,0,0,,Matches,e7403902
+10,Wouter van der Steen,nl NED,GK,Willem II,36-167,1990,1,0,23,0.3,1,3.91,4,3,75.0,0,0,0,0,,0,0,0,0,,Matches,53d40dd7
+11,Thomas Didillon,fr FRA,GK,Willem II,30-354,1995,2,2,157,1.7,9,5.16,17,8,47.1,0,0,2,0,0.0,0,0,0,0,,Matches,a3d524cb
+12,Joel Drommel,nl NED,GK,Twente,30-001,1996,6,6,540,6.0,6,1.00,19,13,68.4,3,2,1,2,33.3,0,0,0,0,,Matches,510c6a3f
+13,Tjark Ernst,de GER,GK,Feyenoord,23-247,2003,12,12,1080,12.0,17,1.42,51,33,66.7,7,4,1,4,33.3,0,0,0,0,,Matches,3f6c3ae0
+14,Stijn van Gassel,nl NED,GK,Excelsior,30-030,1996,12,12,1080,12.0,29,2.42,68,39,57.4,3,2,7,2,16.7,4,4,0,0,0.0,Matches,af72ff2d
+15,Kjetil Haug,no NOR,GK,Go Ahead Eagles,28-158,1998,10,10,900,10.0,23,2.30,50,27,54.0,3,5,2,0,0.0,1,1,0,0,0.0,Matches,d3ae48eb
+16,Thijs Jansen,nl NED,GK,Cambuur,24-353,2001,12,12,1080,12.0,27,2.25,62,35,56.5,4,3,5,3,25.0,4,4,0,0,0.0,Matches,faa1223d
+17,Bernt Klaverboer,nl NED,GK,Heerenveen,21-052,2005,12,12,1080,12.0,16,1.33,44,28,63.6,6,3,3,5,41.7,1,1,0,0,0.0,Matches,98eb5284
+18,Ronald Koeman Jr.,nl NED,GK,Telstar,31-178,1995,12,12,1080,12.0,25,2.08,74,49,66.2,2,4,6,1,8.3,3,2,1,0,33.3,Matches,2536dab8
+19,Matej Kovar,cz CZE,GK,PSV,26-184,2000,12,12,1080,12.0,15,1.25,49,34,69.4,8,2,2,2,16.7,0,0,0,0,,Matches,bc67a0e1
+20,Karst de Leeuw,nl NED,GK,Willem II,22-212,2004,2,2,180,2.0,6,3.00,15,9,60.0,0,1,1,0,0.0,0,0,0,0,,Matches,96ce4680
+21,Kilian Nikiema,bf BFA,GK,ADO Den Haag,23-148,2003,12,12,1080,12.0,25,2.08,80,55,68.8,2,3,7,0,0.0,1,1,0,0,0.0,Matches,8d147a40
+22,Sergio Padt,nl NED,GK,Utrecht,36-164,1990,3,3,270,3.0,6,2.00,17,11,64.7,1,1,1,0,0.0,0,0,0,0,,Matches,be855308
+23,Maarten Paes,id IDN,GK,Ajax,28-187,1998,1,1,90,1.0,1,1.00,4,3,75.0,1,0,0,0,0.0,0,0,0,0,,Matches,eb343262
+24,Nikolas Polster,at AUT,GK,NEC Nijmegen,24-133,2002,3,2,225,2.5,5,2.00,14,9,64.3,0,2,0,0,0.0,0,0,0,0,,Matches,c35e132a
+25,Jasper Schendelaar,nl NED,GK,Zwolle,26-076,2000,12,12,1080,12.0,24,2.00,74,50,67.6,3,3,6,2,16.7,2,2,0,0,0.0,Matches,0c43c76c
+26,Lovro Štubljar,si SVN,GK,Groningen,22-100,2004,1,0,1,0.0,1,90.00,1,0,0.0,0,0,0,0,,1,1,0,0,0.0,Matches,4c909198
+27,Marc-André ter Stegen,de GER,GK,Ajax,34-201,1992,11,11,990,11.0,14,1.27,47,32,70.2,6,4,1,3,27.3,3,2,1,0,33.3,Matches,6f51e382
+28,Lars Unnerstall,de GER,GK,Twente,36-120,1990,6,6,540,6.0,6,1.00,22,16,72.7,4,1,1,2,33.3,0,0,0,0,,Matches,4b1793b0
+29,Etienne Vaessen,sr SUR,GK,Groningen,31-114,1995,12,12,1077,12.0,27,2.26,66,39,59.1,4,3,5,1,8.3,4,2,1,1,33.3,Matches,5622d68b

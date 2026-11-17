@@ -324,6 +324,8 @@ python scripts/update_leagues.py        # ya da --league super_lig
 python -m pytest -q
 ```
 
+Otomatik pencere doğrulamada takılırsa yedek yol: 20 sayfayı kendi tarayıcında açıp her birini **Ctrl+S → "Web sayfası, tamamı"** ile tek bir klasöre kaydet, sonra `python scripts/update_leagues.py --html-dir <klasör>` çalıştır. Betik hangi sayfanın hangi lig ve tabloya ait olduğunu kendisi tanır; dosya adları önemli değildir.
+
 ---
 
 ## ⚠️ Bilinen Sınırlamalar

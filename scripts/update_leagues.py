@@ -15,6 +15,9 @@ Kullanim (repo kok dizininde):
     python scripts/update_leagues.py                     # 4 lig
     python scripts/update_leagues.py --league super_lig  # tek lig
     python scripts/update_leagues.py --skip-market-values  # piyasa degeri eslestirmesini atla
+    python scripts/update_leagues.py --html-dir C:\\Users\\ben\\Downloads\\fbref
+        # Otomatik pencere dogrulamada takilirsa: 20 sayfayi kendi tarayicinda acip Ctrl+S ile
+        # (Web sayfasi, tamami) bir klasore kaydet; betik hangi lig/tablo oldugunu kendisi tanir.
 
 Calisma sirasi: tablolari cek -> data/<lig>/*.csv -> add_league.py -> build_market_values.py.
 Bir tablo bariz bicimde eksikse (oyuncu sayisi oncekinin %80'inin altinda) o lig guncellenmez.
@@ -160,15 +163,42 @@ class FBrefBrowser:
             self.ctx = self._pw.chromium.launch_persistent_context(**kwargs)
         self.page = self.ctx.pages[0] if self.ctx.pages else self.ctx.new_page()
 
+    def _live_page(self):
+        """Dogrulama sirasinda sekme yenilenebilir/degisebilir; acik bir sekme bul."""
+        if not self.page.is_closed():
+            return self.page
+        open_pages = [p for p in self.ctx.pages if not p.is_closed()]
+        if not open_pages:
+            raise UpdateError("Tarayici penceresi kapandi. Pencereyi kapatmadan tekrar calistir "
+                              "ya da --html-dir yontemini kullan (README).")
+        self.page = open_pages[-1]
+        return self.page
+
     def fetch(self, url: str, table_id: str) -> str:
-        self.page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+        from playwright.sync_api import Error as PlaywrightError
+
+        try:
+            self._live_page().goto(url, wait_until="domcontentloaded", timeout=60_000)
+        except PlaywrightError as exc:
+            if "closed" in str(exc).lower():
+                raise UpdateError("Tarayici penceresi kapandi.") from exc
+            # Dogrulama sayfasi yonlendirme yaparken goto hata verebilir; asagida beklenir
         deadline = time.time() + CHALLENGE_TIMEOUT_S
         warned = False
         while time.time() < deadline:
-            html = self.page.content()
+            try:
+                page = self._live_page()
+                html = page.content()
+                title = (page.title() or "").lower()
+            except PlaywrightError as exc:
+                # Sayfa o anda yonleniyor (dogrulama tamamlaninca olur): biraz bekle, tekrar dene
+                if "closed" in str(exc).lower() and not any(not p.is_closed() for p in self.ctx.pages):
+                    raise UpdateError("Tarayici penceresi kapandi. Pencereyi kapatmadan tekrar calistir "
+                                      "ya da --html-dir yontemini kullan (README).") from exc
+                time.sleep(2)
+                continue
             if f'id="{table_id}"' in html:
                 return html
-            title = (self.page.title() or "").lower()
             if not warned and ("just a moment" in title or "bir dakika" in title or "challenge" in html[:5000].lower()):
                 print("   Tarayicida dogrulama cikti; lutfen pencerede tamamla. Bekliyorum...")
                 warned = True
@@ -184,18 +214,44 @@ class FBrefBrowser:
             self._pw.stop()
 
 
-def update_league(browser, folder: str, first: bool) -> str:
+def detect_saved_page(html: str):
+    """Kaydedilmis bir FBref sayfasinin (lig klasoru, tablo adi) ikilisini bulur; taninmazsa None."""
+    m = re.search(r'<link[^>]+rel="canonical"[^>]+href="[^"]*/en/comps/(\d+)/', html) or \
+        re.search(r'<meta[^>]+property="og:url"[^>]+content="[^"]*/en/comps/(\d+)/', html)
+    if not m:
+        return None
+    folder = next((f for f, (cid, _, _) in LEAGUES.items() if cid == int(m.group(1))), None)
+    name = next((n for n, (_, tid) in PAGES.items() if f'id="{tid}"' in html), None)
+    return (folder, name) if folder and name else None
+
+
+def index_saved_pages(html_dir: str) -> dict:
+    """Klasordeki .html dosyalarini {(lig, tablo): html} olarak dondurur."""
+    found = {}
+    for fname in sorted(os.listdir(html_dir)):
+        if not fname.lower().endswith((".html", ".htm")):
+            continue
+        with open(os.path.join(html_dir, fname), encoding="utf-8", errors="replace") as fh:
+            html = fh.read()
+        key = detect_saved_page(html)
+        if key:
+            found[key] = html
+        else:
+            print(f"   (tanınmadı, atlandı: {fname})")
+    return found
+
+
+def update_league(get_html, folder: str, first: bool) -> str:
+    """get_html(url, table_id, name) -> sayfa HTML'i (tarayicidan ya da kaydedilmis dosyadan)."""
     comp_id, slug, comp = LEAGUES[folder]
     src_dir = os.path.join(DATA_DIR, folder)
     os.makedirs(src_dir, exist_ok=True)
     fetched = {}
     for name, (page, table_id) in PAGES.items():
-        if not first:
-            time.sleep(random.uniform(*DELAY_RANGE))
-        first = False
         url = page_url(comp_id, slug, page)
         print(f"   {name:<12} {url}")
-        text = table_html_to_csv(browser.fetch(url, table_id), table_id)
+        text = table_html_to_csv(get_html(url, table_id, name, first), table_id)
+        first = False
         old_n = count_rows(os.path.join(src_dir, f"{name}.csv"), is_path=True)
         new_n = count_rows(text)
         if old_n and new_n < MIN_ROW_RATIO * old_n:
@@ -230,25 +286,51 @@ def main(argv=None) -> int:
     parser.add_argument("--league", choices=sorted(LEAGUES), action="append",
                         help="Yalnizca bu lig(ler). Birden fazla kez verilebilir.")
     parser.add_argument("--skip-market-values", action="store_true")
+    parser.add_argument("--html-dir", help="Tarayici yerine, elle kaydedilmis FBref sayfalarinin (Ctrl+S) klasoru")
     parser.add_argument("--tm", help="Transfermarkt players.csv yolu (varsayilan: build_market_values'in varsayilani)")
     args = parser.parse_args(argv)
 
     try:
-        import playwright  # noqa: F401
         import bs4  # noqa: F401
+        if not args.html_dir:
+            import playwright  # noqa: F401
     except ImportError:
         print("Eksik paket. Once: pip install -r requirements-update.txt && python -m playwright install chromium",
               file=sys.stderr)
         return 1
 
     leagues = args.league or list(LEAGUES)
-    browser = FBrefBrowser()
+    if args.html_dir:
+        saved = index_saved_pages(args.html_dir)
+        leagues = [f for f in leagues if any((f, n) in saved for n in PAGES)]
+        if not leagues:
+            print("Klasorde taninan FBref sayfasi yok.", file=sys.stderr)
+            return 1
+
+        def get_html(url, table_id, name, first, _folder=None):
+            key = next(((f, n) for (f, n) in saved if n == name and page_url(LEAGUES[f][0], LEAGUES[f][1],
+                                                                            PAGES[n][0]) == url), None)
+            if key is None:
+                raise UpdateError(f"Kayitli sayfa eksik: {url}")
+            return saved[key]
+
+        class _NoBrowser:
+            def close(self):
+                pass
+        browser = _NoBrowser()
+    else:
+        browser = FBrefBrowser()
+
+        def get_html(url, table_id, name, first):
+            if not first:
+                time.sleep(random.uniform(*DELAY_RANGE))
+            return browser.fetch(url, table_id)
     done, failed = [], []
     try:
         for i, folder in enumerate(leagues):
             print(f"[{i + 1}/{len(leagues)}] {LEAGUES[folder][2]}")
             try:
-                update_league(browser, folder, first=(i == 0))
+                update_league(get_html, folder, first=(i == 0))
                 done.append(folder)
             except UpdateError as exc:
                 print(f"   ATLANDI: {exc}", file=sys.stderr)
