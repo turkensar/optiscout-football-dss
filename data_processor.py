@@ -1,4 +1,5 @@
-﻿import os
+﻿import json
+import os
 import numpy as np
 import pandas as pd
 
@@ -21,7 +22,20 @@ VALID_POSITIONS = ["GK", "DF", "MF", "FW"]
 # masraflar: piyasa değerinin %15'i); son yılına giren oyuncuyu kulüp bedelsiz kaybetmemek
 # için indirimli satar (%60); diğerleri tam piyasa değeri. Oranlar varsayımdır.
 TRANSFER_WINDOW = pd.Timestamp("2027-07-01")
-TM_SNAPSHOT_DATE = pd.Timestamp("2026-07-06")  # Transfermarkt verisinin tarihi
+DATA_VERSIONS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "data_versions.json")
+
+
+def load_data_versions() -> dict:
+    """scripts/update_data.py'nin yazdigi veri tarihleri (yoksa bos)."""
+    try:
+        with open(DATA_VERSIONS_PATH, encoding="utf-8") as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
+        return {}
+
+
+# Transfermarkt verisinin tarihi: otomatik guncelleme bunu data_versions.json'a yazar
+TM_SNAPSHOT_DATE = pd.Timestamp(load_data_versions().get("transfermarkt_snapshot", "2026-07-06"))
 FEE_FACTOR_FREE = 0.15
 FEE_FACTOR_LAST_YEAR = 0.60
 # Takımdaki rol -> bedel çarpanı. Kulüp kilit oyuncusunu piyasa değerine bırakmaz (prim

@@ -303,16 +303,39 @@ Varsayılan katsayılarla en iyi 100 oyuncuda Süper Lig'den 5, Portekiz'den 5, 
 
 ---
 
+## 🔄 Veri Güncelleme
+
+Sezon ilerledikçe veriler iki yoldan güncellenir. Son güncelleme tarihleri `data/data_versions.json` dosyasında tutulur ve uygulamanın kenar çubuğunda gösterilir.
+
+| Veri | Kaynak | Nasıl | Sıklık |
+|---|---|---|---|
+| Big-5 istatistikleri | Kaggle `hubertsidorowicz/football-players-stats-2026-2027` | GitHub Actions (`update-data.yml`) | Her pazartesi, otomatik |
+| Piyasa değeri, sözleşme, mevki | Kaggle `davidcariboo/player-scores` (Transfermarkt) | GitHub Actions (`update-data.yml`) | Her pazartesi, otomatik |
+| Süper Lig, Portekiz, Hollanda, Belçika | FBref | Yerelde `python scripts/update_leagues.py` | İstendiğinde |
+
+**Otomatik iş (Big-5 + Transfermarkt):** `scripts/update_data.py` iki veri setini indirir, repodaki dosyayla aynı sütunları seçerek `players_data_light` dosyasını yeniden üretir, piyasa değerlerini yeniden eşleştirir ve testleri çalıştırır. Veri değiştiyse ve testler geçtiyse sonuç repoya commit'lenir. Yeni dosya bozuk görünürse (sütun eksik, oyuncu sayısı %20'den fazla düşmüş) hiçbir şey yazılmaz. Kurulum için repo ayarlarında (*Settings → Secrets and variables → Actions*) Kaggle API anahtarından iki sır tanımlanır: `KAGGLE_USERNAME` ve `KAGGLE_KEY`. İş, *Actions → update-data → Run workflow* ile elle de başlatılabilir.
+
+**Ek ligler (yerel):** FBref otomatik istekleri Cloudflare ile engellediği için ek ligler bulut yerine kendi bilgisayarında, gerçek bir tarayıcı penceresiyle çekilir. Doğrulama çıkarsa pencerede kullanıcı tamamlar; betik sayfalar arasında birkaç saniye bekleyerek 20 tabloyu (4 lig × 5 tablo) indirir, `add_league.py` ile birleştirir. Bir ligin tablolarından biri eksik gelirse o lig hiç değiştirilmez.
+
+```bash
+pip install -r requirements-update.txt
+python -m playwright install chromium   # bir kez
+python scripts/update_leagues.py        # ya da --league super_lig
+python -m pytest -q
+```
+
+---
+
 ## ⚠️ Bilinen Sınırlamalar
 
 * **xG/xA yok:** FBref artık gelişmiş Opta metriklerini yayınlamadığı için skorlar gol, asist ve şut gibi temel istatistiklere dayanır.
-* **Bedel ve etki varsayımları:** Takıma etki metrikleri takımın genel gücünden de etkilenir (iyi takımda oynayan oyuncunun gol farkı yüksektir); bu yüzden takımın gücünden bağımsız olan On-Off da kullanılır. Topa sahip olma düzeltmesi gerçek topa sahip olma oranı yerine bir vekil kullanır. Kilit oyuncu eşiği (%65) ve rol çarpanları (×1.4 / ×0.75) varsayımdır. %15 ve %60 oranları sektör pratiğine dayalı varsayımlardır; sözleşme tarihleri Temmuz 2026 tarihlidir ve sonrasında yapılan uzatmaları içermez. Veriden önce bitmiş görünen sözleşmeler eskimiş kayıt sayılır ve tam bedel uygulanır.
+* **Bedel ve etki varsayımları:** Takıma etki metrikleri takımın genel gücünden de etkilenir (iyi takımda oynayan oyuncunun gol farkı yüksektir); bu yüzden takımın gücünden bağımsız olan On-Off da kullanılır. Topa sahip olma düzeltmesi gerçek topa sahip olma oranı yerine bir vekil kullanır. Kilit oyuncu eşiği (%65) ve rol çarpanları (×1.4 / ×0.75) varsayımdır. %15 ve %60 oranları sektör pratiğine dayalı varsayımlardır; sözleşme tarihleri Transfermarkt verisinin tarihine aittir ve sonrasında yapılan uzatmaları içermez. Veriden önce bitmiş görünen sözleşmeler eskimiş kayıt sayılır ve tam bedel uygulanır.
 * **Değer modeli:** Bu sezonun ilk haftalarındaki performansa dayanır ve piyasa değerindeki değişimin yalnızca üçte birini açıklar (R² ≈ 0.37); fırsat listesi bir ön eleme aracıdır.
 * **Transfer planı varsayımları:** Maaşlar modele dahil değildir. Satış kararlarında model yalnızca ilk 11'in gücüne bakar; kadro derinliğini ve oyuncunun varlık değerini hesaba katmaz (ör. ilk 11'i çok az iyileştirmek için değerli bir oyuncuyu satabilir), bu yüzden satış sayısı sınırlı tutulmalıdır. Maliyet olarak piyasa değeri ya da sözleşme durumuna göre tahmini bedel kullanılır. Kulüp kadrosu yalnızca süre filtresini geçen oyunculardan oluşur; sakat veya az oynamış oyuncular için filtre düşürülmelidir.
 * **Penaltısız, dakika başına üretim:** Skorlar toplam gol sayısını değil penaltısız 90 dakika başına üretimi ödüllendirir. Bu yüzden örneğin penaltı golleri olan ve çok oynayan bir yıldız, daha az oynayıp yüksek oranla gol atan bir oyuncunun gerisinde kalabilir.
 * **Rol verisi:** Roller Transfermarkt'ın tek bir "ana" alt mevkisine dayanır; birden fazla rolde oynayan oyuncular yalnızca ana rolünde puanlanır (MILP'de diğer rollere uygunluk katsayısıyla yerleştirilebilir). Rol ağırlıkları uzman görüşüne dayalı varsayımlardır.
 * **Takım ve lig bağlamı:** Savunma aksiyonları topa sahip olma oranından, kaleci metrikleri takım savunmasından etkilenir. Big-5 ligleri birbirine eşit kabul edilir; her ek lig için tek bir lig katsayısı kullanılır ve bu katsayı her metrik ve her rol için aynıdır (gerçekte ligler arası fark mevkiye göre değişebilir).
-* **Piyasa değeri tarihi:** Transfermarkt verisi 6 Temmuz 2026 tarihli bir anlık görüntüdür; yaz transfer dönemindeki değer değişimlerini içermez. Piyasa değeri bir tahmindir, gerçek bonservis bedeli değildir.
+* **Piyasa değeri tarihi:** Transfermarkt verisi haftalık güncellenir, ancak Transfermarkt değerleri kendi içinde yılda birkaç kez revize edilir. Tarih kenar çubuğunda görünür. Piyasa değeri bir tahmindir, gerçek bonservis bedeli değildir.
 * **Oyuncu kimliği:** Veride benzersiz oyuncu ID'si yok; kimlik `isim + doğum yılı` ile kurulur. Aynı isim ve doğum yılına sahip iki farklı oyuncu (ör. iki "Vitinha") tek kişi sayılır. Yaşı ve doğum yılı boş olan oyuncular analizden çıkarılır.
 
 ---

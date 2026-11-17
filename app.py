@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from data_processor import (DEFAULT_LEAGUE_STRENGTH, ROLE_GROUP_LABELS, UNKNOWN_LEAGUE_STRENGTH,
-                            FootballDataProcessor,
+                            FootballDataProcessor, load_data_versions,
                             add_decision_score, applicable_sub_scores)
 from similarity_engine import PlayerSimilarityEngine
 from squad_optimizer import SquadOptimizer
@@ -258,6 +258,13 @@ for _lg in _extra:
 data_key = (min_mins, tuple(league_items))
 df, source_file, has_values = load_processed_data(data_key)
 st.sidebar.caption(f"Veri kaynağı: `{source_file}`")
+_versions = load_data_versions()
+if _versions:
+    st.sidebar.caption(
+        "Son güncelleme: Big-5 " + _versions.get("big5_updated", "—")
+        + " · Ek ligler " + _versions.get("leagues_updated", "—")
+        + " · Transfermarkt " + _versions.get("transfermarkt_snapshot", "—")
+    )
 if has_values:
     matched_share = df["Market_Value_EUR"].notna().mean() * 100
     st.sidebar.caption(f"Transfermarkt piyasa değeri eşleşmesi: %{matched_share:.0f}")
