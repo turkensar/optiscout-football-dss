@@ -37,6 +37,13 @@ FALLBACK_ROLES = {
 }
 SECONDARY_FALLBACK_FACTOR = 0.85
 
+# Bekin ters kanatta oynaması: kanat oyuncularının aksine (ters ayaklı kanat yaygındır)
+# bekler nadiren taraf değiştirir. Oyuncunun kullandığı ayak hedef tarafla uyumluysa
+# (sağ ayaklı sol bek -> sağ bek) ROLE_FIT'teki değer kalır, değilse bu cezaya iner.
+CROSS_SIDE_FULLBACK_FIT = 0.6
+FULLBACK_SIDE = {"Left-Back": "left", "Right-Back": "right"}
+ROLE_SIDE = {"LB": "left", "LWB": "left", "RB": "right", "RWB": "right"}
+
 ROLE_GROUP = {
     "GK": "GK", "CB": "DF", "LB": "DF", "RB": "DF", "LWB": "DF", "RWB": "DF",
     "DM": "MF", "CM": "MF", "AM": "MF", "LM": "MF", "RM": "MF",
@@ -55,18 +62,66 @@ class SquadOptimizer:
         "3-4-3":   {"GK": 1, "CB": 3, "LWB": 1, "RWB": 1, "CM": 2, "LW": 1, "RW": 1, "ST": 1},
     }
 
+    # Transfer gerçekçiliği (kulüp ve oyuncu katsayıları):
+    # 1) Oyuncu, kulübünün kadro değerinin en az STEP_DOWN katı değerindeki bir kulübe gider
+    #    (Rennes'in sol beki Alanyaspor'a gitmez). Kariyerinin sonundaki oyuncular daha kolay
+    #    alt seviyeye iner: VETERAN_AGE ve üstü için eşik VETERAN_STEP_DOWN.
+    # 2) Oyuncunun değeri, alıcı kulübün toplam kadro değerinin MAX_VALUE_SHARE katını
+    #    geçemez (kulübün maaş yapısını ve yıldız seviyesini aşan oyuncu gerçekçi değildir).
+    # Değeri bilinmeyen kulüp veya oyuncu için kural uygulanmaz.
+    STEP_DOWN = 0.5
+    VETERAN_AGE = 31
+    VETERAN_STEP_DOWN = 0.35
+    MAX_VALUE_SHARE = 0.25
+
     def __init__(self, df: pd.DataFrame, score_column: str = "OptiScout_Score"):
         """score_column: modelin maksimize ettiği skor (OptiScout ya da form + kalıcı kalite
         karışımı olan Decision_Score)."""
         self.df = df.copy()
         self.score_column = score_column if score_column in df.columns else "OptiScout_Score"
 
+    def club_value(self, club: str) -> float:
+        rows = self.df.loc[self.df["Squad"] == club]
+        if "Club_Value_EUR" in rows.columns and rows["Club_Value_EUR"].notna().any():
+            return float(rows["Club_Value_EUR"].dropna().iloc[0])
+        if "Market_Value_EUR" in rows.columns and rows["Market_Value_EUR"].notna().any():
+            return float(rows.drop_duplicates("Player_ID")["Market_Value_EUR"].sum())
+        return float("nan")
+
+    def realistic_target_mask(self, ext: pd.DataFrame, buyer_value: float,
+                              step_down: float = None, max_value_share: float = None) -> pd.Series:
+        """Alıcı kulübe gerçekçi olarak gelebilecek dış oyuncular (True)."""
+        step_down = self.STEP_DOWN if step_down is None else step_down
+        max_value_share = self.MAX_VALUE_SHARE if max_value_share is None else max_value_share
+        ok = pd.Series(True, index=ext.index)
+        if not np.isfinite(buyer_value) or buyer_value <= 0:
+            return ok
+        if "Club_Value_EUR" in ext.columns:
+            seller = ext["Club_Value_EUR"]
+        else:
+            totals = self.df.drop_duplicates("Player_ID").groupby("Squad")["Market_Value_EUR"].sum()
+            seller = ext["Squad"].map(totals)
+        veteran = ext["Age"] >= self.VETERAN_AGE
+        threshold = np.where(veteran, min(step_down, self.VETERAN_STEP_DOWN), step_down)
+        ok &= ~(seller.notna() & (buyer_value < threshold * seller))
+        if "Market_Value_EUR" in ext.columns:
+            value = ext["Market_Value_EUR"]
+            ok &= ~(value.notna() & (value > max_value_share * buyer_value))
+        return ok
+
     @staticmethod
     def eligible_roles(row) -> dict:
         """Bir oyuncunun oynayabileceği roller ve uygunluk katsayıları."""
         sub = row.get("TM_Sub_Position")
         if isinstance(sub, str) and sub:
-            return {role: fits[sub] for role, fits in ROLE_FIT.items() if sub in fits}
+            roles = {role: fits[sub] for role, fits in ROLE_FIT.items() if sub in fits}
+            natural_side = FULLBACK_SIDE.get(sub)
+            if natural_side:
+                foot = str(row.get("TM_Foot") or "").lower()
+                for role, side in ROLE_SIDE.items():
+                    if role in roles and side != natural_side and foot not in (side, "both"):
+                        roles[role] = min(roles[role], CROSS_SIDE_FULLBACK_FIT)
+            return roles
         roles = dict(FALLBACK_ROLES.get(row.get("Primary_Pos"), {}))
         sec = row.get("Secondary_Pos")
         if isinstance(sec, str) and sec in FALLBACK_ROLES:
@@ -343,6 +398,9 @@ class SquadOptimizer:
         allow_sales: bool = False,
         max_sales: int = 2,
         protected_ids: list = None,
+        realistic: bool = True,
+        step_down: float = None,
+        max_value_share: float = None,
     ) -> dict:
         """
         Kulüp boşluk analizi ve transfer planı.
@@ -375,6 +433,11 @@ class SquadOptimizer:
         ext = ext[ext[cost_column].notna()] if cost_column in ext.columns else ext.iloc[0:0]
         # Kulübün kendi oyuncusu başka bir kulüp satırıyla da görünüyorsa (sezon içi transfer) dışla
         ext = ext[~ext["Player_ID"].isin(own["Player_ID"])]
+        # Gerçekçilik: kulübün seviyesine göre gelmesi beklenmeyen oyuncular aday değildir
+        n_before = len(ext)
+        if realistic:
+            ext = ext[self.realistic_target_mask(ext, self.club_value(club), step_down, max_value_share)]
+        n_unrealistic = n_before - len(ext)
 
         # 1) Mevcut 11
         own_pool = own.reset_index(drop=True)
@@ -428,6 +491,8 @@ class SquadOptimizer:
             "sold": pd.DataFrame(),
             "spent_eur": 0.0,
             "sale_revenue_eur": 0.0,
+            "club_value_eur": self.club_value(club),
+            "excluded_unrealistic": n_unrealistic,
         }
 
         if baseline["status"] == "Optimal":

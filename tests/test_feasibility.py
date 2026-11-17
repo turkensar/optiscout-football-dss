@@ -40,9 +40,11 @@ def test_mask_rules(opt):
     })
     mask = opt.realistic_target_mask(ext, buyer_value=200e6)
     # 25 yaşında, 1 milyarlık kulüpten 200 milyonluk kulübe: hayır (eşik %50)
-    # 33 yaşında aynı kulüpten: evet (veteran eşiği %25 -> 250M > 200M ise hayır)
+    # 33 yaşında aynı kulüpten: veteran eşiği %35 -> 350M gerekir
     assert list(mask) == [False, False, True, True]
     mask = opt.realistic_target_mask(ext, buyer_value=300e6)
+    assert list(mask) == [False, False, True, True]
+    mask = opt.realistic_target_mask(ext, buyer_value=400e6)
     assert list(mask) == [False, True, True, True]
     # Oyuncu değeri alıcı kadro değerinin %25'ini geçemez
     mask = opt.realistic_target_mask(ext.iloc[[2]], buyer_value=60e6)

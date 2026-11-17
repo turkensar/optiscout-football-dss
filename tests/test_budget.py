@@ -90,3 +90,27 @@ def test_matcher_uses_birth_year_and_club():
     assert out.loc["Vitinha|2000|Paris SG", "Market_Value_EUR"] == 90_000_000
     assert out.loc["Vitinha|2000|Genoa", "Market_Value_EUR"] == 8_000_000
     assert "Nobody Known|1999|X" not in out.index  # dogum yili tutmuyor
+
+
+def test_matcher_rejects_conflicting_position_and_keeps_position_only_records():
+    fb = pd.DataFrame([
+        dict(Player="Rafa Rodríguez", Squad="Málaga", Born=2003, Pos="MF"),
+        dict(Player="Ilhan Fakili", Squad="Beşiktaş", Born=2006, Pos="MF"),
+    ])
+    fb["norm_name"] = fb["Player"].map(normalize)
+    fb["Row_Key"] = fb["Player"] + "|" + fb["Born"].astype(str) + "|" + fb["Squad"]
+    tm = pd.DataFrame([
+        # ayni isimli bir kaleci: orta saha oyuncusuyla eslesmemeli
+        dict(player_id=1, name="Rafa Rodríguez", current_club_name="Some Club", birth_year=2003,
+             market_value_in_eur=500_000, sub_position="Goalkeeper", value_ok=True),
+        # degeri olmayan eski kayit: yalnizca mevki icin kullanilir
+        dict(player_id=2, name="Ilhan Fakili", current_club_name="Clermont Foot 63", birth_year=2006,
+             market_value_in_eur=None, sub_position="Left Winger", value_ok=False),
+    ])
+    tm["norm_name"] = tm["name"].map(normalize)
+    out = match(fb, tm).set_index("Row_Key")
+    assert "Rafa Rodríguez|2003|Málaga" not in out.index
+    row = out.loc["Ilhan Fakili|2006|Beşiktaş"]
+    assert row["TM_Sub_Position"] == "Left Winger"
+    assert pd.isna(row["Market_Value_EUR"])
+    assert row["Match_Method"].endswith("_position_only")

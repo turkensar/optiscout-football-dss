@@ -4,7 +4,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from data_processor import (DEFAULT_LEAGUE_STRENGTH, ROLE_GROUP_LABELS, FootballDataProcessor,
+from data_processor import (DEFAULT_LEAGUE_STRENGTH, ROLE_GROUP_LABELS, UNKNOWN_LEAGUE_STRENGTH,
+                            FootballDataProcessor,
                             add_decision_score, applicable_sub_scores)
 from similarity_engine import PlayerSimilarityEngine
 from squad_optimizer import SquadOptimizer
@@ -194,8 +195,11 @@ def draw_tactical_pitch(xi_df, has_values: bool = False,
                 ys.append(y)
                 ring_colors.append("#facc15" if is_new else "white")
                 ring_widths.append(5 if is_new else 2)
+                natural = row.get("TM_Sub_Position")
+                natural_tr = SUB_POSITION_TR.get(natural, "mevki bilinmiyor") if isinstance(natural, str) else "mevki bilinmiyor"
                 labels.append(
                     f"<b>{'★ ' if is_new else ''}{row['Player']}</b>{'*' if row['Out_Of_Position'] else ''}"
+                    f"{'<br><i>(asıl: ' + natural_tr + ')</i>' if row['Out_Of_Position'] else ''}"
                     f"<br>{role}{'' if row['Squad'] == home_club else ' · ' + row['Squad']} ("
                     f"{row['OptiScout_Score']}"
                     f"{'→' + str(row['Effective_Score']) if row['Out_Of_Position'] and 'Effective_Score' in row else ''})"
@@ -243,11 +247,11 @@ min_mins = st.sidebar.slider(
 league_items = []
 for _lg in _extra:
     _f = st.sidebar.slider(
-        f"🏟️ {_lg} lig katsayısı", 0.50, 1.00, float(DEFAULT_LEAGUE_STRENGTH.get(_lg, 1.0)), 0.05,
+        f"🏟️ {_lg} lig katsayısı", 0.50, 1.00, float(DEFAULT_LEAGUE_STRENGTH.get(_lg, UNKNOWN_LEAGUE_STRENGTH)), 0.05,
         key=f"league_factor_{_lg}",
         help="Bu ligdeki üretim (gol, şut, top kapma, artı/eksi) Big-5 ile kıyaslanmadan önce "
              "bu katsayıyla çarpılır. 1.00: Big-5 seviyesinde kabul et. Varsayılan bir varsayımdır: "
-             "Opta güç sıralamasında Süper Lig kulüp ortalaması ~78, Big-5 ~85 ve üzeri. "
+             "Opta güç sıralamasında kulüp ortalamaları: Big-5 ~85 ve üzeri, Portekiz ~80, Süper Lig ve Hollanda ~78-79. "
              "Big-5 oyuncularının skorları bu ayardan etkilenmez.",
     )
     league_items.append((_lg, round(_f, 2)))
@@ -577,7 +581,8 @@ with tab3:
         with col_pitch:
             st.plotly_chart(draw_tactical_pitch(xi_df, has_values))
             if xi_df["Out_Of_Position"].any():
-                st.caption("* Doğal rolü dışında oynatılan oyuncu (skoru uygunluk katsayısıyla indirimli)")
+                st.caption("* Doğal rolü dışında oynatılan oyuncu (skoru uygunluk katsayısıyla indirimli). "
+                           "Mevkisi yanlış görünen oyuncuyu `data/position_overrides.csv` ile düzeltebilirsin.")
         with col_xi_table:
             show_table(
                 xi_df[["Assigned_Role", "Player", "Squad", "OptiScout_Score"]

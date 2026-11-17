@@ -14,6 +14,13 @@ from scripts.add_league import (ID_COL, OUTPUT_COLUMNS, build_league,  # noqa: E
                                 read_fbref_table, split_positions)
 
 SUPER_LIG_SRC = os.path.join(ROOT, "data", "super_lig")
+# Ham FBref tablolari olan ek ligler: (klasor, Comp degeri)
+RAW_LEAGUES = [(d, c) for d, c in [
+    ("super_lig", "tr Süper Lig"),
+    ("primeira_liga", "pt Primeira Liga"),
+    ("eredivisie", "nl Eredivisie"),
+    ("belgian_pro_league", "be Belgian Pro League"),
+] if os.path.isdir(os.path.join(ROOT, "data", d))]
 LEAGUES_DIR = os.path.join(ROOT, "data", "leagues")
 NO_LEAGUES = os.path.join(ROOT, "data", "__no_extra_leagues__")
 
@@ -51,18 +58,20 @@ def test_split_positions(raw, expected):
     assert split_positions(raw) == expected
 
 
-@pytest.mark.skipif(not os.path.isdir(SUPER_LIG_SRC), reason="ham Süper Lig tablolari yok")
-def test_build_super_lig_matches_main_format():
-    out = build_league(SUPER_LIG_SRC, "tr Süper Lig")
+@pytest.mark.parametrize("folder,comp", RAW_LEAGUES)
+def test_build_league_matches_main_format(folder, comp):
+    out = build_league(os.path.join(ROOT, "data", folder), comp)
     assert list(out.columns) == OUTPUT_COLUMNS + [ID_COL]
     assert len(out) > 300
     assert out[ID_COL].notna().all()
-    assert (out["Comp"] == "tr Süper Lig").all()
+    assert (out["Comp"] == comp).all()
     # Yas "22-149" bicimi tam yila cevrilmis olmali
-    assert out["Age"].between(15, 45).all()
+    age = out["Age"].dropna()  # yasi bilinmeyenler isleme sirasinda elenir
+    assert len(age) >= 0.95 * len(out)
+    assert age.between(15, 45).all()
     # Pozisyonlar ana veriyle ayni bicimde (virgullu)
     pos = out["Pos"].dropna()  # FBref bazi genc oyuncularda mevki vermiyor
-    assert len(pos) >= len(out) - 5
+    assert len(pos) >= 0.95 * len(out)
     assert pos.str.fullmatch(r"(GK|DF|MF|FW)(,(GK|DF|MF|FW))?").all()
     # Kalecilerin kaleci verisi, herkesin oynama suresi verisi var
     gk = out["Pos"].str.startswith("GK")
@@ -108,13 +117,15 @@ def test_league_factor_lowers_weaker_league_scores_only():
     proc = FootballDataProcessor()
     full = proc.clean_and_engineer(270, {"Süper Lig": 1.0})
     weak = proc.clean_and_engineer(270, {"Süper Lig": 0.75})
-    sl_full = full.loc[~full["Is_Reference"], "OptiScout_Score"].mean()
-    sl_weak = weak.loc[~weak["Is_Reference"], "OptiScout_Score"].mean()
+    sl_full = full.loc[full["League"] == "Süper Lig", "OptiScout_Score"].mean()
+    sl_weak = weak.loc[weak["League"] == "Süper Lig", "OptiScout_Score"].mean()
     assert sl_weak < sl_full - 5
     big_full = full[full["Is_Reference"]].set_index("Row_Key")["OptiScout_Score"]
     big_weak = weak[weak["Is_Reference"]].set_index("Row_Key")["OptiScout_Score"]
     assert np.allclose(big_full.sort_index(), big_weak.sort_index())
-    assert (weak.loc[~weak["Is_Reference"], "League_Factor"] == 0.75).all()
+    assert (weak.loc[weak["League"] == "Süper Lig", "League_Factor"] == 0.75).all()
+    # Big-5 her zaman 1.0
+    assert (weak.loc[weak["Is_Reference"], "League_Factor"] == 1.0).all()
 
 
 def test_league_factor_scales_goals_and_goals_conceded_in_right_direction():
@@ -123,7 +134,7 @@ def test_league_factor_scales_goals_and_goals_conceded_in_right_direction():
     if df["Is_Reference"].all():
         pytest.skip("ek lig dosyasi yok")
     scaled = FootballDataProcessor()._league_adjust(df.copy(), {"Süper Lig": 0.8})
-    sl = ~df["Is_Reference"]
+    sl = (df["League"] == "Süper Lig").to_numpy()
     assert np.allclose(scaled.loc[sl, "Gls_adj"], df.loc[sl, "Gls_adj"] * 0.8)
     assert np.allclose(scaled.loc[sl, "GA90_adj"], df.loc[sl, "GA90_adj"] / 0.8)
     # Kurtaris yuzdesi duser ama 0-100 araliginda kalir
@@ -131,4 +142,15 @@ def test_league_factor_scales_goals_and_goals_conceded_in_right_direction():
     assert (scaled.loc[gk, "SavePct_adj"] < df.loc[gk, "SavePct_adj"] + 1e-9).all()
     assert scaled.loc[gk, "SavePct_adj"].between(0, 100).all()
     # Big-5 satirlari hic degismez
-    assert np.allclose(scaled.loc[~sl, "Gls_adj"], df.loc[~sl, "Gls_adj"])
+    ref = df["Is_Reference"].to_numpy()
+    assert np.allclose(scaled.loc[ref, "Gls_adj"], df.loc[ref, "Gls_adj"])
+
+
+def test_every_extra_league_gets_a_factor_below_one():
+    proc = FootballDataProcessor()
+    df = proc.clean_and_engineer(270)
+    extra = df[~df["Is_Reference"]]
+    if extra.empty:
+        pytest.skip("ek lig dosyasi yok")
+    assert (extra["League_Factor"] < 1.0).all()
+    assert set(extra["League"]) == set(proc.extra_league_names())

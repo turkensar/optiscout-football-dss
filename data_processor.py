@@ -65,7 +65,14 @@ PADJ_MIN, PADJ_MAX = 0.7, 1.4
 # Opta Power Rankings'te Süper Lig kulüp ortalaması ~78, Big-5 ~85 ve üzeri; bu fark
 # İngiltere Championship ile Premier League arasındaki farka yakındır. Uygulamada
 # kenar çubuğundan değiştirilebilir.
-DEFAULT_LEAGUE_STRENGTH = {"Süper Lig": 0.75}
+DEFAULT_LEAGUE_STRENGTH = {
+    "Süper Lig": 0.75,
+    "Primeira Liga": 0.80,       # Opta kulüp ortalaması ~80
+    "Belgian Pro League": 0.80,  # son Opta sıralamasında Süper Lig'in üstünde
+    "Eredivisie": 0.75,          # Opta kulüp ortalaması ~79
+}
+# Listede olmayan EK bir lig (Big-5 dışı) için temkinli varsayılan
+UNKNOWN_LEAGUE_STRENGTH = 0.75
 # Katsayının uygulandığı "yüksek olması iyi" metrikler
 LEAGUE_SCALED_METRICS = [
     "Gls_adj", "Ast_adj", "GA_non_pk_adj", "Sh_adj", "SoT_adj", "Crs_adj", "TklW_adj",
@@ -146,12 +153,15 @@ class FootballDataProcessor:
         full_path: str = "data/players_data-2026_2027.csv",
         market_path: str = "data/market_values.csv",
         leagues_dir: str = "data/leagues",
+        overrides_path: str = "data/position_overrides.csv",
     ):
         base_dir = os.path.dirname(os.path.abspath(__file__))
         self.light_path = os.path.join(base_dir, light_path) if not os.path.isabs(light_path) else light_path
         self.full_path = os.path.join(base_dir, full_path) if not os.path.isabs(full_path) else full_path
         self.market_path = os.path.join(base_dir, market_path) if not os.path.isabs(market_path) else market_path
         self.leagues_dir = os.path.join(base_dir, leagues_dir) if not os.path.isabs(leagues_dir) else leagues_dir
+        self.overrides_path = (os.path.join(base_dir, overrides_path)
+                               if not os.path.isabs(overrides_path) else overrides_path)
         self.source_file = None
         self.has_market_values = False
 
@@ -358,7 +368,36 @@ class FootballDataProcessor:
             df["TM_Foot"] = None
             df["TM_Height_cm"] = np.nan
         df["Market_Value_M"] = (df["Market_Value_EUR"] / 1e6).round(1)
+        df = self._apply_position_overrides(df)
         return self._attach_contract_costs(df)
+
+    def _apply_position_overrides(self, df: pd.DataFrame) -> pd.DataFrame:
+        """`data/position_overrides.csv` ile alt mevkileri elle düzeltir.
+
+        Transfermarkt verisi sezon başında alınmış bir anlık görüntüdür; sezon içinde
+        mevkisi değişen (ör. bekten kanada çekilen) oyuncular burada düzeltilir.
+        Sütunlar: Player, Squad, Sub_Position[, Note]. Squad boşsa tüm kulüplerde uygulanır.
+        """
+        df["Position_Source"] = np.where(df["TM_Sub_Position"].notna(), "Transfermarkt", "FBref")
+        if not os.path.exists(self.overrides_path):
+            return df
+        ov = pd.read_csv(self.overrides_path, dtype=str).fillna("")
+        missing = {"Player", "Sub_Position"} - set(ov.columns)
+        if missing:
+            raise ValueError(f"{self.overrides_path}: eksik sütun(lar) {sorted(missing)}")
+        if "Squad" not in ov.columns:
+            ov["Squad"] = ""
+        bad = sorted(set(ov["Sub_Position"]) - set(SUB_POSITION_TO_ROLE_GROUP))
+        if bad:
+            raise ValueError(f"{self.overrides_path}: tanınmayan alt mevki(ler) {bad}. "
+                             f"Geçerli değerler: {sorted(SUB_POSITION_TO_ROLE_GROUP)}")
+        for row in ov.itertuples(index=False):
+            mask = df["Player"] == row.Player.strip()
+            if row.Squad.strip():
+                mask &= df["Squad"] == row.Squad.strip()
+            df.loc[mask, "TM_Sub_Position"] = row.Sub_Position
+            df.loc[mask, "Position_Source"] = "Elle düzeltme"
+        return df
 
     @staticmethod
     def _attach_contract_costs(df: pd.DataFrame) -> pd.DataFrame:
@@ -415,7 +454,11 @@ class FootballDataProcessor:
         Yüksek olması iyi metrik: pozitifse x*f, negatifse x/f (eksi artı/eksi daha da kötüleşir).
         Düşük olması iyi metrik (yenilen gol): x/f.
         """
-        factor = df["League"].map(league_strength).fillna(1.0).clip(lower=0.1, upper=1.5)
+        factor = df["League"].map(league_strength)
+        if "Is_Reference" in df.columns:
+            # Big-5 (referans) her zaman 1.0; tanımsız ek lig temkinli varsayılanı alır
+            factor = factor.where(~df["Is_Reference"], 1.0).fillna(UNKNOWN_LEAGUE_STRENGTH)
+        factor = factor.fillna(1.0).clip(lower=0.1, upper=1.5)
         df["League_Factor"] = factor
         if (factor == 1.0).all():
             return df
